@@ -5,8 +5,8 @@ Game::Game()
           characterScaleX(1.f),
           characterScaleY(1.f)
 {
-    characterTexture.loadFromFile(".\\Images\\alien (2).png");
-    backgroundTexture.loadFromFile(".\\Images\\fundo.png");
+    characterTexture.loadFromFile("./Images/alien (2).png");
+    backgroundTexture.loadFromFile("./Images/fundo.png");
     //enemieTexture.loadFromFile("./Images/transforme.png");
 
     character.setTexture(characterTexture);
