@@ -2,8 +2,6 @@
 
 int main()
 {
-    //ok alterado
-
     Menu * menu = new Menu();
     menu->run_menu();
     delete menu;
