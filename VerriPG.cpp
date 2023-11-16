@@ -24,8 +24,8 @@ void Menu::set_values(){
 
     pos = 0;
     pressed = theselect = false;
-    font->loadFromFile("C:\\Users\\guicr\\Documents\\Documentos\\VerrPG_2_semestre\\Code_Game\\ethn.otf");
-    image->loadFromFile("C:\\Users\\guicr\\Documents\\Documentos\\VerrPG_2_semestre\\Code_Game\\menu-sci-fi-game.png");
+    font->loadFromFile("C:\\Users\\guicr\\Desktop\\teste_verriPG\\teste_VerriPG\\ethn.otf");
+    image->loadFromFile("C:\\Users\\guicr\\Desktop\\teste_verriPG\\teste_VerriPG\\menu-sci-fi-game.png");
 
     bg->setTexture(*image);
 
