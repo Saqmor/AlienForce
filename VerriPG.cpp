@@ -1,85 +1,95 @@
 #include "VerriPG.h"
 
-Menu::Menu(){
-    window = new sf::RenderWindow();
-    winclose = new sf::RectangleShape();
-    font = new sf::Font();
-    image = new sf::Texture();
-    bg = new sf::Sprite();
+Game::Game()
+        : window(sf::VideoMode(800, 600), "My window"),
+          characterScaleX(1.f),
+          characterScaleY(1.f)
+{
+    characterTexture.loadFromFile("C:\\Users\\guicr\\Documents\\Documentos\\codigos_exame\\VerriPG_movement\\Movement\\Images\\alien (2).png");
+    backgroundTexture.loadFromFile("C:\\Users\\guicr\\Documents\\Documentos\\codigos_exame\\VerriPG_movement\\Movement\\Images\\fundo.png");
+    //enemieTexture.loadFromFile("./Images/transforme.png");
 
-    set_values();
+    character.setTexture(characterTexture);
+    background.setTexture(backgroundTexture);
+    enemie.setTexture(enemieTexture);
+
+    // Ajusta a escala inicial
+    sf::Vector2f centerM(static_cast<float>(characterTexture.getSize().x), static_cast<float>(characterTexture.getSize().y));
+    centerM.x = centerM.x / 2;
+    centerM.y = centerM.y / 2;
+    character.setOrigin(centerM);
 }
 
-Menu::~Menu(){
-    delete window;
-    delete winclose;
-    delete font;
-    delete image;
-    delete bg;
+Game::~Game()
+{
 }
 
-void Menu::set_values(){
-    window->create(sf::VideoMode(1280,720), "Menu SFML", sf::Style::Titlebar | sf::Style::Close);
-    window->setPosition(sf::Vector2i(0,0));
-
-    pos = 0;
-    pressed = theselect = false;
-    font->loadFromFile("C:\\Users\\guicr\\Desktop\\teste_verriPG\\teste_VerriPG\\ethn.otf");
-    image->loadFromFile("C:\\Users\\guicr\\Desktop\\teste_verriPG\\teste_VerriPG\\menu-sci-fi-game.png");
-
-    bg->setTexture(*image);
-
-    pos_mouse = {0,0};
-    mouse_coord = {0, 0};
-
+void Game::initializeMenu()
+{
+    menuFont.loadFromFile("C:\\Users\\guicr\\Desktop\\teste_verriPG\\teste_VerriPG\\ethn.otf");
+    menuText.setFont(menuFont);
+    menuText.setCharacterSize(24);
+    menuText.setOutlineColor(sf::Color::Green);
+    menuText.setOutlineThickness(4);
+    menuText.setPosition(400, 300);
+    menuText.setString("Press 'M' to open the menu");
     options = {"War Game", "Play", "Options", "About", "Quit"};
-    texts.resize(5);
-    coords = {{590,40},{610,191},{590,282},{600,370},{623,457}};
-    sizes = {20,28,24,24,24};
-
-    for (std::size_t i{}; i < texts.size(); ++i){
-        texts[i].setFont(*font);
-        texts[i].setString(options[i]);
-        texts[i].setCharacterSize(sizes[i]);
-        texts[i].setOutlineColor(sf::Color::Green);
-        texts[i].setPosition(coords[i]);
-    }
-    texts[1].setOutlineThickness(4);
-    pos = 1;
-
-    winclose->setSize(sf::Vector2f(23,26));
-    winclose->setPosition(1178,39);
-    winclose->setFillColor(sf::Color::Transparent);
-
 }
 
-void Menu::loop_events(){
-    sf::Event event;
-    while(window->pollEvent(event)){
-        if( event.type == sf::Event::Closed){
-            window->close();
+
+void Game::run()
+{
+    while (window.isOpen())
+    {
+        processEvents();
+        update();
+        render();
+
+        // Adicione a verificação para abrir o menu
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) && !menuPressed)
+        {
+            menuPressed = true;
+            runMenu();
+            menuPressed = false;
         }
+    }
+}
 
-        pos_mouse = sf::Mouse::getPosition(*window);
-        mouse_coord = window->mapPixelToCoords(pos_mouse);
+void Game::runMenu()
+{
+    while (window.isOpen())
+    {
+        processMenuEvents();
+        drawMenu();
+    }
+}
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed){
-            if( pos < 4){
-                ++pos;
-                pressed = true;
-                texts[pos].setOutlineThickness(4);
-                texts[pos - 1].setOutlineThickness(0);
-                pressed = false;
+void Game::processMenuEvents()
+{
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+            window.close();
+
+        // Adicione aqui os eventos específicos do menu, como seleção de opção
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !menuPressed){
+            if( menuPosition < 4){
+                ++menuPosition;
+                menuPressed = true;
+                texts[menuPosition].setOutlineThickness(4);
+                texts[menuPosition - 1].setOutlineThickness(0);
+                menuPressed = false;
                 theselect = false;
             }
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !pressed){
-            if( pos > 1){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !menuPressed){
+            if( menuPosition > 1){
                 --pos;
-                pressed = true;
-                texts[pos].setOutlineThickness(4);
-                texts[pos + 1].setOutlineThickness(0);
+                menuPressed = true;
+                texts[menuPosition].setOutlineThickness(4);
+                texts[menuPosition + 1].setOutlineThickness(0);
                 pressed = false;
                 theselect = false;
             }
@@ -87,10 +97,9 @@ void Menu::loop_events(){
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect){
             theselect = true;
-            if( pos == 4){
+            if( menuPosition == 4){
                 window->close();
             }
-            std::cout << options[pos] << '\n';
         }
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -98,21 +107,72 @@ void Menu::loop_events(){
                 window->close();
             }
         }
+
+        // Use menuPosition para controlar a posição atual no menu
+        // e atualize menuText.setString() de acordo com a opção selecionada
     }
 }
 
-void Menu::draw_all(){
-    window->clear();
-    window->draw(*bg);
-    for(auto t : texts){
-        window->draw(t);
-    }
-    window->display();
+void Game::drawMenu()
+{
+    window.clear();
+    // Desenhe elementos do menu, como fundo, opções, etc.
+    window.draw(menuText);
+    window.display();
 }
 
-void Menu::run_menu(){
-    while(window->isOpen()){
-        loop_events();
-        draw_all();
+
+void Game::processEvents()
+{
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+            window.close();
     }
+}
+
+void Game::update()
+{
+    sf::Vector2f velocity(0.f, 0.f);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    {
+        // left key is pressed: move our character
+        velocity.x = -1.f;
+        // Ajusta a escala para inverter horizontalmente
+        characterScaleX = std::abs(characterScaleX);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    {
+        // right key is pressed: move our character
+        velocity.x = 1.f;
+        // Ajusta a escala para inverter horizontalmente
+        characterScaleX = -std::abs(characterScaleX);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    {
+        // up key is pressed: move our character
+        velocity.y = -1.f;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    {
+        // down key is pressed: move our character
+        velocity.y = 1.f;
+    }
+
+    character.setScale(characterScaleX, characterScaleY);
+    position = character.getPosition();
+    character.move(velocity);
+
+    std::cout << "Your position on x is: " << position.x << std::endl;
+}
+
+void Game::render()
+{
+    window.clear();
+    window.draw(background);
+    window.draw(character);
+    //window.draw(enemie);
+    window.display();
 }
