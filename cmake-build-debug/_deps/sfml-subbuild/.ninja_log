@@ -1,0 +1,21 @@
+# ninja log v5
+1	70	7220356927729308	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir	d7b68495ee4c1c40
+1	70	7220356927729308	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir	d7b68495ee4c1c40
+70	8095	7220357007982291	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download	c42f3272c5431d0f
+70	8095	7220357007982291	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download	c42f3272c5431d0f
+8096	10169	0	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	5bb9ed5eccd30c88
+8096	10169	0	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	5bb9ed5eccd30c88
+10169	10235	7220357029382795	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	108f20c0431888a0
+10169	10235	7220357029382795	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	108f20c0431888a0
+10235	10301	7220357030035198	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	e4b244c354b9daaa
+10235	10301	7220357030035198	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	e4b244c354b9daaa
+10301	10365	7220357030675277	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	f94fbb0682d43956
+10301	10365	7220357030675277	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	f94fbb0682d43956
+10365	10433	7220357031353510	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	15656c856f9a6cba
+10365	10433	7220357031353510	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	15656c856f9a6cba
+10433	10503	7220357032058851	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	ffb42f928ce39096
+10433	10503	7220357032058851	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	ffb42f928ce39096
+10503	10591	7220357032944741	CMakeFiles/sfml-populate-complete	b797dd96078253cb
+10503	10591	7220357032944741	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	b797dd96078253cb
+10503	10591	7220357032944741	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete	b797dd96078253cb
+10503	10591	7220357032944741	C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	b797dd96078253cb
