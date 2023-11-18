@@ -40,6 +40,14 @@ private:
     sf::Vector2i pos_mouse;
     sf::Vector2f mouse_coord;
     sf::RectangleShape * winclose;
+
+    // Adiciona variáveis para rastrear a animação em cada direção
+    float frameAtualBaixo = 0.f;
+    float frameAtualEsquerda = 0.f;
+    float frameAtualDireita = 0.f;
+    float frameAtualCima = 0.f;
+    float velocidadeAnimacao = 0.02f;
+    int linha;
 };
 
 
