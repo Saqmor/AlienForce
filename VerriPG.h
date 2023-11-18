@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
+#include <cmath>
 
 class Game
 {
@@ -18,6 +19,7 @@ private:
     void render();
 
     sf::RenderWindow window;
+    sf::Event event;
     sf::Texture characterTexture, backgroundTexture, enemieTexture;
     sf::Sprite character, background, enemie;
 
