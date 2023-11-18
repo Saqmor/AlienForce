@@ -59,7 +59,7 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         // left key is pressed: move our character
-        velocity.x = -1.f;
+        velocity.x = -0.05f;
         frameAtualDireita += velocidadeAnimacao;
         linha =1;
         // Ajusta a escala para inverter horizontalmente
@@ -68,7 +68,7 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         // right key is pressed: move our character
-        velocity.x = 1.f;
+        velocity.x = 0.05f;
         frameAtualEsquerda += velocidadeAnimacao;
         linha=2;
         // Ajusta a escala para inverter horizontalmente
@@ -77,14 +77,14 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         // up key is pressed: move our character
-        velocity.y = -1.f;
+        velocity.y = -0.05f;
         frameAtualCima += velocidadeAnimacao;
         linha =3;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         // down key is pressed: move our character
-        velocity.y = 1.f;
+        velocity.y = 0.05f;
         frameAtualBaixo += velocidadeAnimacao;
         linha =0;
     }

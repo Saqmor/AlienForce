@@ -46,7 +46,7 @@ private:
     float frameAtualEsquerda = 0.f;
     float frameAtualDireita = 0.f;
     float frameAtualCima = 0.f;
-    float velocidadeAnimacao = 0.02f;
+    float velocidadeAnimacao = 0.005f;
     int linha;
 };
 
