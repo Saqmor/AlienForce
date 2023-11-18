@@ -36,9 +36,8 @@ void Game::run()
 
 void Game::processEvents()
 {
-    sf::Event event;
     while (window.pollEvent(event))
-    {
+    {   
         if (event.type == sf::Event::Closed)
             window.close();
     }
@@ -48,6 +47,7 @@ void Game::update()
 {
     sf::Vector2f velocity(0.f, 0.f);
 
+    //Movimentação por setas   
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         // left key is pressed: move our character
@@ -72,14 +72,32 @@ void Game::update()
         // down key is pressed: move our character
         velocity.y = 1.f;
     }
+     character.setScale(characterScaleX, characterScaleY);
+     position = character.getPosition();
+    
 
-    character.setScale(characterScaleX, characterScaleY);
-    position = character.getPosition();
+    //Movimentação Mouse (Melhorar orientação)
+    /*
+    if (event.type == sf::Event::MouseButtonPressed) {
+    // Atualização da posição do objeto pela posição do mouse quando ocorre um clique
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        velocity.x=1.f;
+        velocity.y=1.f;
+        sf::Vector2f characterPosition = character.getPosition();
+        double angle = std::atan2((mousePosition.y-characterPosition.y),(mousePosition.x-characterPosition.x));
+        if(mousePosition.x>characterPosition.x)
+        velocity.x=1.5*std::cos(std::fabs(angle));
+        else
+        velocity.x=1.5*std::cos(-std::fabs(angle));
+        if(mousePosition.y>characterPosition.y)
+        velocity.y=1.5*std::sin(std::fabs(angle));
+        else
+        velocity.y=1.5*std::sin(-std::fabs(angle));
+    } */
     character.move(velocity);
 
-    //std::cout << "Your position on x is: " << position.x << std::endl;
+    //std::cout << "Your position on x is: " << position.x << std::endl;}
 }
-
 void Game::render()
 {
     window.clear();
