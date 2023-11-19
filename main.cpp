@@ -2,8 +2,8 @@
 
 int main()
 {
-    Game game;
-    game.run();
+    Menu menu;
+    menu.run_menu();
 
     return 0;
 }
