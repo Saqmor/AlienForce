@@ -4,6 +4,9 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 #include <cmath>
+#include <random>
+#include <string>
+#include <queue>
 
 class Game
 {
@@ -49,5 +52,29 @@ private:
     float velocidadeAnimacao = 0.005f;
     int linha;
 };
+
+struct Person{
+    int hp = 100;
+    bool isAlive = false;
+    std::vector<bool> bomb;
+};
+
+struct Alien{
+    int hp = 300;
+    bool isAlive = false;
+};
+
+int d(int);
+void attack1(Alien* alien, Person* person);
+void attack2(Person* person, Alien* alien);
+void heal();
+void run();
+std::queue<int> defineTurns();
+void playerTurn();
+void enemyTurn();
+void Battle(Person* person, Alien* alien);
+
+
+
 
 

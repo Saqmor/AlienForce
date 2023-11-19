@@ -33,6 +33,10 @@ void Game::run()
         update();
         render();
     }
+
+    Person player;
+    Alien enemy;
+    Battle(&player, &enemy);
 }
 
 void Game::processEvents()
@@ -159,4 +163,53 @@ void Game::render()
     window.draw(character);
     //window.draw(enemie);
     window.display();
+}
+
+
+
+
+
+
+
+int d(int n) {
+    std::random_device dev;
+    auto gen = std::mt19937(dev());
+    std::uniform_int_distribution<int> dist(1, n);
+    return dist(gen);
+}
+
+void attack1(Alien* enemy){
+    enemy->hp -= 8 + d(8);
+}
+
+void attack2(Person* player, Alien* enemy){
+
+}
+
+std::queue<int> defineTurns() {
+    std::queue<int> turn;
+    turn.push(1);
+    for (int i = 0; i < 2; ++i) {
+        turn.push(2);
+    }
+    return turn;
+}
+
+void playerTurn() {
+
+}
+
+void enemyTurn() {
+
+}
+
+void Battle(Person* player, Alien* enemy){
+    while (player->isAlive && enemy->isAlive){
+        std::queue<int> QueueTurns = defineTurns();
+        if (QueueTurns.front() == 1)
+            playerTurn();
+        if (QueueTurns.front() == 2)
+            enemyTurn();
+    }
+    return;
 }
