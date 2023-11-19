@@ -25,6 +25,6 @@
 -- Found OpenAL: C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-src/extlibs/libs-mingw/x64/libopenal32.a  
 -- Found VORBIS: C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-src/extlibs/libs-mingw/x64/libvorbisenc.a;C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-src/extlibs/libs-mingw/x64/libvorbisfile.a;C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-src/extlibs/libs-mingw/x64/libvorbis.a;C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-src/extlibs/libs-mingw/x64/libogg.a  
 -- Found FLAC: C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-src/extlibs/libs-mingw/x64/libFLAC.a  
--- Configuring done (19.6s)
+-- Configuring done (8.6s)
 -- Generating done (0.1s)
 -- Build files have been written to: C:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug

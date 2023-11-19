@@ -1,7 +1,0 @@
-# Ignorar arquivos gerados pelo CMake
-cmake-build-debug/
-
-# Ignorar arquivos específicos
-cmake-build-debug/.cmake/api/v1/reply/index-*
-cmake-build-debug/Code_Game.exe
-cmake-build-debug/bin/Code_Game.exe
