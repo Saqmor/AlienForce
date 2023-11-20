@@ -308,10 +308,6 @@ void Game::render()
 
 
 
-
-
-
-
 int dice(int n) {
     std::random_device dev;
     auto gen = std::mt19937(dev());
@@ -338,19 +334,6 @@ void bossFight::attack1(){
     }
     maxPriorityQueue.pop();
 }
-
-/*int chooseBomb() {
-    sf::Sprite background;
-    sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("./Images/fundo.png");
-    background.setTexture(backgroundTexture);
-    //Criação de janelas e de barra de vida
-    sf::RenderWindow window(sf::VideoMode(800,400),"My window");
-    sf::RectangleShape boxAttack1(sf::Vector2f(50,15.f));
-    sf::RectangleShape boxAttack2(sf::Vector2f(200,15.f));
-    sf::RectangleShape boxHeal(sf::Vector2f(350,15.f));
-    sf::RectangleShape boxRun(sf::Vector2f(550,15.f));
-}*/
 
 void bossFight::attack2(){
     damageCondition();
@@ -468,6 +451,7 @@ bool bossFight::playerTurn() {
             pressed_opBattle = false;
         }
     }
+
     return true;
 }
 
@@ -482,37 +466,89 @@ void bossFight::enemyTurn() {
         hero.isAlive = false;
     }
 }
+void bossFight::layoutBattle()
+{
+    //Criação de retângulos envolventes  
+    roundedTexture.loadFromFile("./Images/rounded(5).png");
+    hero.roundedHero.setTexture(roundedTexture);
+    alien.roundedBoss.setTexture(roundedTexture);
+    hero.roundedHero.setScale(-1.3f,0.4f);
+    alien.roundedBoss.setScale(1.9f,0.4f);
 
+    //Criação dos personagens
+    hero.heroTexture.loadFromFile("./Images/hero.png");
+    alien.bossTexture.loadFromFile("./Images/boss.png");
+    hero.heroSprite.setTexture(hero.heroTexture);
+    alien.bossSprite.setTexture(alien.bossTexture);
+
+    //Texto
+    font_bar.loadFromFile("ethn.otf");
+    alien.textBoss.setFont(font_bar);
+    alien.textBoss.setString("Boss HP");
+    alien.textBoss.setCharacterSize(12);
+    hero.textHero.setFont(font_bar);
+    hero.textHero.setString("Hero HP");
+    hero.textHero.setCharacterSize(12); 
+
+    //Pintura    
+    hero.playerHp.setFillColor(sf::Color(144,238,144));
+    alien.bossHp.setFillColor(sf::Color(144,238,144));
+    alien.textBoss.setFillColor(sf::Color(0,128,128));
+    hero.textHero.setFillColor(sf::Color(0,128,128));
+    alien.roundedBoss.setColor(sf::Color(222,184,135));
+    hero.roundedHero.setColor(sf::Color(222,184,135));
+
+    //Posicionamento
+    hero.playerHp.setPosition(600.f,400.f);
+    alien.bossHp.setPosition(0,64.f);
+    alien.roundedBoss.setPosition(-130.f,30.f);
+    hero.roundedHero.setPosition(900.f,370.f);
+    alien.textBoss.setPosition(20.f,40.f);
+    hero.textHero.setPosition(705.f,380.f);
+
+    // Ajusta a escala e posicionamento das Sprites Hero e Boss
+    sf::Vector2f positionHero(static_cast<float>(hero.heroTexture.getSize().x), static_cast<float>(hero.heroTexture.getSize().y));
+    sf::Vector2f positionBoss(static_cast<float>(alien.bossTexture.getSize().x), static_cast<float>(alien.bossTexture.getSize().y));
+    positionHero.x = positionHero.x / 2;
+    positionHero.y = positionHero.y / 2;
+    positionBoss.x = positionBoss.x / 2;
+    positionHero.y = positionBoss.y / 2;
+    hero.heroSprite.setOrigin(positionHero);
+    alien.bossSprite.setOrigin(positionBoss);
+    hero.heroSprite.setPosition(150.f,380.f);
+    alien.bossSprite.setPosition(675.f,250.f);
+    alien.bossSprite.setScale(0.5f,0.5f);
+    hero.heroSprite.setScale(0.5f,0.5f);
+    
+}
+void bossFight::drawBattle()
+{   
+    layoutBattle();
+    
+        window.clear();
+        window.draw(background);
+        window.draw(alien.roundedBoss);
+        window.draw(hero.roundedHero);
+        window.draw(hero.playerHp);
+        window.draw(alien.bossHp);
+        window.draw(alien.textBoss);
+        window.draw(hero.textHero);
+        window.draw(hero.heroSprite);
+        window.draw(alien.bossSprite);
+        for(auto t : texts_opBattle){
+            window.draw(t);
+        }
+        window.display();
+}
 void bossFight::modeBattle()
 {
     font = new sf::Font();
     image = new sf::Texture();
     bg = new sf::Sprite();
-    sf::Sprite background;
-    sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile("./Images/fundo.png");
     background.setTexture(backgroundTexture);
-
-    //Criação de janelas e de barra de vida
-    sf::RenderWindow window(sf::VideoMode(800,600),"My window");
-    sf::RectangleShape playerHp(sf::Vector2f(hero.hp,25.f));
-    playerHp.setFillColor(sf::Color(50,205,50));
-    sf::RectangleShape bossHp(sf::Vector2f(alien.hp,25.f));
-    bossHp.setFillColor(sf::Color(50,205,50));
-
-    // Ajusta a escala inicial junto com o centro da figura
-    sf::Vector2f positionPhp(static_cast<float>(playerHp.getSize().x), static_cast<float>(playerHp.getSize().y));
-    sf::Vector2f positionBhp(static_cast<float>(bossHp.getSize().x), static_cast<float>(bossHp.getSize().y));
-    positionPhp.x = positionPhp.x / 2;
-    positionPhp.y = positionPhp.y / 2;
-    positionBhp.x = positionBhp.x / 2;
-    positionBhp.y = positionBhp.y / 2;
-    playerHp.setOrigin(positionPhp);
-    bossHp.setOrigin(positionBhp);
-
-    playerHp.setPosition(80.f,50.f);
-    bossHp.setPosition(400.f,100.f);
-
+    window.create(sf::VideoMode(800,600),"My window");
+   
     pressed_opBattle = theselect_opBattle = false;
     font->loadFromFile("./ethn.otf");
     //image->loadFromFile("");
@@ -533,7 +569,7 @@ void bossFight::modeBattle()
     texts_opBattle[0].setOutlineThickness(4);
     pos_opBattle = 0;
 
-
+    
     defineTurns();
     bool endBattle = false;
     while (window.isOpen())
@@ -558,18 +594,11 @@ void bossFight::modeBattle()
                 window.close();
 
 
-            playerHp.setSize(sf::Vector2f(hero.hp, 30));
-            bossHp.setSize(sf::Vector2f(alien.hp, 30));
+            hero.playerHp.setSize(sf::Vector2f(hero.hp, 13));
+            alien.bossHp.setSize(sf::Vector2f(0.45*alien.hp, 13));
 
         }
-        window.clear();
-        window.draw(background);
-        window.draw(playerHp);
-        window.draw(bossHp);
-        for(auto t : texts_opBattle){
-            window.draw(t);
-        }
-        window.display();
+        drawBattle();
     }
 
 

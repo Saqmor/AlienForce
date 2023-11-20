@@ -85,6 +85,11 @@ private:
         bool posionBomb = false;
         bool paralyzingBomb = false;
         int speed = 12;
+        sf::RectangleShape playerHp;
+        sf::Texture heroTexture;
+        sf::Sprite heroSprite;
+        sf::Sprite roundedHero;
+        sf::Text textHero;
     };
     Hero hero;
 
@@ -96,17 +101,26 @@ private:
         bool posion = false;
         bool lessAccuracy = false;
         int speed = 25;
+        sf::RectangleShape bossHp;
+        sf::Texture bossTexture;
+        sf::Sprite bossSprite;
+        sf::Sprite roundedBoss;
+        sf::Text textBoss;
     };
     Alien alien;
 
-
-
+    
     int pos_opBattle;
     bool pressed_opBattle, theselect_opBattle;
 
     sf::Font * font;
     sf::Texture * image;
     sf::Sprite * bg;
+    sf::RenderWindow window;
+    sf::Sprite background;
+    sf::Texture backgroundTexture;
+    sf::Texture roundedTexture;
+    sf::Font font_bar;
 
     std::vector<const char *> optionsBattle;
     std::vector<sf::Vector2f> coords_opBattle;
@@ -116,8 +130,8 @@ private:
     std::priority_queue<int> maxPriorityQueue;
 public:
     void attack1();
-    int chooseBomb();
     void attack2();
+    int chooseBomb();
     void heal();
     void defineTurns();
     void damageCondition();
@@ -129,6 +143,8 @@ public:
     void writeTextesBattle();
     //void Battle();
     void modeBattle();
+    void drawBattle();
+    void layoutBattle();
 };
 
 
