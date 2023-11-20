@@ -53,26 +53,56 @@ private:
     int linha;
 };
 
-struct Person{
-    int hp = 100;
-    bool isAlive = false;
-    std::vector<bool> bomb;
-};
 
-struct Alien{
-    int hp = 300;
-    bool isAlive = false;
-};
 
-int d(int);
-void attack1(Alien* alien, Person* person);
-void attack2(Person* person, Alien* alien);
-void heal();
-void run();
-std::queue<int> defineTurns();
-void playerTurn();
-void enemyTurn();
-void Battle(Person* person, Alien* alien);
+class bossFight{
+private:
+    struct Hero{
+        float hp = 200;
+        bool isAlive = false;
+        bool iceBomb = false;
+        bool fireBomb = false;
+        bool posionBomb = false;
+        bool paralyzingBomb = false;
+    };
+    Hero hero;
+
+    struct Alien{
+        float hp = 700;
+        bool isAlive = false;
+        bool frozen = false;
+        bool burn = false;
+        bool posion = false;
+        bool lessAccuracy = false;
+    };
+    Alien alien;
+
+
+
+    int pos_opBattle;
+    bool pressed_opBattle, theselect_opBattle;
+
+    sf::Font * font;
+    sf::Texture * image;
+    sf::Sprite * bg;
+
+    std::vector<const char *> optionsBattle;
+    std::vector<sf::Vector2f> coords_opBattle;
+    std::vector<sf::Text> texts_opBattle;
+    std::vector<std::size_t> sizes_opBattle;
+
+public:
+    void attack1(std::queue<int>* QueueTurns);
+    void attack2(std::queue<int>* QueueTurns);
+    int chooseBomb();
+    void heal();
+    std::queue<int>* defineTurns();
+    void damageCondition();
+    bool playerTurn(std::queue<int>* QueueTurns);
+    void enemyTurn(std::queue<int>* QueueTurns);
+    //void Battle();
+    void renderBattle();
+};
 
 
 
