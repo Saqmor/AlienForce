@@ -34,9 +34,10 @@ void Graph::rem_edge(std::size_t u, std::size_t v) {
   
 std::vector<std::size_t> Graph::neighbors(std::size_t v) const {
   std::vector<std::size_t> neigh;
-  for (std::size_t from = 0; from < v; ++from)
+  for (std::size_t from = 0; from < n; ++from){
     if (edge_exists(from, v))
       neigh.push_back(from);
+  }
   return neigh; 
 }
 
@@ -44,20 +45,24 @@ std::size_t Graph::order() const {
   return n;
 }
 
+float Graph::peso_aresta(std::size_t u,std::size_t v)const{
+  if (u < v){
+    std::swap(u,v);
+  }
+  return matrix[u*(u+1)/2+v].weight;
+}
+
 void Graph::start(float* d, std::size_t* p,std::size_t s) const{
   for(std::size_t i=0; i<n;i++){
     d[i]=FLT_MAX/2;
-    p[i]=-1;
+    p[i]=10*n;
   }
   d[s]=0;
 }
 
 void Graph::relax(float* d, std::size_t* p,std::size_t u,std::size_t v) const{
-  if (u < v){
-    std::swap(u, v);
-  }
-  if(d[u]+ matrix[u*(u+1)/2+v].weight<d[v]){
-    d[v]=d[u]+ matrix[u*(u+1)/2+v].weight;
+  if(d[u]+ peso_aresta(u,v)<d[v]){
+    d[v]=d[u]+ peso_aresta(u,v);
     p[v]=u;
   }
 }
@@ -83,12 +88,17 @@ std::size_t Graph::minimum_dist(bool* open,float* d) const{
     if(open[i] && d[min]>d[i])
       min=i;
   }
+  return min;
 }
 
-float* Graph::dijkstra(std::size_t s) const{
+std::size_t* Graph::dijkstra(std::size_t s) const{
   float* d = new float[n];
   std::size_t* p = new std::size_t[n];
-  bool* open = new bool[n]{true};
+  bool* open = new bool[n];
+
+  for(std::size_t i=0; i<n; i++){
+    open[i]=true;
+  }
 
   start(d,p,s);
 
@@ -97,10 +107,40 @@ float* Graph::dijkstra(std::size_t s) const{
     open[u]=false;
 
     for(std::size_t i: neighbors(u)){
-      if(open[i])
+      if(open[i]){
         relax(d,p,u,i);
+      }
     }
   }
-  return d; 
+  return p; 
 }
 
+
+std::vector<std::size_t> Graph::min_way(std::size_t u,std::size_t v) const{
+  
+  auto p=dijkstra(u);
+  std::stack<std::size_t> aux;
+  std::vector<std::size_t> min_way;
+
+  for(std::size_t i=v; i!=u; i=p[i]){
+    aux.push(i);
+  }
+
+  min_way.push_back(u);
+  while(!aux.empty()){
+    min_way.push_back(aux.top());
+    aux.pop();
+  }
+  return min_way;
+}
+
+void Graph::print_min_caminh(std::size_t u,std::size_t v) const{
+  auto m = min_way(u,v);
+
+    std::cout<<std::endl;
+    for(std::size_t i=0; i<m.size();i++){
+        std::cout<<m[i];
+    }
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+}
