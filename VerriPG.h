@@ -48,22 +48,28 @@ public:
 private:
     void processEvents();
     void update();
+    void update_enemy();
     void render();
-
     sf::RenderWindow window;
     sf::Event event;
     sf::Texture characterTexture, backgroundTexture, enemieTexture;
     sf::Sprite character, background, enemie;
 
     float characterScaleX, characterScaleY;
-    sf::Vector2f position;
+    sf::Vector2f velocity;
 
     // Adiciona variáveis para rastrear a animação em cada direção
     float frameAtualBaixo = 0.f;
     float frameAtualEsquerda = 0.f;
     float frameAtualDireita = 0.f;
     float frameAtualCima = 0.f;
-    float velocidadeAnimacao = 0.005f;
+
+    float frameAtualBaixo_enemie = 0.f;
+    float frameAtualEsquerda_enemie = 0.f;
+    float frameAtualDireita_enemie = 0.f;
+    float frameAtualCima_enemie = 0.f;
+
+    float velocidadeAnimacao = 0.01f;
     int linha;
 };
 

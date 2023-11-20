@@ -147,20 +147,20 @@ Game::Game()
           characterScaleX(1.f),
           characterScaleY(1.f)
 {
-    characterTexture.loadFromFile("./Images/alienspreadsheet.png");
-    backgroundTexture.loadFromFile("./Images/fundo.png");
-    //enemieTexture.loadFromFile("./Images/transforme.png");
+    characterTexture.loadFromFile("./Images/chiefsheet.png");
+    backgroundTexture.loadFromFile("./Images/mundo_lua.png");
+    enemieTexture.loadFromFile("./Images/alienspreadsheet.png");
+    velocity = sf::Vector2f(1.f, 0.f);
 
     character.setTexture(characterTexture);
     background.setTexture(backgroundTexture);
     enemie.setTexture(enemieTexture);
 
     // Ajusta a escala inicial junto com o centro da figura
-    /*
-    sf::Vector2f centerM(static_cast<float>(characterTexture.getSize().x), static_cast<float>(characterTexture.getSize().y));
+    sf::Vector2f centerM(static_cast<float>(enemieTexture.getSize().x), static_cast<float>(enemieTexture.getSize().y));
     centerM.x = centerM.x / 2;
     centerM.y = centerM.y / 2;
-    character.setOrigin(centerM); */
+    enemie.setOrigin(centerM); 
 }
 
 Game::~Game()
@@ -173,6 +173,7 @@ void Game::run()
     {
         processEvents();
         update();
+        update_enemy();
         render();
     }
 }
@@ -192,16 +193,17 @@ void Game::update()
     textureSize.x /= 4;  // Assumindo 4 frames na horizontal
     textureSize.y /= 4;  // Assumindo 4 frames na vertical
 
-    float characterScaleX = 2.f;
-    float characterScaleY = 2.f;
+    float characterScaleX = 3.f;
+    float characterScaleY = 3.f;
     character.setScale(characterScaleX, characterScaleY);
+    background.setScale(2.f,1.f);
     sf::Vector2f velocity(0.f, 0.f);
 
     //Movimentação por setas
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         // left key is pressed: move our character
-        velocity.x = -0.02f;
+        velocity.x = -0.2f;
         frameAtualDireita += velocidadeAnimacao;
         linha =1;
         // Ajusta a escala para inverter horizontalmente
@@ -210,7 +212,7 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         // right key is pressed: move our character
-        velocity.x = 0.02f;
+        velocity.x = 0.2f;
         frameAtualEsquerda += velocidadeAnimacao;
         linha=2;
         // Ajusta a escala para inverter horizontalmente
@@ -219,18 +221,18 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         // up key is pressed: move our character
-        velocity.y = -0.02f;
+        velocity.y = -0.2f;
         frameAtualCima += velocidadeAnimacao;
         linha =3;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         // down key is pressed: move our character
-        velocity.y = 0.02f;
+        velocity.y = 0.2f;
         frameAtualBaixo += velocidadeAnimacao;
         linha =0;
     }
-    position = character.getPosition();
+    //position = character.getPosition();
 
     // Verifica se o personagem está se movendo
     bool isMoving = (velocity.x != 0.f || velocity.y != 0.f);
@@ -272,34 +274,56 @@ void Game::update()
         // Se o personagem não estiver se movendo, exibir um frame parado
         character.setTextureRect(sf::IntRect(0, linha*textureSize.y, textureSize.x, textureSize.y));
     }
-
-    //Movimentação Mouse (Melhorar orientação)
-    /*
-    if (event.type == sf::Event::MouseButtonPressed) {
-    // Atualização da posição do objeto pela posição do mouse quando ocorre um clique
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        velocity.x=1.f;
-        velocity.y=1.f;
-        sf::Vector2f characterPosition = character.getPosition();
-        double angle = std::atan2((mousePosition.y-characterPosition.y),(mousePosition.x-characterPosition.x));
-        if(mousePosition.x>characterPosition.x)
-        velocity.x=1.5*std::cos(std::fabs(angle));
-        else
-        velocity.x=1.5*std::cos(-std::fabs(angle));
-        if(mousePosition.y>characterPosition.y)
-        velocity.y=1.5*std::sin(std::fabs(angle));
-        else
-        velocity.y=1.5*std::sin(-std::fabs(angle));
-    } */
     float velocidadeMovimento = 100.f;
     character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
+}
+void Game::update_enemy()
+{
+    sf::Vector2u textureSize = enemieTexture.getSize();
+    textureSize.x /= 4;  // Assumindo 4 frames na horizontal
+    textureSize.y /= 4;  // Assumindo 4 frames na vertical
+
+    float enemieScaleX = 2.f;
+    float enemieScaleY = 2.f;
+    enemie.setScale(enemieScaleX, enemieScaleY);
+    sf::Vector2f velocity_enemy =velocity;
+
+        if (velocity.x > 0.f) {
+            frameAtualEsquerda_enemie += velocidadeAnimacao;
+            if (frameAtualEsquerda_enemie > 4) {
+                frameAtualEsquerda_enemie = 0.f;
+            }
+            //Seta qual figura vai aparecer
+            enemie.setTextureRect(sf::IntRect(static_cast<int>(frameAtualEsquerda_enemie) * textureSize.x, 2 * textureSize.y, textureSize.x, textureSize.y));
+        } else if (velocity.x < 0.f) {
+            frameAtualDireita_enemie += velocidadeAnimacao;
+            if (frameAtualDireita_enemie > 4) {
+                frameAtualDireita_enemie = 0.f;
+            }
+            enemie.setTextureRect(sf::IntRect(static_cast<int>(frameAtualDireita_enemie) * textureSize.x, 1 * textureSize.y, textureSize.x, textureSize.y));
+        }
+        float velocidadeMovimento = 100.f;
+        enemie.move(velocity * velocidadeMovimento * 0.016f);
+        sf::Vector2f position=enemie.getPosition();
+        //Verifica se o personagem ultrapassou as bordas da janela
+        if (position.x < 0) {
+            position.x = 0;
+            enemie.setPosition(position.x,200.f);
+            velocity.x =1.f;
+        } else if (position.x > window.getSize().x - textureSize.x * enemieScaleX) {
+            position.x = window.getSize().x - textureSize.x * enemieScaleX;
+            enemie.setPosition(position.x,200.f);
+            velocity.x = -1.f;
+        }
+        position = enemie.getPosition();
+        enemie.setPosition(position.x,400.f);
 }
 void Game::render()
 {
     window.clear();
     window.draw(background);
     window.draw(character);
-    //window.draw(enemie);
+    window.draw(enemie);
     window.display();
 }
 
