@@ -174,6 +174,7 @@ void Game::run()
         processEvents();
         update();
         update_enemy();
+        clash();
         render();
     }
 }
@@ -326,6 +327,22 @@ void Game::render()
     window.draw(enemie);
     window.display();
 }
+void Game::clash()
+{    
+     // Defina a duração do choque (em segundos)
+    float duration = 1000.f;  // Ajuste conforme necessário
 
+    // Variável para controlar o temporizador
+    sf::Clock timer;
+
+        // Verifique a colisão
+        if (character.getGlobalBounds().intersects(enemie.getGlobalBounds())) {
+            if (timer.getElapsedTime().asSeconds() >= 1.0f) {
+                std::cout << "Houve choque" << std::endl;
+                timer.restart();  // Reinicie o temporizador
+            }
+        }
+    
+}
 
 

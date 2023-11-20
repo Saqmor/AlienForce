@@ -49,11 +49,13 @@ private:
     void processEvents();
     void update();
     void update_enemy();
+    void clash();
     void render();
     sf::RenderWindow window;
     sf::Event event;
     sf::Texture characterTexture, backgroundTexture, enemieTexture;
     sf::Sprite character, background, enemie;
+    float character_hp =300;
 
     float characterScaleX, characterScaleY;
     sf::Vector2f velocity;
