@@ -230,7 +230,7 @@ void bossFight::heal() {
 }
 
 std::queue<int>* bossFight::defineTurns() {
-    std::queue<int>* turn;
+    std::queue<int>* turn = new std::queue<int>();
     turn->push(1);
     for (int i = 0; i < 2; ++i) {
         turn->push(2);
@@ -375,30 +375,74 @@ void bossFight::enemyTurn(std::queue<int>* QueueTurns) {
         a ideia é começar a batalha quando o personagem chegar perto
 }*/
 void bossFight::renderBattle()
-{
-    /*sf::Sprite background;
+{   
+    sf::RenderWindow window(sf::VideoMode(800,600),"My window");
+
+    //Imagem de fundo
+    sf::Sprite background;
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile("./Images/fundo.png");
-    background.setTexture(backgroundTexture);*/
-    //Criação de janelas e de barra de vida
-    sf::RenderWindow window(sf::VideoMode(800,600),"My window");
-    sf::RectangleShape playerHp(sf::Vector2f(hero.hp,25.f));
-    playerHp.setFillColor(sf::Color(50,205,50));
-    sf::RectangleShape bossHp(sf::Vector2f(alien.hp,25.f));
-    bossHp.setFillColor(sf::Color(50,205,50));
+    background.setTexture(backgroundTexture);
 
-    // Ajusta a escala inicial junto com o centro da figura
-    sf::Vector2f positionPhp(static_cast<float>(playerHp.getSize().x), static_cast<float>(playerHp.getSize().y));
-    sf::Vector2f positionBhp(static_cast<float>(bossHp.getSize().x), static_cast<float>(bossHp.getSize().y));
-    positionPhp.x = positionPhp.x / 2;
-    positionPhp.y = positionPhp.y / 2;
-    positionBhp.x = positionBhp.x / 2;
-    positionBhp.y = positionBhp.y / 2;
-    playerHp.setOrigin(positionPhp);
-    bossHp.setOrigin(positionBhp);
+    //Criação de retângulos envolventes  
+    sf::Texture roundedTexture;
+    roundedTexture.loadFromFile("./Images/rounded(5).png");
+    sf::Sprite roundedHero,roundedBoss;
+    roundedHero.setTexture(roundedTexture);
+    roundedBoss.setTexture(roundedTexture);
+    roundedHero.setScale(-1.3f,0.4f);
+    roundedBoss.setScale(1.9f,0.4f);
+    sf::RectangleShape playerHp(sf::Vector2f(hero.hp,13.f));
+    sf::RectangleShape bossHp(sf::Vector2f(alien.hp,13.f));
 
-    playerHp.setPosition(80.f,50.f);
-    bossHp.setPosition(400.f,100.f);
+    //Criação dos personagens
+    sf::Texture heroTexture,bossTexture;
+    heroTexture.loadFromFile("./Images/hero.png");
+    bossTexture.loadFromFile("./Images/boss.png");
+    sf::Sprite heroSprite,bossSprite;
+    heroSprite.setTexture(heroTexture);
+    bossSprite.setTexture(bossTexture);
+
+    //Texto
+    sf::Text textHero,textBoss;
+    sf::Font font;
+    font.loadFromFile("ethn.otf");
+    textBoss.setFont(font);
+    textBoss.setString("Boss HP");
+    textBoss.setCharacterSize(12);
+    textHero.setFont(font);
+    textHero.setString("Hero HP");
+    textHero.setCharacterSize(12); 
+
+    //Pintura    
+    playerHp.setFillColor(sf::Color(144,238,144));
+    bossHp.setFillColor(sf::Color(144,238,144));
+    textBoss.setFillColor(sf::Color(0,128,128));
+    textHero.setFillColor(sf::Color(0,128,128));
+    roundedBoss.setColor(sf::Color(222,184,135));
+    roundedHero.setColor(sf::Color(222,184,135));
+
+    //Posicionamento
+    playerHp.setPosition(600.f,400.f);
+    bossHp.setPosition(0,64.f);
+    roundedBoss.setPosition(-130.f,30.f);
+    roundedHero.setPosition(900.f,370.f);
+    textBoss.setPosition(20.f,40.f);
+    textHero.setPosition(705.f,380.f);
+    
+    // Ajusta a escala e posicionamento das Sprites Hero e Boss
+    sf::Vector2f positionHero(static_cast<float>(heroTexture.getSize().x), static_cast<float>(heroTexture.getSize().y));
+    sf::Vector2f positionBoss(static_cast<float>(bossTexture.getSize().x), static_cast<float>(bossTexture.getSize().y));
+    positionHero.x = positionHero.x / 2;
+    positionHero.y = positionHero.y / 2;
+    positionBoss.x = positionBoss.x / 2;
+    positionHero.y = positionBoss.y / 2;
+    heroSprite.setOrigin(positionHero);
+    bossSprite.setOrigin(positionBoss);
+    heroSprite.setPosition(150.f,380.f);
+    bossSprite.setPosition(675.f,250.f);
+    bossSprite.setScale(0.5f,0.5f);
+    heroSprite.setScale(0.5f,0.5f);
 
     bool endBattle = false;
     std::queue<int>* QueueTurns = defineTurns();
@@ -436,27 +480,19 @@ void bossFight::renderBattle()
             if (endBattle)
                 window.close();
 
-
-
-            playerHp.setSize(sf::Vector2f(hero.hp, 30));
-            bossHp.setSize(sf::Vector2f(alien.hp, 30));
-
-
-            /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            {
-                sf::Vector2f lenght(static_cast<float>(rectangle.getSize().x), static_cast<float>(rectangle.getSize().y));
-                lenght.x=lenght.x -20.f;
-
-            }*/
+            playerHp.setSize(sf::Vector2f(hero.hp, 13));
+            bossHp.setSize(sf::Vector2f(0.45*alien.hp, 13));
         }
         window.clear();
+        window.draw(background);
+        window.draw(roundedBoss);
+        window.draw(roundedHero);
         window.draw(playerHp);
         window.draw(bossHp);
-        for(auto t : texts_opBattle){
-            window.draw(t);
-        }
+        window.draw(textBoss);
+        window.draw(textHero);
+        window.draw(heroSprite);
+        window.draw(bossSprite);
         window.display();
     }
-
-
 }
