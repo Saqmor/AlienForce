@@ -116,8 +116,8 @@ private:
     std::priority_queue<int> maxPriorityQueue;
 public:
     void attack1();
-    void attack2();
     int chooseBomb();
+    void attack2();
     void heal();
     void defineTurns();
     void damageCondition();

@@ -339,6 +339,19 @@ void bossFight::attack1(){
     maxPriorityQueue.pop();
 }
 
+/*int chooseBomb() {
+    sf::Sprite background;
+    sf::Texture backgroundTexture;
+    backgroundTexture.loadFromFile("./Images/fundo.png");
+    background.setTexture(backgroundTexture);
+    //Criação de janelas e de barra de vida
+    sf::RenderWindow window(sf::VideoMode(800,400),"My window");
+    sf::RectangleShape boxAttack1(sf::Vector2f(50,15.f));
+    sf::RectangleShape boxAttack2(sf::Vector2f(200,15.f));
+    sf::RectangleShape boxHeal(sf::Vector2f(350,15.f));
+    sf::RectangleShape boxRun(sf::Vector2f(550,15.f));
+}*/
+
 void bossFight::attack2(){
     damageCondition();
     if (maxPriorityQueue.top() == alien.speed)
@@ -455,7 +468,6 @@ bool bossFight::playerTurn() {
             pressed_opBattle = false;
         }
     }
-
     return true;
 }
 
@@ -480,6 +492,7 @@ void bossFight::modeBattle()
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile("./Images/fundo.png");
     background.setTexture(backgroundTexture);
+
     //Criação de janelas e de barra de vida
     sf::RenderWindow window(sf::VideoMode(800,600),"My window");
     sf::RectangleShape playerHp(sf::Vector2f(hero.hp,25.f));
