@@ -371,12 +371,13 @@ void bossFight::attack2(){
 
 void bossFight::heal() {
     hero.hp += 10 + 2 * dice(6);
+    maxPriorityQueue.pop();
 }
 
 void bossFight::defineTurns() {
-    if (alien.speed == 2 * hero.speed)
+    if (alien.speed >= 2 * hero.speed)
         maxPriorityQueue.push(alien.speed);
-    if (hero.speed == 2 * alien.speed)
+    if (hero.speed >= 2 * alien.speed)
         maxPriorityQueue.push(hero.speed);
     maxPriorityQueue.push(hero.speed);
     maxPriorityQueue.push(alien.speed);
@@ -393,11 +394,22 @@ void bossFight::damageCondition() {
     }
 }
 
+bool bossFight::Turn() {
+    if (maxPriorityQueue.top() == alien.speed)
+        enemyTurn();
+    if ( playerTurn())
+        return true;
+    else return false;
+}
+
 bool bossFight::playerTurn() {
 
+    // Verifica se a tecla Enter está pressionada
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-        if(!theselect_opBattle){
+        // Verifica se o jogador ainda não selecionou a opção atual
+        if (!theselect_opBattle) {
             theselect_opBattle = true;
+            std::cout << "entrou ";
             switch (pos_opBattle) {
                 case 0:
                     // Code for "Attack1" option
@@ -410,43 +422,43 @@ bool bossFight::playerTurn() {
                 case 2:
                     // Code for "Heal" option
                     heal();
-                    maxPriorityQueue.pop();
                     break;
                 case 3:
                     // Code for "Run" option
-                    break;
+                    return false;
                 default:
                     break;
             }
         }
-
-    }
-    else {
+    } else {
+        // Se a tecla Enter não estiver pressionada, reinicia theselect_opBattle
         theselect_opBattle = false;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed_opBattle){
-        if( pos_opBattle < 3){
+
+    // Lógica para navegar entre as opções com as teclas direcionais
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed_opBattle) {
+        if (pos_opBattle < 3) {
             ++pos_opBattle;
             pressed_opBattle = true;
             texts_opBattle[pos_opBattle].setOutlineThickness(4);
             texts_opBattle[pos_opBattle - 1].setOutlineThickness(0);
             pressed_opBattle = false;
-
         }
     }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed_opBattle){
-        if( pos_opBattle > 0){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed_opBattle) {
+        if (pos_opBattle > 0) {
             --pos_opBattle;
             pressed_opBattle = true;
             texts_opBattle[pos_opBattle].setOutlineThickness(4);
             texts_opBattle[pos_opBattle + 1].setOutlineThickness(0);
             pressed_opBattle = false;
-
         }
     }
+
     return true;
 }
+
 
 void bossFight::enemyTurn() {
     if (prob(80))
@@ -488,7 +500,6 @@ void bossFight::modeBattle()
     playerHp.setPosition(80.f,50.f);
     bossHp.setPosition(400.f,100.f);
 
-    pos_opBattle = 0;
     pressed_opBattle = theselect_opBattle = false;
     font->loadFromFile("./ethn.otf");
     //image->loadFromFile("");
@@ -521,29 +532,14 @@ void bossFight::modeBattle()
                 window.close();
 
             if (hero.isAlive && alien.isAlive && !endBattle){
-                std::cout<<maxPriorityQueue.top();
                 if (maxPriorityQueue.empty())
                     defineTurns();
-                if (maxPriorityQueue.top() == hero.speed){
-                    if (!playerTurn())
-                        endBattle = true;
-                    if (!alien.isAlive){
-                        alien.hp = 0;
-                        endBattle = true;
-                    }
-
-                }
-                else if (maxPriorityQueue.top() == alien.speed){
-                    enemyTurn();
-                    if (!alien.isAlive) {
-                        alien.hp = 0;
-                        endBattle = true;
-                    }
-                    if (!hero.isAlive){
-                        hero.hp = 0;
-                        endBattle = true;
-                    }
-                }
+                if (!Turn())
+                    endBattle = true;
+                if (!alien.isAlive)
+                    endBattle = true;
+                if (!hero.isAlive)
+                    endBattle = true;
             }
             if (endBattle)
                 window.close();

@@ -121,7 +121,10 @@ public:
     void heal();
     void defineTurns();
     void damageCondition();
+    bool Turn();
     bool playerTurn();
+
+
     void enemyTurn();
     void writeTextesBattle();
     //void Battle();
