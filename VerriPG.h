@@ -8,6 +8,38 @@
 #include <string>
 #include <queue>
 
+class Menu {
+    int pos;
+    bool pressed, theselect, selectedPlay;
+
+    sf::RenderWindow * window;
+    sf::RectangleShape * winclose;
+    sf::Font * font;
+    sf::Texture * image;
+    sf::Sprite * bg;
+
+    sf::Vector2i pos_mouse;
+    sf::Vector2f mouse_coord;
+
+    std::vector<const char *> options;
+    std::vector<sf::Vector2f> coords;
+    std::vector<sf::Text> texts;
+    std::vector<std::size_t> sizes;
+
+
+protected:
+    void set_values();
+    void loop_events();
+    void draw_all();
+
+public:
+    Menu();
+    ~Menu();
+    void run_menu();
+};
+
+
+
 class Game
 {
 public:
@@ -29,21 +61,6 @@ private:
     float characterScaleX, characterScaleY;
     sf::Vector2f position;
 
-    void initializeMenu();
-    void processMenuEvents();
-    void drawMenu();
-    void runMenu();
-
-    sf::Font menuFont;
-    sf::Text menuText;
-    int menuPosition;
-    bool menuPressed;
-    std::vector<const char *> options;
-    std::vector<sf::Vector2f> coords;
-    sf::Vector2i pos_mouse;
-    sf::Vector2f mouse_coord;
-    sf::RectangleShape * winclose;
-
     // Adiciona variáveis para rastrear a animação em cada direção
     float frameAtualBaixo = 0.f;
     float frameAtualEsquerda = 0.f;
@@ -55,25 +72,30 @@ private:
 
 
 
+
+
+
 class bossFight{
 private:
     struct Hero{
         float hp = 200;
-        bool isAlive = false;
+        bool isAlive = true;
         bool iceBomb = false;
         bool fireBomb = false;
         bool posionBomb = false;
         bool paralyzingBomb = false;
+        int speed = 12;
     };
     Hero hero;
 
     struct Alien{
         float hp = 700;
-        bool isAlive = false;
+        bool isAlive = true;
         bool frozen = false;
         bool burn = false;
         bool posion = false;
         bool lessAccuracy = false;
+        int speed = 25;
     };
     Alien alien;
 
@@ -91,17 +113,19 @@ private:
     std::vector<sf::Text> texts_opBattle;
     std::vector<std::size_t> sizes_opBattle;
 
+    std::priority_queue<int> maxPriorityQueue;
 public:
-    void attack1(std::queue<int>* QueueTurns);
-    void attack2(std::queue<int>* QueueTurns);
+    void attack1();
+    void attack2();
     int chooseBomb();
     void heal();
-    std::queue<int>* defineTurns();
+    void defineTurns();
     void damageCondition();
-    bool playerTurn(std::queue<int>* QueueTurns);
-    void enemyTurn(std::queue<int>* QueueTurns);
+    bool playerTurn();
+    void enemyTurn();
+    void writeTextesBattle();
     //void Battle();
-    void renderBattle();
+    void modeBattle();
 };
 
 
