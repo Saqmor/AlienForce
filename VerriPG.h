@@ -111,27 +111,36 @@ private:
 
     
     int pos_opBattle;
-    bool pressed_opBattle, theselect_opBattle;
+    int posBomb;
+    bool pressed_opBattle, theselect_opBattle, pressed, theselect;
+    bool enterPrevState;
 
-    sf::Font * font;
-    sf::Texture * image;
-    sf::Sprite * bg;
+    sf::Font font;
+    sf::Texture image;
+    sf::Sprite bg;
     sf::RenderWindow window;
+    sf::RenderWindow windowAttack2;
     sf::Sprite background;
     sf::Texture backgroundTexture;
     sf::Texture roundedTexture;
     sf::Font font_bar;
 
+    std::vector<sf::Text> texts;
     std::vector<const char *> optionsBattle;
     std::vector<sf::Vector2f> coords_opBattle;
     std::vector<sf::Text> texts_opBattle;
     std::vector<std::size_t> sizes_opBattle;
+    std::vector<std::size_t> sizes;
+    std::vector<const char *> choicesBomb;
 
     std::priority_queue<int> maxPriorityQueue;
 public:
     void attack1();
     void attack2();
-    int chooseBomb();
+    void setValues();
+    int loopChooseBomb();
+    void drawSpecialAttack();
+    int runChooseBomb();
     void heal();
     void defineTurns();
     void damageCondition();

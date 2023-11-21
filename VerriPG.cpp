@@ -34,8 +34,8 @@ void Menu::set_values(){
 
     options = {"Alienverse: Cosmic Invasion", "New game", "Continue", "About", "Quit"};
     texts.resize(5);
-    coords = {{590,40},{610,191},{590,282},{600,370},{623,457}};
-    sizes = {20,28,24,24,24};
+    coords = {{572,40},{585,191},{583,280},{600,370},{623,457}};
+    sizes = {25,21,24,24,24};
 
     for (std::size_t i{}; i < texts.size(); ++i){
         texts[i].setFont(*font);
@@ -335,12 +335,106 @@ void bossFight::attack1(){
     maxPriorityQueue.pop();
 }
 
+
+void bossFight::setValues() {
+    choicesBomb = {"Ice Bomb", "Fire Bomb", "Poison Bomb", "Paralyzing Bomb "};
+    texts.resize(4);
+    sizes = {20,20,20,20,20};
+
+    for (std::size_t i{}; i < texts.size(); ++i){
+        texts[i].setFont(font);
+        texts[i].setString(choicesBomb[i]);
+        texts[i].setCharacterSize(sizes[i]);
+        texts[i].setOutlineColor(sf::Color::Green);
+        texts[i].setPosition(coords_opBattle[i]);
+    }
+    texts[0].setOutlineThickness(4);
+    posBomb = 0;
+}
+
+int bossFight::loopChooseBomb() {
+    sf::Event event;
+    while(window.pollEvent(event)){
+        if( event.type == sf::Event::Closed){
+            window.close();
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !enterPrevState) {
+            enterPrevState = true;
+            switch (posBomb) {
+                case 0:
+                    return 1;
+                case 1:
+                    return 2;
+                case 2:
+                    return 3;
+                case 3:
+                    return 4;
+                default:
+                    break;
+            }
+        } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+            // Se a tecla Enter não estiver pressionada, reinicia theselect_opBattle
+            enterPrevState = false;
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed) {
+            if (posBomb < 4) {
+                ++posBomb;
+                pressed = true;
+                texts[posBomb].setOutlineThickness(4);
+                texts[posBomb - 1].setOutlineThickness(0);
+                pressed = false;
+            }
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed) {
+            if (posBomb > 0) {
+                --posBomb;
+                pressed = true;
+                texts[posBomb].setOutlineThickness(4);
+                texts[posBomb + 1].setOutlineThickness(0);
+                pressed = false;
+            }
+        }
+    }
+    return -1;
+}
+
+void bossFight::drawSpecialAttack() {
+    window.clear();
+    window.draw(background);
+    window.draw(alien.roundedBoss);
+    window.draw(hero.roundedHero);
+    window.draw(hero.playerHp);
+    window.draw(alien.bossHp);
+    window.draw(alien.textBoss);
+    window.draw(hero.textHero);
+    window.draw(hero.heroSprite);
+    window.draw(alien.bossSprite);
+    for(auto t : texts){
+        window.draw(t);
+    }
+    window.display();
+}
+
+int bossFight::runChooseBomb(){
+    int num = -1;
+    enterPrevState = true;
+    setValues();
+    while (num == -1){
+        num = loopChooseBomb();
+        drawSpecialAttack();
+    }
+    texts[posBomb].setOutlineThickness(0);
+    return num;
+}
+
 void bossFight::attack2(){
     damageCondition();
     if (maxPriorityQueue.top() == alien.speed)
         hero.hp -= 20 + 2 * dice(12);
     if (maxPriorityQueue.top() == hero.speed){
-        switch (2) {
+        switch (runChooseBomb()) {
             case 1:
                 alien.hp -=  prob(40) ? 50 + 2 * dice(20) : 0;
                 alien.speed -= 20;
@@ -401,32 +495,30 @@ bool bossFight::Turn() {
 bool bossFight::playerTurn() {
 
     // Verifica se a tecla Enter está pressionada
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect_opBattle) {
         // Verifica se o jogador ainda não selecionou a opção atual
-        if (!theselect_opBattle) {
-            theselect_opBattle = true;
-            std::cout << "entrou ";
-            switch (pos_opBattle) {
-                case 0:
-                    // Code for "Attack1" option
-                    attack1();
-                    break;
-                case 1:
-                    // Code for "Attack2" option
-                    attack2();
-                    break;
-                case 2:
-                    // Code for "Heal" option
-                    heal();
-                    break;
-                case 3:
-                    // Code for "Run" option
-                    return false;
-                default:
-                    break;
-            }
+        theselect_opBattle = true;
+        std::cout << "entrou ";
+        switch (pos_opBattle) {
+            case 0:
+                // Code for "Attack1" option
+                attack1();
+                break;
+            case 1:
+                // Code for "Attack2" option
+                attack2();
+                break;
+            case 2:
+                // Code for "Heal" option
+                heal();
+                break;
+            case 3:
+                // Code for "Run" option
+                return false;
+            default:
+                break;
         }
-    } else {
+    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
         // Se a tecla Enter não estiver pressionada, reinicia theselect_opBattle
         theselect_opBattle = false;
     }
@@ -542,15 +634,12 @@ void bossFight::drawBattle()
 }
 void bossFight::modeBattle()
 {
-    font = new sf::Font();
-    image = new sf::Texture();
-    bg = new sf::Sprite();
     backgroundTexture.loadFromFile("./Images/fundo.png");
     background.setTexture(backgroundTexture);
     window.create(sf::VideoMode(800,600),"My window");
    
     pressed_opBattle = theselect_opBattle = false;
-    font->loadFromFile("./ethn.otf");
+    font.loadFromFile("./ethn.otf");
     //image->loadFromFile("");
 
     //bg->setTexture(*image);
@@ -560,7 +649,7 @@ void bossFight::modeBattle()
     sizes_opBattle = {20,20,20,20,20};
 
     for (std::size_t i{}; i < texts_opBattle.size(); ++i){
-        texts_opBattle[i].setFont(*font);
+        texts_opBattle[i].setFont(font);
         texts_opBattle[i].setString(optionsBattle[i]);
         texts_opBattle[i].setCharacterSize(sizes_opBattle[i]);
         texts_opBattle[i].setOutlineColor(sf::Color::Green);
