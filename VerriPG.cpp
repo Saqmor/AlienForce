@@ -303,5 +303,45 @@ void Game::render()
     window.display();
 }
 
+void SpaceMap::update() {
+    backgroundTexture.loadFromFile("");
+    background.setTexture(backgroundTexture);
+    //Rocket.setTexture("");
+}
+
+void SpaceMap::loopSpaceMap () {
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+
+
+
+        }
+    }
+}
+
+void SpaceMap::render() {
+    window.clear();
+    window.draw(background);
+    //window.draw(character);
+    window.display();
+}
+
+
+void SpaceMap::runSpaceMap() {
+    window.create(sf::VideoMode(800, 600), "My window");
+    while (window.isOpen())
+    {
+        loopSpaceMap();
+        render();
+    }
+}
+
+
+
 
 

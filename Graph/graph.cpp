@@ -144,3 +144,5 @@ void Graph::print_min_caminh(std::size_t u,std::size_t v) const{
     std::cout<<std::endl;
     std::cout<<std::endl;
 }
+
+void

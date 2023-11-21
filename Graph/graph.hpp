@@ -3,6 +3,8 @@
 #include <float.h>
 #include <iostream>
 #include <stack>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 class Graph {
 private:
@@ -38,5 +40,4 @@ public:
   std::vector<std::size_t> min_way(std::size_t u,std::size_t v) const;
   void print_min_caminh(std::size_t u,std::size_t v) const;
 };
-
 

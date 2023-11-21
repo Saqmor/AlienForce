@@ -68,3 +68,18 @@ private:
 };
 
 
+class SpaceMap {
+private:
+    sf::RenderWindow window;
+    sf::Texture backgroundTexture;
+    sf::Sprite background;
+
+    sf::Sprite Rocket;
+
+public:
+    void update();
+    void loopSpaceMap ();
+    void render();
+    void runSpaceMap ();
+};
+
