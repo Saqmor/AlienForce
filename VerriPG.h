@@ -86,12 +86,12 @@ private:
 class bossFight{
 private:
     struct Hero{
-        float hp = 200;
+        float hp = 240;
         bool isAlive = true;
         bool iceBomb = false;
         bool fireBomb = false;
-        bool posionBomb = false;
-        bool paralyzingBomb = false;
+        bool poisonBomb = false;
+        bool flashbang = false;
         int speed = 12;
         sf::RectangleShape playerHp;
         sf::Texture heroTexture;
@@ -106,7 +106,7 @@ private:
         bool isAlive = true;
         bool frozen = false;
         bool burn = false;
-        bool posion = false;
+        bool poison = false;
         bool lessAccuracy = false;
         int speed = 25;
         sf::RectangleShape bossHp;
@@ -136,6 +136,7 @@ private:
     std::vector<sf::Text> texts;
     std::vector<const char *> optionsBattle;
     std::vector<sf::Vector2f> coords_opBattle;
+    std::vector<sf::Vector2f> coords_attack2;
     std::vector<sf::Text> texts_opBattle;
     std::vector<std::size_t> sizes_opBattle;
     std::vector<std::size_t> sizes;

@@ -369,10 +369,10 @@ bool prob(int n) {
 void bossFight::attack1(){
     damageCondition();
     if (maxPriorityQueue.top() == hero.speed)
-        alien.hp -= 8 + dice(8);
+        alien.hp -= 7 + dice(8);
     if (maxPriorityQueue.top() == alien.speed){
         if (alien.lessAccuracy)
-            hero.hp -= prob(90) ? 10 + 2 * dice(8) : 0;
+            hero.hp -= prob(85) ? 10 + 2 * dice(8) : 0;
         else hero.hp -= 10 + 2 * dice(8);
     }
     maxPriorityQueue.pop();
@@ -380,16 +380,17 @@ void bossFight::attack1(){
 
 
 void bossFight::setValues() {
-    choicesBomb = {"Ice Bomb", "Fire Bomb", "Poison Bomb", "Paralyzing Bomb "};
+    choicesBomb = {"Ice Bomb", "Fire Bomb", "Poison Bomb", "Flashbang"};
     texts.resize(4);
     sizes = {20,20,20,20,20};
+    coords_attack2 = {{15,500},{160,500},{325,500},{550,500}};
 
     for (std::size_t i{}; i < texts.size(); ++i){
         texts[i].setFont(font);
         texts[i].setString(choicesBomb[i]);
         texts[i].setCharacterSize(sizes[i]);
         texts[i].setOutlineColor(sf::Color::Green);
-        texts[i].setPosition(coords_opBattle[i]);
+        texts[i].setPosition(coords_attack2[i]);
     }
     texts[0].setOutlineThickness(4);
     posBomb = 0;
@@ -421,7 +422,7 @@ int bossFight::loopChooseBomb() {
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed) {
-            if (posBomb < 4) {
+            if (posBomb < 3) {
                 ++posBomb;
                 pressed = true;
                 texts[posBomb].setOutlineThickness(4);
@@ -475,7 +476,7 @@ int bossFight::runChooseBomb(){
 void bossFight::attack2(){
     damageCondition();
     if (maxPriorityQueue.top() == alien.speed)
-        hero.hp -= 20 + 2 * dice(12);
+        hero.hp -= 60 + 2 * dice(12);
     if (maxPriorityQueue.top() == hero.speed){
         switch (runChooseBomb()) {
             case 1:
@@ -488,7 +489,7 @@ void bossFight::attack2(){
                 break;
             case 3:
                 alien.hp -=  prob(80) ? 40 + 2 * dice(20) : 0;
-                alien.posion = true;
+                alien.poison = true;
                 break;
             case 4:
                 alien.hp -=  prob(50) ? 50 + 2 * dice(20) : 0;
@@ -503,7 +504,7 @@ void bossFight::attack2(){
 
 
 void bossFight::heal() {
-    hero.hp += 10 + 2 * dice(6);
+    hero.hp += 8 + 1 * dice(6);
     maxPriorityQueue.pop();
 }
 
@@ -519,7 +520,7 @@ void bossFight::defineTurns() {
 void bossFight::damageCondition() {
     if (alien.burn)
         alien.hp -= 4;
-    if (alien.posion)
+    if (alien.poison)
         alien.hp -= 7;
     if (alien.hp <= 0){
         alien.hp = 0;
@@ -592,7 +593,7 @@ bool bossFight::playerTurn() {
 
 
 void bossFight::enemyTurn() {
-    if (prob(80))
+    if (prob(90))
         attack1();
     else attack2();
 
@@ -612,7 +613,7 @@ void bossFight::layoutBattle()
 
     //Criação dos personagens
     hero.heroTexture.loadFromFile("./Images/hero.png");
-    alien.bossTexture.loadFromFile("./Images/boss.png");
+    alien.bossTexture.loadFromFile("./Images/alien_boss_true.png");
     hero.heroSprite.setTexture(hero.heroTexture);
     alien.bossSprite.setTexture(alien.bossTexture);
 
@@ -651,7 +652,7 @@ void bossFight::layoutBattle()
     hero.heroSprite.setOrigin(positionHero);
     alien.bossSprite.setOrigin(positionBoss);
     hero.heroSprite.setPosition(150.f,380.f);
-    alien.bossSprite.setPosition(675.f,250.f);
+    alien.bossSprite.setPosition(650.f,370.f);
     alien.bossSprite.setScale(0.5f,0.5f);
     hero.heroSprite.setScale(0.5f,0.5f);
     
@@ -677,7 +678,7 @@ void bossFight::drawBattle()
 }
 void bossFight::modeBattle()
 {
-    backgroundTexture.loadFromFile("./Images/fundo.png");
+    backgroundTexture.loadFromFile("./Images/background_battle_2.png");
     background.setTexture(backgroundTexture);
     window.create(sf::VideoMode(800,600),"My window");
    
@@ -688,7 +689,7 @@ void bossFight::modeBattle()
     //bg->setTexture(*image);
     optionsBattle = {"Atirar", "Especial", "Curar", "Fugir"};
     texts_opBattle.resize(4);
-    coords_opBattle = {{40,500},{200,500},{350,500},{550,500}};
+    coords_opBattle = {{70,500},{229,500},{419,500},{600,500}};
     sizes_opBattle = {20,20,20,20,20};
 
     for (std::size_t i{}; i < texts_opBattle.size(); ++i){
