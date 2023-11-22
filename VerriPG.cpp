@@ -147,20 +147,20 @@ Game::Game()
           characterScaleX(1.f),
           characterScaleY(1.f)
 {
-    characterTexture.loadFromFile("./Images/alienspreadsheet.png");
+    characterTexture.loadFromFile("./Images/chiefsheet.png");
     backgroundTexture.loadFromFile("./Images/fundo.png");
-    //enemieTexture.loadFromFile("./Images/transforme.png");
+    enemy1Texture.loadFromFile("./Images/enemy1.png");
 
     character.setTexture(characterTexture);
     background.setTexture(backgroundTexture);
-    enemie.setTexture(enemieTexture);
+    enemy1.setTexture(enemy1Texture);
 
     // Ajusta a escala inicial junto com o centro da figura
-    /*
-    sf::Vector2f centerM(static_cast<float>(characterTexture.getSize().x), static_cast<float>(characterTexture.getSize().y));
+    
+    sf::Vector2f centerM(static_cast<float>(enemy1Texture.getSize().x), static_cast<float>(enemy1Texture.getSize().y));
     centerM.x = centerM.x / 2;
     centerM.y = centerM.y / 2;
-    character.setOrigin(centerM); */
+    enemy1.setOrigin(centerM); 
 }
 
 Game::~Game()
@@ -173,6 +173,7 @@ void Game::run()
     {
         processEvents();
         update();
+        update_enemy1();
         render();
     }
 
@@ -204,7 +205,7 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         // left key is pressed: move our character
-        velocity.x = -0.02f;
+        velocity.x = -0.1f;
         frameAtualDireita += velocidadeAnimacao;
         linha =1;
         // Ajusta a escala para inverter horizontalmente
@@ -213,7 +214,7 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         // right key is pressed: move our character
-        velocity.x = 0.02f;
+        velocity.x = 0.1f;
         frameAtualEsquerda += velocidadeAnimacao;
         linha=2;
         // Ajusta a escala para inverter horizontalmente
@@ -222,14 +223,14 @@ void Game::update()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         // up key is pressed: move our character
-        velocity.y = -0.02f;
+        velocity.y = -0.1f;
         frameAtualCima += velocidadeAnimacao;
         linha =3;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         // down key is pressed: move our character
-        velocity.y = 0.02f;
+        velocity.y = 0.1f;
         frameAtualBaixo += velocidadeAnimacao;
         linha =0;
     }
@@ -297,12 +298,54 @@ void Game::update()
     float velocidadeMovimento = 100.f;
     character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
 }
+void Game::update_enemy1()
+{
+    sf::Vector2u textureSize = enemy1Texture.getSize();
+    textureSize.x /= 4;  // Assumindo 4 frames na horizontal
+    textureSize.y /= 4;  // Assumindo 4 frames na vertical
+
+    float enemyScaleX =2.f;
+    float enemyScaleY =2.f;
+
+    enemy1.setScale(enemyScaleX, enemyScaleY);
+    sf::Vector2f velocity =velocity_enemy1;
+
+        if (velocity.x > 0.f) {
+            frameAtualEsquerda_enemy += velocidadeAnimacao;
+            if (frameAtualEsquerda_enemy > 4) {
+                frameAtualEsquerda_enemy = 0.f;
+            }
+            //Seta qual figura vai aparecer
+            enemy1.setTextureRect(sf::IntRect(static_cast<int>(frameAtualEsquerda_enemy) * textureSize.x, 2 * textureSize.y, textureSize.x, textureSize.y));
+        } else if (velocity.x < 0.f) {
+            frameAtualDireita_enemy += velocidadeAnimacao;
+            if (frameAtualDireita_enemy > 4) {
+                frameAtualDireita_enemy = 0.f;
+            }
+            enemy1.setTextureRect(sf::IntRect(static_cast<int>(frameAtualDireita_enemy) * textureSize.x, 1 * textureSize.y, textureSize.x, textureSize.y));
+        }
+        float velocidadeMovimento = 100.f;
+        enemy1.move(velocity_enemy1 * velocidadeMovimento * 0.016f);
+        sf::Vector2f position_enemy1=enemy1.getPosition();
+        //Verifica se o personagem ultrapassou as bordas da janela
+        if (position_enemy1.x <=0) {
+            position_enemy1.x = 0;
+            enemy1.setPosition(position_enemy1.x,200.f);
+            velocity_enemy1.x=0.4f;
+        } else if (position_enemy1.x > window.getSize().x - textureSize.x * enemyScaleX) {
+            position_enemy1.x = window.getSize().x - textureSize.x * enemyScaleX;
+            enemy1.setPosition(position_enemy1.x,200.f);
+            velocity_enemy1.x = -0.4f;
+        }
+        position_enemy1 = enemy1.getPosition();
+        enemy1.setPosition(position_enemy1.x,400.f);
+}
 void Game::render()
 {
     window.clear();
     window.draw(background);
     window.draw(character);
-    //window.draw(enemie);
+    window.draw(enemy1);
     window.display();
 }
 
