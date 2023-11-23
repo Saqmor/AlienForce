@@ -3,9 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
-#include <cmath>
 #include <random>
-#include <string>
 #include <queue>
 
 class Menu {
