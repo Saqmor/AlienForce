@@ -11,7 +11,7 @@
 
 class Menu {
     int pos;
-    bool pressed, theselect, selectedPlay;
+    bool pressed, theselect, selectedPlay, selectedContinue;
 
     sf::RenderWindow * window;
     sf::RectangleShape * winclose;
@@ -216,6 +216,8 @@ private:
     sf::Sprite background;
 
     sf::Sprite Rocket;
+    sf::Texture rocketTexture;
+    sf::Vector2f position;
 
     bool enterWorld = true;
     //std::vector<sf::CircleShape, std::allocator<sf::CircleShape>> worlds;
@@ -246,6 +248,10 @@ class SpaceShip
     void set_values();
 
 };
+
+
+
+
 /*class SpaceMap {
 private:
 

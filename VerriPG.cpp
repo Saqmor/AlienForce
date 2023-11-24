@@ -95,7 +95,8 @@ void Menu::loop_events(){
                     break;
                 case 2:
                     // Code for "Options" option
-                    std::cout << "Options selected!\n";
+                    selectedContinue = true;
+                    window->close();
                     break;
                 case 3:
                     // Code for "About" option
@@ -139,6 +140,10 @@ void Menu::run_menu(){
         std::cin >> n;
         SpaceMap space(n);
         space.runSpaceMap();
+    }
+    if (selectedContinue){
+        // ver se o arquivo save existe
+            //
     }
 }
 
@@ -300,6 +305,7 @@ SpaceMap::~SpaceMap() {
 
 void SpaceMap::set_values()
 {
+    worlds = new World[order()];
     std::size_t from, to;
     float weight;
     while(std::cin >> from >> to >> weight)
@@ -371,7 +377,7 @@ void SpaceMap::render() {
 
 void SpaceMap::runSpaceMap() {
     //createGraph();
-    worlds = new World[order()];
+
     set_values();
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
