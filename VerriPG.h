@@ -200,6 +200,20 @@ private:
     sf::Vector2f mouse_coord;
 };
 
+class SpaceShip
+{
+    private:
+    sf::RenderTexture texture;
+    sf::Sprite sprite; 
+    sf::Vector2f position;
+
+    public:
+    void move(std::vector<int>points);
+    void render();
+    void move_animation();
+    void set_values();
+
+};
 /*class SpaceMap {
 private:
 
