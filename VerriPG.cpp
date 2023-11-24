@@ -312,7 +312,7 @@ void SpaceMap::set_values()
     rocket.setPosition(coordsWorlds[7]);
     planet =7;
     rocketPosition = rocket.getPosition();
-    rocket.setScale(0.5f,-0.5f);
+    rocket.setScale(0.5f,0.5f);
 
     for (std::size_t i = 0; i < order(); ++i) {
         worlds[i].shape.setRadius(sizeWorlds[i]);
@@ -355,7 +355,7 @@ void SpaceMap::loopSpaceMap() {
                 if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
                     track=min_way(planet,i);
                     move_ship();
-                    //worlds[i].game.run();
+                    worlds[i].game.run();
                     //indo do planet -> i;
                 }
             }
@@ -415,24 +415,28 @@ float SpaceMap::set_angle(sf::Vector2f direction)
 void SpaceMap::move_ship()
 {   
     sf::Vector2f velocity;
+    std::cout<<"Inicio"<<std::endl;
+    for(std::size_t i =0;i<track.size();i++)
+    std::cout<<track[i]<<std::endl;
+    std::cout<<"Fim"<<std::endl;
     for(std::size_t i =0;i<track.size()-1;i++)
     {   
         double angle = std::atan2((coordsWorlds[track[i+1]].y-coordsWorlds[track[i]].y),
         (coordsWorlds[track[i+1]].x-coordsWorlds[track[i]].x));
         if(coordsWorlds[track[i+1]].x>coordsWorlds[track[i]].x)
-            velocity.x =std::cos(std::abs(angle));
+            velocity.x =std::abs(std::cos(angle));
         else
-            velocity.x =-std::cos(std::abs(angle));
+            velocity.x =-std::abs(std::cos(angle));
         if(coordsWorlds[track[i+1]].y>coordsWorlds[track[i]].y)
-            velocity.y=-std::sin(std::abs(angle));
+            velocity.y=std::abs(std::sin(angle));
         else
-            velocity.y=-std::sin(std::abs(angle));
+            velocity.y=-std::abs(std::sin(angle));
         angle = set_angle(velocity);
-        velocity = velocity *-3.f;
+        velocity = velocity *3.f;
         rocket.setRotation(angle);
         print = true;
-        while(!rocket.getGlobalBounds().contains(coordsWorlds[track[i+1]]))
-        {
+        while(std::abs(rocket.getPosition().x-(coordsWorlds[track[i+1]]).x)>2)
+        {   
             rocket.setPosition(rocket.getPosition() + velocity*0.2f);
             window.clear();
             window.draw(background);
@@ -441,6 +445,8 @@ void SpaceMap::move_ship()
                 window.draw(worlds[i].shape);
             window.display();   
         }
+        rocket.setPosition(coordsWorlds[track[i+1]]);
+        rocket.setRotation(0);
        //Movimentação Mouse (Melhorar orientação)
     /*
     if (event.type == sf::Event::MouseButtonPressed) {
@@ -460,6 +466,7 @@ void SpaceMap::move_ship()
         velocity.y=1.5*std::sin(-std::fabs(angle));
     } */ 
     }
+    planet = track.back();
 }
 
 int dice(int n) {
