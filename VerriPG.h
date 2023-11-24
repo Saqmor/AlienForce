@@ -209,13 +209,20 @@ public:
     void render();
     void runSpaceMap ();
     void set_values();
+    void move_ship();
+    float set_angle(sf::Vector2f direction);
 
 private:
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     sf::Sprite background;
 
-    sf::Sprite Rocket;
+    sf::Texture rocketTexture;
+    sf::Sprite rocket;
+    sf::Vector2f rocketPosition;
+    std::size_t planet;
+    std::vector<std::size_t>track;
+    bool print = false;
 
     bool enterWorld = true;
     //std::vector<sf::CircleShape, std::allocator<sf::CircleShape>> worlds;
@@ -234,10 +241,6 @@ private:
 
 class SpaceShip
 {
-    private:
-    sf::RenderTexture texture;
-    sf::Sprite sprite; 
-    sf::Vector2f position;
 
     public:
     void move(std::vector<int>points);

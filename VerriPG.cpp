@@ -306,8 +306,15 @@ void SpaceMap::set_values()
         add_edge(from, to, weight);
     coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
     sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
+    rocketTexture.loadFromFile("./Images/ship.png");
+    rocket.setTexture(rocketTexture);
+    rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
+    rocket.setPosition(coordsWorlds[7]);
+    planet =7;
+    rocketPosition = rocket.getPosition();
+    rocket.setScale(0.5f,-0.5f);
 
-    for (int i = 0; i < order(); ++i) {
+    for (std::size_t i = 0; i < order(); ++i) {
         worlds[i].shape.setRadius(sizeWorlds[i]);
         worlds[i].shape.setFillColor(sf::Color::Green);
         worlds[i].shape.setOrigin(worlds[i].shape.getRadius(),worlds[i].shape.getRadius());
@@ -344,9 +351,12 @@ void SpaceMap::loopSpaceMap() {
             if(worlds[order() - 1].shape.getGlobalBounds().contains(mouse_coord)){
                 worlds[order() - 1].Fight.modeBattle();
             }
-            for (int i = 0; i < order() - 1; ++i) {
+            for (std::size_t i = 0; i < order() - 1; ++i) {
                 if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
-                    worlds[i].game.run();
+                    track=min_way(planet,i);
+                    move_ship();
+                    //worlds[i].game.run();
+                    //indo do planet -> i;
                 }
             }
         }
@@ -360,9 +370,11 @@ void SpaceMap::loopSpaceMap() {
 void SpaceMap::render() {
     window.clear();
     window.draw(background);
+    window.draw(rocket);
     for (int i = 0; i < order(); ++i) {
         window.draw(worlds[i].shape);
     }
+    
     //window.draw(character);
     //window.draw(worlds);
     window.display();
@@ -376,6 +388,7 @@ void SpaceMap::runSpaceMap() {
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
     backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
+    
     background.setTexture(backgroundTexture);
     while (window.isOpen())
     {
@@ -383,9 +396,71 @@ void SpaceMap::runSpaceMap() {
         render();
     }
 }
-
-
-
+float SpaceMap::set_angle(sf::Vector2f direction)
+{
+    float angle;
+    if(direction.x>0)
+       if(direction.y>0)
+            angle = M_PI_2 + std::acos(direction.x);
+        else
+            angle =M_PI-2 - std::acos(direction.x);
+    if(direction.x<=0)
+        if(direction.y>0)
+            angle=-M_PI_2 + std::asin(direction.y);
+        else
+            angle=M_PI_2-std::acos(direction.x);
+    angle =(angle *180)/M_PI;
+    return angle;
+}
+void SpaceMap::move_ship()
+{   
+    sf::Vector2f velocity;
+    for(std::size_t i =0;i<track.size()-1;i++)
+    {   
+        double angle = std::atan2((coordsWorlds[track[i+1]].y-coordsWorlds[track[i]].y),
+        (coordsWorlds[track[i+1]].x-coordsWorlds[track[i]].x));
+        if(coordsWorlds[track[i+1]].x>coordsWorlds[track[i]].x)
+            velocity.x =std::cos(std::abs(angle));
+        else
+            velocity.x =-std::cos(std::abs(angle));
+        if(coordsWorlds[track[i+1]].y>coordsWorlds[track[i]].y)
+            velocity.y=-std::sin(std::abs(angle));
+        else
+            velocity.y=-std::sin(std::abs(angle));
+        angle = set_angle(velocity);
+        velocity = velocity *-3.f;
+        rocket.setRotation(angle);
+        print = true;
+        while(!rocket.getGlobalBounds().contains(coordsWorlds[track[i+1]]))
+        {
+            rocket.setPosition(rocket.getPosition() + velocity*0.2f);
+            window.clear();
+            window.draw(background);
+            window.draw(rocket);
+            for (int i = 0; i < order(); ++i)
+                window.draw(worlds[i].shape);
+            window.display();   
+        }
+       //Movimentação Mouse (Melhorar orientação)
+    /*
+    if (event.type == sf::Event::MouseButtonPressed) {
+    // Atualização da posição do objeto pela posição do mouse quando ocorre um clique
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        velocity.x=1.f;
+        velocity.y=1.f;
+        sf::Vector2f characterPosition = character.getPosition();
+        
+        if(mousePosition.x>characterPosition.x)
+        velocity.x=1.5*std::cos(std::fabs(angle));
+        else
+        velocity.x=1.5*std::cos(-std::fabs(angle));
+        if(mousePosition.y>characterPosition.y)
+        velocity.y=1.5*std::sin(std::fabs(angle));
+        else
+        velocity.y=1.5*std::sin(-std::fabs(angle));
+    } */ 
+    }
+}
 
 int dice(int n) {
     std::random_device dev;
@@ -679,8 +754,8 @@ void bossFight::layoutBattle()
     hero.textHero.setPosition(705.f,380.f);
 
     // Ajusta a escala e posicionamento das Sprites Hero e Boss
-    sf::Vector2f positionHero(static_cast<float>(hero.heroTexture.getSize().x), static_cast<float>(hero.heroTexture.getSize().y));
-    sf::Vector2f positionBoss(static_cast<float>(alien.bossTexture.getSize().x), static_cast<float>(alien.bossTexture.getSize().y));
+    sf::Vector2f positionHero(hero.heroTexture.getSize().x,hero.heroTexture.getSize().y);
+    sf::Vector2f positionBoss(alien.bossTexture.getSize().x, alien.bossTexture.getSize().y);
     positionHero.x = positionHero.x / 2;
     positionHero.y = positionHero.y / 2;
     positionBoss.x = positionBoss.x / 2;
@@ -774,7 +849,6 @@ void bossFight::modeBattle()
 }
 
 
-
 void Game::setValues() {
     window.create(sf::VideoMode(800, 600), "My window");
     characterScaleX = 1.f;
@@ -789,7 +863,7 @@ void Game::setValues() {
 
     // Ajusta a escala inicial junto com o centro da figura
 
-    sf::Vector2f centerM(static_cast<float>(enemy1Texture.getSize().x), static_cast<float>(enemy1Texture.getSize().y));
+    sf::Vector2f centerM(enemy1Texture.getSize().x,enemy1Texture.getSize().y);
     centerM.x = centerM.x / 2;
     centerM.y = centerM.y / 2;
     enemy1.setOrigin(centerM);
@@ -806,8 +880,6 @@ void Game::run()
         update_enemy1();
         render();
     }
-
-
 }
 
 void Game::processEvents()
