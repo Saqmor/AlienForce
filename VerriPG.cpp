@@ -154,18 +154,14 @@ void SpaceMap::set_values()
     float weight;
     while(std::cin >> from >> to >> weight)
         add_edge(from, to, weight);
-
-
-
-
     coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
     sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
 
     for (int i = 0; i < order(); ++i) {
         worlds[i].shape.setRadius(sizeWorlds[i]);
         worlds[i].shape.setFillColor(sf::Color::Green);
+        worlds[i].shape.setOrigin(worlds[i].shape.getRadius(),worlds[i].shape.getRadius());
         worlds[i].shape.setPosition(coordsWorlds[i]);
-
     }
     /*worlds.setRadius(sizeWorlds[0]);
     worlds.setFillColor(sf::Color::Green);
@@ -225,7 +221,7 @@ void SpaceMap::runSpaceMap() {
     set_values();
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
-    backgroundTexture.loadFromFile("./images/mapa_espacial.png");
+    backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
     background.setTexture(backgroundTexture);
     while (window.isOpen())
     {
