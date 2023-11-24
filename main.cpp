@@ -14,8 +14,6 @@ int main(){
     grafo.add_edge(2,4,10);
 
     grafo.print_min_caminh(1,4);*/
-    int n;
-    std::cin >> n;
-    SpaceMap space(n);
-    space.runSpaceMap();
+    Menu menu;
+    menu.run_menu();
 }
