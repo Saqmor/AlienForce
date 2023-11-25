@@ -7,6 +7,7 @@
 #include <SFML/Window.hpp>
 #include <random>
 #include <queue>
+#include <fstream>
 
 
 class Menu {
@@ -37,6 +38,7 @@ public:
     Menu();
     ~Menu();
     void run_menu();
+    int read_base();
 };
 
 
@@ -182,6 +184,10 @@ public:
     void add_edge(std::size_t from, std::size_t to,float);
     void rem_edge(std::size_t from, std::size_t to);
     void add_num_vertices();
+    void add_edges_from_file();
+    void add_edges_from_file2(std::string);
+
+    void show_all_edges();
 
     std::vector<std::size_t> neighbors(std::size_t v) const;
 
@@ -249,35 +255,3 @@ class SpaceShip
     void set_values();
 
 };
-/*class SpaceMap {
-private:
-
-
-
-
-    sf::RenderWindow window;
-    sf::Texture backgroundTexture;
-    sf::Sprite background;
-
-    sf::Sprite Rocket;
-
-
-    std::vector<sf::CircleShape> worlds;
-    std::vector<sf::Vector2f> coordsWorlds;
-    std::vector<float> sizeWorlds;
-    sf::Vector2i pos_mouse;
-    sf::Vector2f mouse_coord;
-    Graph graphmap;
-
-public:
-
-    SpaceMap(std::size_t n);
-
-    void numVertices(std::size_t n);
-    void update();
-    void loopSpaceMap ();
-    void render();
-    void runSpaceMap ();
-
-
-};*/

@@ -135,13 +135,20 @@ void Menu::run_menu(){
         draw_all();
     }
     if (selectedPlay){
-        int n;
-        std::cin >> n;
-        SpaceMap space(n);
+        SpaceMap space(read_base());
         space.runSpaceMap();
     }
 }
 
+int Menu::read_base(){
+    std::ifstream is;
+    int vertex;
+    is.open("graph_input.txt");
+    is>>vertex;
+    is.close();
+    return vertex;
+
+}
 
 
 
@@ -293,6 +300,45 @@ void Graph::add_num_vertices() {
     std::cin >> n;
 }
 
+void Graph::add_edges_from_file(){
+    std::ifstream is;
+    std::size_t u,v;
+    float w;
+
+    is.open("graph_input.txt");
+    is>>w;
+    while(is>>u>>v>>w)
+        add_edge(u,v,w);
+    is.close();
+}
+
+
+void Graph::add_edges_from_file2(std::string name_file){
+    std::ifstream is;
+    std::size_t u,v;
+    float w;
+
+    is>>w;
+    is.open(name_file);
+    while(is>>u>>v>>w)
+        add_edge(u,v,w);
+    is.close();
+}
+
+void Graph::show_all_edges(){
+    std::size_t u,v;
+
+    for(u=0; u<n; u++){
+        for(v=u; v<n; v++){
+            if(edge_exists(u,v)){
+                std::cout<<u<<" "<<v<<" "<<peso_aresta(u,v)<<std::endl;
+            }
+        }
+    }
+}
+
+
+
 //deletar os ponteiros de struct
 SpaceMap::~SpaceMap() {
 }
@@ -302,8 +348,9 @@ void SpaceMap::set_values()
 {
     std::size_t from, to;
     float weight;
-    while(std::cin >> from >> to >> weight)
-        add_edge(from, to, weight);
+    add_edges_from_file();
+    //while(std::cin >> from >> to >> weight)
+      //  add_edge(from, to, weight);
     coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
     sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
     rocketTexture.loadFromFile("./Images/ship.png");
