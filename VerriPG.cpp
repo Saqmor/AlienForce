@@ -135,6 +135,7 @@ void Menu::run_menu(){
         loop_events();
         draw_all();
     }
+
     if (selectedPlay){
         int n;
         std::cin >> n;
@@ -310,8 +311,9 @@ void SpaceMap::set_values()
     float weight;
     while(std::cin >> from >> to >> weight)
         add_edge(from, to, weight);
-    coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
+    coordsWorlds = {{190,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
     sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
+    coordsWorlds[0].x = 588;
 
     for (int i = 0; i < order(); ++i) {
         worlds[i].shape.setRadius(sizeWorlds[i]);
@@ -336,7 +338,7 @@ void SpaceMap::set_values()
     numVertices(graphMap.order());
 }*/
 
-void SpaceMap::loopSpaceMap() {
+void SpaceMap::loopSpaceMap(Alien& alien, Hero& hero) {
     sf::Event event;
     while (window.pollEvent(event)) {
         if( event.type == sf::Event::Closed) {
@@ -348,7 +350,7 @@ void SpaceMap::loopSpaceMap() {
         if((sf::Mouse::isButtonPressed(sf::Mouse::Left)) && !enterWorld){
             enterWorld = true;
             if(worlds[order() - 1].shape.getGlobalBounds().contains(mouse_coord)){
-                worlds[order() - 1].Fight.modeBattle();
+                worlds[order() - 1].Fight.modeBattle(alien, hero);
             }
             for (int i = 0; i < order() - 1; ++i) {
                 if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
@@ -379,15 +381,18 @@ void SpaceMap::runSpaceMap() {
     //createGraph();
 
     set_values();
+    Alien alien;
+    Hero hero;
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
     backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
     background.setTexture(backgroundTexture);
     while (window.isOpen())
     {
-        loopSpaceMap();
+        loopSpaceMap(alien, hero);
         render();
     }
+    
 }
 
 
@@ -408,8 +413,8 @@ bool prob(int n) {
     }
 }
 
-void bossFight::attack1(){
-    damageCondition();
+void bossFight::attack1(Alien& alien, Hero& hero){
+    damageCondition(alien);
     if (maxPriorityQueue.top() == hero.speed)
         alien.hp -= 7 + dice(8);
     if (maxPriorityQueue.top() == alien.speed){
@@ -486,7 +491,7 @@ int bossFight::loopChooseBomb() {
     return -1;
 }
 
-void bossFight::drawSpecialAttack() {
+void bossFight::drawSpecialAttack(Alien& alien, Hero& hero) {
     window.clear();
     window.draw(background);
     window.draw(alien.roundedBoss);
@@ -503,24 +508,24 @@ void bossFight::drawSpecialAttack() {
     window.display();
 }
 
-int bossFight::runChooseBomb(){
+int bossFight::runChooseBomb(Alien& alien, Hero& hero){
     int num = -1;
     enterPrevState = true;
     setValues();
     while (num == -1){
         num = loopChooseBomb();
-        drawSpecialAttack();
+        drawSpecialAttack(alien, hero);
     }
     texts[posBomb].setOutlineThickness(0);
     return num;
 }
 
-void bossFight::attack2(){
-    damageCondition();
+void bossFight::attack2(Alien& alien, Hero& hero){
+    damageCondition(alien);
     if (maxPriorityQueue.top() == alien.speed)
         hero.hp -= 60 + 2 * dice(12);
     if (maxPriorityQueue.top() == hero.speed){
-        switch (runChooseBomb()) {
+        switch (runChooseBomb(alien, hero)) {
             case 1:
                 alien.hp -=  prob(40) ? 50 + 2 * dice(20) : 0;
                 alien.speed -= 20;
@@ -545,12 +550,12 @@ void bossFight::attack2(){
 }
 
 
-void bossFight::heal() {
+void bossFight::heal(Hero& hero) {
     hero.hp += 8 + 1 * dice(6);
     maxPriorityQueue.pop();
 }
 
-void bossFight::defineTurns() {
+void bossFight::defineTurns(Alien& alien, Hero& hero) {
     if (alien.speed >= 2 * hero.speed)
         maxPriorityQueue.push(alien.speed);
     if (hero.speed >= 2 * alien.speed)
@@ -559,7 +564,7 @@ void bossFight::defineTurns() {
     maxPriorityQueue.push(alien.speed);
 }
 
-void bossFight::damageCondition() {
+void bossFight::damageCondition(Alien& alien) {
     if (alien.burn)
         alien.hp -= 4;
     if (alien.poison)
@@ -570,15 +575,15 @@ void bossFight::damageCondition() {
     }
 }
 
-bool bossFight::Turn() {
+bool bossFight::Turn(Alien& alien, Hero& hero) {
     if (maxPriorityQueue.top() == alien.speed)
-        enemyTurn();
-    if ( playerTurn())
+        enemyTurn(alien, hero);
+    if ( playerTurn(alien, hero))
         return true;
     else return false;
 }
 
-bool bossFight::playerTurn() {
+bool bossFight::playerTurn(Alien& alien, Hero& hero) {
 
     // Verifica se a tecla Enter está pressionada
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect_opBattle) {
@@ -588,15 +593,15 @@ bool bossFight::playerTurn() {
         switch (pos_opBattle) {
             case 0:
                 // Code for "Attack1" option
-                attack1();
+                attack1(alien, hero);
                 break;
             case 1:
                 // Code for "Attack2" option
-                attack2();
+                attack2(alien, hero);
                 break;
             case 2:
                 // Code for "Heal" option
-                heal();
+                heal(hero);
                 break;
             case 3:
                 // Code for "Run" option
@@ -634,17 +639,17 @@ bool bossFight::playerTurn() {
 }
 
 
-void bossFight::enemyTurn() {
+void bossFight::enemyTurn(Alien& alien, Hero& hero) {
     if (prob(90))
-        attack1();
-    else attack2();
+        attack1(alien, hero);
+    else attack2(alien, hero);
 
     if (hero.hp <= 0){
         hero.hp = 0;
         hero.isAlive = false;
     }
 }
-void bossFight::layoutBattle()
+void bossFight::layoutBattle(Alien& alien, Hero& hero)
 {
     //Criação de retângulos envolventes
     roundedTexture.loadFromFile("./Images/rounded(5).png");
@@ -699,9 +704,9 @@ void bossFight::layoutBattle()
     hero.heroSprite.setScale(0.5f,0.5f);
 
 }
-void bossFight::drawBattle()
+void bossFight::drawBattle(Alien& alien, Hero& hero)
 {
-    layoutBattle();
+    layoutBattle(alien, hero);
 
     window.clear();
     window.draw(background);
@@ -718,7 +723,7 @@ void bossFight::drawBattle()
     }
     window.display();
 }
-void bossFight::modeBattle()
+void bossFight::modeBattle(Alien& alien, Hero& hero)
 {
     backgroundTexture.loadFromFile("./Images/background_battle_2.png");
     background.setTexture(backgroundTexture);
@@ -745,7 +750,7 @@ void bossFight::modeBattle()
     pos_opBattle = 0;
 
 
-    defineTurns();
+    defineTurns(alien, hero);
     bool endBattle = false;
     while (window.isOpen())
     {
@@ -757,8 +762,8 @@ void bossFight::modeBattle()
 
             if (hero.isAlive && alien.isAlive && !endBattle){
                 if (maxPriorityQueue.empty())
-                    defineTurns();
-                if (!Turn())
+                    defineTurns(alien, hero);
+                if (!Turn(alien, hero))
                     endBattle = true;
                 if (!alien.isAlive)
                     endBattle = true;
@@ -773,7 +778,7 @@ void bossFight::modeBattle()
             alien.bossHp.setSize(sf::Vector2f(0.45*alien.hp, 13));
 
         }
-        drawBattle();
+        drawBattle(alien, hero);
     }
 
 
