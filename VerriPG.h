@@ -232,8 +232,6 @@ private:
     bool print = false;
 
     bool enterWorld = true;
-    //std::vector<sf::CircleShape, std::allocator<sf::CircleShape>> worlds;
-    //sf::CircleShape worldsArray[8];
     struct World{
         sf::CircleShape shape;
         bossFight Fight;

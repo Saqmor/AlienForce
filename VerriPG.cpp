@@ -347,12 +347,11 @@ SpaceMap::~SpaceMap() {
 void SpaceMap::read_planets_data(){
     std::ifstream is;
     is.open("coords_worlds.txt");
-    int a,b,r;
+    float a,b,r;
     for (std::size_t i = 0; i < order(); i++){
         is>>a>>b>>r;
-        coordsWorlds[i].x=a;
-        coordsWorlds[i].y=b;
-        sizeWorlds[i]=r;
+        coordsWorlds.emplace_back(a, b);
+        sizeWorlds.push_back(r);
     }
     is.close();
 }
@@ -365,9 +364,9 @@ void SpaceMap::set_values()
     add_edges_from_file();
     //while(std::cin >> from >> to >> weight)
       //  add_edge(from, to, weight);
-    coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
-    sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
-    //read_planets_data();
+    //coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
+    //sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
+    read_planets_data();
     rocketTexture.loadFromFile("./Images/ship.png");
     rocket.setTexture(rocketTexture);
     rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
