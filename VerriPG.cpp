@@ -205,7 +205,7 @@ float Graph::peso_aresta(std::size_t u,std::size_t v)const{
 
 void Graph::start(float* d, std::size_t* p,std::size_t s) const{
     for(std::size_t i=0; i<n;i++){
-        d[i]=FLT_MAX/2;
+        d[i]=std::numeric_limits<float>::max()/2;
         p[i]=10*n;
     }
     d[s]=0;

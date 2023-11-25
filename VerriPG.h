@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <float.h>
+#include <limits>
 #include <iostream>
 #include <stack>
 #include <SFML/Graphics.hpp>
