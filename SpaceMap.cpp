@@ -242,7 +242,7 @@ void SpaceMap::set_values()
     mouse_coord = {0, 0};
 }
 
-void SpaceMap::loopSpaceMap() {
+void SpaceMap::loopSpaceMap(Alien& alien, Hero& hero) {
     sf::Event event;
     while (window.pollEvent(event)) {
         if( event.type == sf::Event::Closed) {
@@ -254,7 +254,7 @@ void SpaceMap::loopSpaceMap() {
         if((sf::Mouse::isButtonPressed(sf::Mouse::Left)) && !enterWorld){
             enterWorld = true;
             if(worlds[order() - 1].shape.getGlobalBounds().contains(mouse_coord)){
-                worlds[order() - 1].Fight.modeBattle();
+                worlds[order() - 1].Fight.modeBattle(alien, hero);
             }
             for (std::size_t i = 0; i < order() - 1; ++i) {
                 if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
@@ -287,6 +287,8 @@ void SpaceMap::render() {
 void SpaceMap::runSpaceMap() {
     worlds = new World[order()];
     set_values();
+    Alien alien;
+    Hero hero;
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
     backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
@@ -294,7 +296,7 @@ void SpaceMap::runSpaceMap() {
     background.setTexture(backgroundTexture);
     while (window.isOpen())
     {
-        loopSpaceMap();
+        loopSpaceMap(alien, hero);
         render();
     }
 }

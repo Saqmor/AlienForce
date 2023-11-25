@@ -33,7 +33,7 @@ void Menu::set_values(){
     pos_mouse = {0,0};
     mouse_coord = {0, 0};
 
-    options = {"Alienverse: Cosmic Invasion", "New game", "Continue", "About", "Quit"};
+    options = {"AlienForce", "New game", "Continue", "About", "Quit"};
     texts.resize(5);
     coords = {{572,40},{585,191},{583,280},{600,370},{623,457}};
     sizes = {25,21,24,24,24};

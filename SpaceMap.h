@@ -1,6 +1,3 @@
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <iostream>
 #include "Levels.h"
 #include "bossFight.h"
 
@@ -54,7 +51,7 @@ public:
     ~SpaceMap();
     void numVertices(std::size_t n);
     void update();
-    void loopSpaceMap ();
+    void loopSpaceMap (Alien& alien, Hero& hero);
     void render();
     void runSpaceMap ();
     void set_values();
