@@ -11,7 +11,8 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(Code_Game main.cpp
-        VerriPG.cpp)
+        VerriPG.cpp
+        VerriPG.h)
 target_link_libraries(Code_Game PRIVATE sfml-graphics)
 target_compile_features(Code_Game PRIVATE cxx_std_17)
 
