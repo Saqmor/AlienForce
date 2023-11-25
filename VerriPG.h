@@ -217,6 +217,7 @@ public:
     void set_values();
     void move_ship();
     float set_angle(sf::Vector2f direction);
+    void read_planets_data();
 
 private:
     sf::RenderWindow window;
