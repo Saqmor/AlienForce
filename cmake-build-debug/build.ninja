@@ -65,6 +65,14 @@ build CMakeFiles/Code_Game.dir/VerriPG.cpp.obj: CXX_COMPILER__Code_Game_unscanne
   OBJECT_DIR = CMakeFiles\Code_Game.dir
   OBJECT_FILE_DIR = CMakeFiles\Code_Game.dir
 
+build CMakeFiles/Code_Game.dir/Menu.cpp.obj: CXX_COMPILER__Code_Game_unscanned_Debug C$:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/Menu.cpp || cmake_object_order_depends_target_Code_Game
+  DEFINES = -DSFML_STATIC
+  DEP_FILE = CMakeFiles\Code_Game.dir\Menu.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/guicr/Desktop/teste_verriPG/teste_VerriPG/cmake-build-debug/_deps/sfml-src/include
+  OBJECT_DIR = CMakeFiles\Code_Game.dir
+  OBJECT_FILE_DIR = CMakeFiles\Code_Game.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Code_Game
@@ -73,7 +81,7 @@ build CMakeFiles/Code_Game.dir/VerriPG.cpp.obj: CXX_COMPILER__Code_Game_unscanne
 #############################################
 # Link the executable bin\Code_Game.exe
 
-build bin/Code_Game.exe: CXX_EXECUTABLE_LINKER__Code_Game_Debug CMakeFiles/Code_Game.dir/main.cpp.obj CMakeFiles/Code_Game.dir/VerriPG.cpp.obj | _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-src/extlibs/libs-mingw/x64/libfreetype.a || _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a
+build bin/Code_Game.exe: CXX_EXECUTABLE_LINKER__Code_Game_Debug CMakeFiles/Code_Game.dir/main.cpp.obj CMakeFiles/Code_Game.dir/VerriPG.cpp.obj CMakeFiles/Code_Game.dir/Menu.cpp.obj | _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-src/extlibs/libs-mingw/x64/libfreetype.a || _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a
   FLAGS = -g
   LINK_LIBRARIES = _deps/sfml-build/lib/libsfml-graphics-s-d.a  _deps/sfml-build/lib/libsfml-window-s-d.a  _deps/sfml-build/lib/libsfml-system-s-d.a  -lopengl32  -lwinmm  -lgdi32  _deps/sfml-src/extlibs/libs-mingw/x64/libfreetype.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Code_Game.dir
