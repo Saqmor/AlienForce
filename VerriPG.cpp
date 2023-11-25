@@ -338,21 +338,41 @@ void Graph::show_all_edges(){
 }
 
 
-
 //deletar os ponteiros de struct
 SpaceMap::~SpaceMap() {
 }
 
+void SpaceMap::read_planets_data(){
+    std::ifstream is;
+    is.open("coords_worlds.txt");
+    float a,b,r;
+    for (std::size_t i = 0; i < order(); i++){
+        is>>a>>b>>r;
+        coordsWorlds.emplace_back(a, b);
+        sizeWorlds.push_back(r);
+    }
+    is.close();
+}
 
 void SpaceMap::set_values()
 {
     std::size_t from, to;
     float weight;
     add_edges_from_file();
+    read_planets_data();
     //while(std::cin >> from >> to >> weight)
       //  add_edge(from, to, weight);
-    coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
-    sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
+    //coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
+    //sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
+    for(std::size_t i=0;i<order();i++)
+    {   
+        std::string address ="./Images/mundo";
+        std::stringstream ss;
+        ss<<i;
+        address= address + ss.str() + ".jpg";
+        worlds[i].level_background.loadFromFile(address);
+        worlds[i].level_sprite.setTexture(worlds[i].level_background);
+    }
     rocketTexture.loadFromFile("./Images/ship.png");
     rocket.setTexture(rocketTexture);
     rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
@@ -402,7 +422,7 @@ void SpaceMap::loopSpaceMap() {
                 if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
                     track=min_way(planet,i);
                     move_ship();
-                    worlds[i].game.run();
+                    worlds[i].game.run(worlds[i].level_sprite);
                     //indo do planet -> i;
                 }
             }
@@ -411,8 +431,6 @@ void SpaceMap::loopSpaceMap() {
     }
 
 }
-
-
 
 void SpaceMap::render() {
     window.clear();
@@ -448,24 +466,24 @@ float SpaceMap::set_angle(sf::Vector2f direction)
     float angle;
     if(direction.x>0)
        if(direction.y>0)
-            angle = M_PI_2 + std::acos(direction.x);
+            angle = M_PI_2 + std::abs(std::acos(direction.x));
         else
-            angle =M_PI-2 - std::acos(direction.x);
+            angle =M_PI-2 - std::abs(std::acos(direction.x));
     if(direction.x<=0)
         if(direction.y>0)
-            angle=-M_PI_2 + std::asin(direction.y);
+        {   
+            sf::Vector2f scale=rocket.getScale();
+            rocket.setScale(scale.x,-scale.y);
+            angle=std::abs(std::asin(direction.y));
+        }
         else
-            angle=M_PI_2-std::acos(direction.x);
+            angle=-std::abs(std::asin(direction.y));
     angle =(angle *180)/M_PI;
     return angle;
 }
 void SpaceMap::move_ship()
 {   
     sf::Vector2f velocity;
-    std::cout<<"Inicio"<<std::endl;
-    for(std::size_t i =0;i<track.size();i++)
-    std::cout<<track[i]<<std::endl;
-    std::cout<<"Fim"<<std::endl;
     for(std::size_t i =0;i<track.size()-1;i++)
     {   
         double angle = std::atan2((coordsWorlds[track[i+1]].y-coordsWorlds[track[i]].y),
@@ -494,6 +512,7 @@ void SpaceMap::move_ship()
         }
         rocket.setPosition(coordsWorlds[track[i+1]]);
         rocket.setRotation(0);
+        rocket.setScale(0.5f,0.5f);
        //Movimentação Mouse (Melhorar orientação)
     /*
     if (event.type == sf::Event::MouseButtonPressed) {
@@ -846,7 +865,6 @@ void bossFight::modeBattle()
     backgroundTexture.loadFromFile("./Images/background_battle_2.png");
     background.setTexture(backgroundTexture);
     window.create(sf::VideoMode(800,600),"My window");
-
     pressed_opBattle = theselect_opBattle = false;
     font.loadFromFile("./ethn.otf");
     //image->loadFromFile("");
@@ -908,11 +926,11 @@ void Game::setValues() {
     characterScaleX = 1.f;
     characterScaleY = 1.f;
     characterTexture.loadFromFile("./Images/chiefsheet.png");
-    backgroundTexture.loadFromFile("./Images/fundo.png");
+    //backgroundTexture.loadFromFile("./Images/fundo.png");
     enemy1Texture.loadFromFile("./Images/enemy1.png");
 
     character.setTexture(characterTexture);
-    background.setTexture(backgroundTexture);
+    //background.setTexture(backgroundTexture);
     enemy1.setTexture(enemy1Texture);
 
     // Ajusta a escala inicial junto com o centro da figura
@@ -924,7 +942,7 @@ void Game::setValues() {
 }
 
 
-void Game::run()
+void Game::run(sf::Sprite background_level)
 {
     setValues();
     while (window.isOpen())
@@ -932,7 +950,7 @@ void Game::run()
         processEvents();
         update();
         update_enemy1();
-        render();
+        render(background_level);
     }
 }
 
@@ -1095,10 +1113,10 @@ void Game::update_enemy1()
     position_enemy1 = enemy1.getPosition();
     enemy1.setPosition(position_enemy1.x,400.f);
 }
-void Game::render()
+void Game::render(sf::Sprite background_level)
 {
     window.clear();
-    window.draw(background);
+    window.draw(background_level);
     window.draw(character);
     window.draw(enemy1);
     window.display();

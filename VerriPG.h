@@ -8,6 +8,7 @@
 #include <random>
 #include <queue>
 #include <fstream>
+#include <sstream>
 
 
 class Menu {
@@ -128,14 +129,14 @@ class Game
 {
 public:
 
-    void run();
+    void run(sf::Sprite);
     void setValues();
 
 private:
     void processEvents();
     void update();
     void update_enemy1();
-    void render();
+    void render(sf::Sprite);
 
     sf::RenderWindow window;
     sf::Event event;
@@ -217,6 +218,7 @@ public:
     void set_values();
     void move_ship();
     float set_angle(sf::Vector2f direction);
+    void read_planets_data();
 
 private:
     sf::RenderWindow window;
@@ -237,6 +239,8 @@ private:
         sf::CircleShape shape;
         bossFight Fight;
         Game game;
+        sf::Texture level_background; 
+        sf::Sprite level_sprite;
     };
     World* worlds;
     std::vector<sf::Vector2f> coordsWorlds;
