@@ -48,7 +48,7 @@ void Game::setValues() {
    flashbang.setScale(0.5f,0.5f);
 }
 
-void Game::run(sf::Sprite background_level,Hero &hero,std::string equipment)
+void Game::run(sf::Sprite background_level,Character& hero,std::string equipment)
 {
     setValues();
     while (window.isOpen())
@@ -229,18 +229,34 @@ void Game::update_enemy1()
     position_enemy1 = enemy1.getPosition();
     enemy1.setPosition(position_enemy1.x,400.f);
 }
-void Game::render(sf::Sprite background_level,Hero &hero,std::string equipment)
+void Game::render(sf::Sprite background_level,Character& hero,std::string equipment)
 {
     window.clear();
     window.draw(background_level);
-    if(!hero.fireBomb && equipment== "fire")
+    for (size_t i = 0; i < 4; i++)
+    {
+        if (hero.Bombs[i].second == 0)
+        {
+            if (hero.Bombs[i].first == "FireBomb")
+                    window.draw(fireBomb);
+            if (hero.Bombs[i].first == "Flashbang")
+                    window.draw(fireBomb);
+            if (hero.Bombs[i].first == "PoisonBomb")
+                    window.draw(fireBomb);
+            if (hero.Bombs[i].first == "IceBomb")
+                    window.draw(fireBomb);
+        }
+        
+    }
+    
+    /*if(!hero.fireBomb && equipment== "fire")
         window.draw(fireBomb);
     if(!hero.flashbang && equipment =="flashbang")
         window.draw(flashbang);
     if(!hero.poisonBomb && equipment == "poison")
         window.draw(poisonBomb);
     if(!hero.iceBomb && equipment =="ice")
-        window.draw(iceBomb);
+        window.draw(iceBomb);*/
     window.draw(character);
     window.draw(enemy1);
     window.display();

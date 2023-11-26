@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "GameState.h"
 
 
 Menu::Menu(){
@@ -96,7 +97,7 @@ void Menu::loop_events(){
                     break;
                 case 2:
                     // Code for "Options" option
-                    std::cout << "Options selected!\n";
+                    selectedContinue = true;
                     break;
                 case 3:
                     // Code for "About" option
@@ -135,10 +136,22 @@ void Menu::run_menu(){
         loop_events();
         draw_all();
     }
+    Character alien;
+    alien.hp = 700;
+    alien.speed = 25;
+    Character hero;
+    hero.hp = 250;
+    hero.speed = 12;
     if (selectedPlay){
-        SpaceMap space(read_base());
-        space.runSpaceMap();
+        hero.name = "hero";
+        alien.name = "alien";
     }
+    if (selectedContinue){
+        LoadSave(hero, alien);
+    }
+
+    SpaceMap space(read_base());
+    space.runSpaceMap(alien, hero);
 }
 
 int Menu::read_base(){

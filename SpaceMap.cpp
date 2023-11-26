@@ -1,4 +1,5 @@
 #include "SpaceMap.h"
+#include "GameState.h"
 #include <stack>
 #include <sstream>
 #include <fstream>
@@ -242,9 +243,33 @@ void SpaceMap::set_values()
     }
     pos_mouse = {0,0};
     mouse_coord = {0, 0};
+//......................................................................................//  
+    buttom_save.setSize(sf::Vector2f(80,40));
+    buttom_quit.setSize(sf::Vector2f(80,40));
+    buttom_save.setFillColor(sf::Color::Red);
+    buttom_quit.setFillColor(sf::Color::Blue);
+    buttom_save.setOrigin(buttom_save.getSize().x/2.f,buttom_save.getSize().y/2.f);
+    buttom_quit.setOrigin(buttom_quit.getSize().x/2.f,buttom_quit.getSize().y/2.f);
+    buttom_save.setPosition(700,100);
+    buttom_quit.setPosition(700,200);
+//..........................................................................................//
+    font.loadFromFile("ethn.otf");
+
+    save_text.setFont(font);
+    save_text.setString("Save");
+    save_text.setCharacterSize(20);
+    save_text.setOutlineColor(sf::Color::Black);
+    save_text.setPosition(700,100);
+
+    quit_text.setFont(font);
+    quit_text.setString("Quit");
+    quit_text.setCharacterSize(20);
+    quit_text.setOutlineColor(sf::Color::Black);
+    quit_text.setPosition(700,200);
+//..........................................................................................//
 }
 
-void SpaceMap::loopSpaceMap(Alien& alien, Hero& hero) {
+void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
     sf::Event event;
     while (window.pollEvent(event)) {
         if( event.type == sf::Event::Closed) {
@@ -266,6 +291,18 @@ void SpaceMap::loopSpaceMap(Alien& alien, Hero& hero) {
                     //indo do planet -> i;
                 }
             }
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                if(buttom_save.getGlobalBounds().contains(mouse_coord)){
+                    CharactersSave(hero, alien);
+                }
+                if (buttom_quit.getGlobalBounds().contains(mouse_coord))
+                {
+                    CharactersSave(hero, alien);
+                    window.close();
+                }
+                
+            }
+
         }
         enterWorld = false;
     }
@@ -280,15 +317,20 @@ void SpaceMap::render() {
     }
     //window.draw(character);
     //window.draw(worlds);
+//..............................................//
+    window.draw(buttom_save);
+    window.draw(buttom_quit);
+    window.draw(save_text);
+    window.draw(quit_text);
+
+//................................................//
     window.display();
 }
 
 
-void SpaceMap::runSpaceMap() {
+void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
     worlds = new World[order()];
     set_values();
-    Alien alien;
-    Hero hero;
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
     backgroundTexture.loadFromFile("./Images/mapa_espacial.png");

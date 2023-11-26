@@ -5,9 +5,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <random>
+#include <vector>
 #include <queue>
 
-struct Hero{
+/*struct Hero{
     float hp = 240;
     bool isAlive = true;
     bool iceBomb = false;
@@ -18,7 +19,6 @@ struct Hero{
     sf::RectangleShape playerHp;
     sf::Texture heroTexture;
     sf::Sprite heroSprite;
-    sf::Sprite roundedHero;
     sf::Text textHero;
 };
 
@@ -35,7 +35,25 @@ struct Alien{
     sf::Sprite bossSprite;
     sf::Sprite roundedBoss;
     sf::Text textBoss;
+};*/
+
+struct Character{
+    std::string name;
+    float hp;
+    bool isAlive = true;
+    bool burn = false;
+    bool poison = false;
+    bool lessAccuracy = false;
+    std::map<std::string, int> bombs = {{"IceBomb", 0}, {"FireBomb", 0}, {"PoisonBomb", 0}, {"Flashbang", 0}};
+    std::vector<std::pair<std::string, int>> Bombs = {{"IceBomb", 0}, {"FireBomb", 0}, {"PoisonBomb", 0}, {"Flashbang", 0}};
+    int speed;
+    sf::RectangleShape characterHp;
+    sf::Texture characterTexture;
+    sf::Sprite characterSprite;
+    sf::Sprite roundedCharacter;
+    sf::Text textCharacter;
 };
+
 
 class bossFight{
 private:
@@ -68,25 +86,25 @@ private:
 
     std::priority_queue<int> maxPriorityQueue;
 public:
-    void attack1(Alien& alien, Hero& hero);
-    void attack2(Alien& alien, Hero& hero);
+    void attack1(Character& alien, Character& hero);
+    void attack2(Character& alien, Character& hero);
     void setValues();
     int loopChooseBomb();
-    void drawSpecialAttack(Alien& alien, Hero& hero);
-    int runChooseBomb(Alien& alien, Hero& hero);
-    void heal(Hero& hero);
-    void defineTurns(Alien& alien, Hero& hero);
-    void damageCondition(Alien& alien);
-    bool Turn(Alien& alien, Hero& hero);
-    bool playerTurn(Alien& alien, Hero& hero);
+    void drawSpecialAttack(Character& alien, Character& hero);
+    int runChooseBomb(Character& alien, Character& hero);
+    void heal(Character& hero);
+    void defineTurns(Character& alien, Character& hero);
+    void damageCondition(Character& alien);
+    bool Turn(Character& alien, Character& hero);
+    bool playerTurn(Character& alien, Character& hero);
 
 
-    void enemyTurn(Alien& alien, Hero& hero);
+    void enemyTurn(Character& alien, Character& hero);
     void writeTextesBattle();
     //void Battle();
-    void modeBattle(Alien& alien, Hero& hero);
-    void drawBattle(Alien& alien, Hero& hero);
-    void layoutBattle(Alien& alien, Hero& hero);
+    void modeBattle(Character& alien, Character& hero);
+    void drawBattle(Character& alien, Character& hero);
+    void layoutBattle(Character& alien, Character& hero);
 };
 
 

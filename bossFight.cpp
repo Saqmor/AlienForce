@@ -16,14 +16,14 @@ bool prob(int n) {
     }
 }
 
-void bossFight::attack1(Alien& alien, Hero& hero){
+void bossFight::attack1(Character& alien, Character& hero){
     damageCondition(alien);
     if (maxPriorityQueue.top() == hero.speed)
-        alien.hp -= 7 + dice(8);
+        alien.hp -= 7.f + dice(8);
     if (maxPriorityQueue.top() == alien.speed){
         if (alien.lessAccuracy)
-            hero.hp -= prob(85) ? 10 + 2 * dice(8) : 0;
-        else hero.hp -= 10 + 2 * dice(8);
+            hero.hp -= prob(85) ? 10.f + 2.f * dice(8) : 0;
+        else hero.hp -= 10.f + 2.f * dice(8);
     }
     maxPriorityQueue.pop();
 }
@@ -74,7 +74,6 @@ int bossFight::loopChooseBomb() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed) {
             if (posBomb < 3) {
                 ++posBomb;
-                pressed = true;
                 texts[posBomb].setOutlineThickness(4);
                 texts[posBomb - 1].setOutlineThickness(0);
                 pressed = false;
@@ -84,7 +83,6 @@ int bossFight::loopChooseBomb() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed) {
             if (posBomb > 0) {
                 --posBomb;
-                pressed = true;
                 texts[posBomb].setOutlineThickness(4);
                 texts[posBomb + 1].setOutlineThickness(0);
                 pressed = false;
@@ -94,24 +92,24 @@ int bossFight::loopChooseBomb() {
     return -1;
 }
 
-void bossFight::drawSpecialAttack(Alien& alien, Hero& hero) {
+void bossFight::drawSpecialAttack(Character& alien, Character& hero) {
     window.clear();
     window.draw(background);
-    window.draw(alien.roundedBoss);
-    window.draw(hero.roundedHero);
-    window.draw(hero.playerHp);
-    window.draw(alien.bossHp);
-    window.draw(alien.textBoss);
-    window.draw(hero.textHero);
-    window.draw(hero.heroSprite);
-    window.draw(alien.bossSprite);
+    window.draw(alien.roundedCharacter);
+    window.draw(hero.roundedCharacter);
+    window.draw(hero.characterHp);
+    window.draw(alien.characterHp);
+    window.draw(alien.textCharacter);
+    window.draw(hero.textCharacter);
+    window.draw(hero.characterSprite);
+    window.draw(alien.characterSprite);
     for(auto t : texts){
         window.draw(t);
     }
     window.display();
 }
 
-int bossFight::runChooseBomb(Alien& alien, Hero& hero){
+int bossFight::runChooseBomb(Character& alien, Character& hero){
     int num = -1;
     enterPrevState = true;
     setValues();
@@ -123,26 +121,26 @@ int bossFight::runChooseBomb(Alien& alien, Hero& hero){
     return num;
 }
 
-void bossFight::attack2(Alien& alien, Hero& hero){
+void bossFight::attack2(Character& alien, Character& hero){
     damageCondition(alien);
     if (maxPriorityQueue.top() == alien.speed)
-        hero.hp -= 60 + 2 * dice(12);
+        hero.hp -= 60.f + 2.f * dice(12);
     if (maxPriorityQueue.top() == hero.speed){
         switch (runChooseBomb(alien, hero)) {
             case 1:
-                alien.hp -=  prob(40) ? 50 + 2 * dice(20) : 0;
+                alien.hp -=  prob(40) ? 50.f + 2.f * dice(20) : 0;
                 alien.speed -= 20;
                 break;
             case 2:
-                alien.hp -=  prob(60) ? 120 + 2 * dice(20) : 0;
+                alien.hp -=  prob(60) ? 120.f + 2.f * dice(20) : 0;
                 alien.burn = true;
                 break;
             case 3:
-                alien.hp -=  prob(80) ? 40 + 2 * dice(20) : 0;
+                alien.hp -=  prob(80) ? 40.f + 2.f * dice(20) : 0;
                 alien.poison = true;
                 break;
             case 4:
-                alien.hp -=  prob(50) ? 50 + 2 * dice(20) : 0;
+                alien.hp -=  prob(50) ? 50.f + 2.f * dice(20) : 0;
                 alien.lessAccuracy = true;
                 break;
             default:
@@ -153,12 +151,12 @@ void bossFight::attack2(Alien& alien, Hero& hero){
 }
 
 
-void bossFight::heal(Hero& hero) {
-    hero.hp += 8 + 1 * dice(6);
+void bossFight::heal(Character& hero) {
+    hero.hp += 8.f + 1.f * dice(6);
     maxPriorityQueue.pop();
 }
 
-void bossFight::defineTurns(Alien& alien, Hero& hero) {
+void bossFight::defineTurns(Character& alien, Character& hero) {
     if (alien.speed >= 2 * hero.speed)
         maxPriorityQueue.push(alien.speed);
     if (hero.speed >= 2 * alien.speed)
@@ -167,7 +165,7 @@ void bossFight::defineTurns(Alien& alien, Hero& hero) {
     maxPriorityQueue.push(alien.speed);
 }
 
-void bossFight::damageCondition(Alien& alien) {
+void bossFight::damageCondition(Character& alien) {
     if (alien.burn)
         alien.hp -= 4;
     if (alien.poison)
@@ -178,7 +176,7 @@ void bossFight::damageCondition(Alien& alien) {
     }
 }
 
-bool bossFight::Turn(Alien& alien, Hero& hero) {
+bool bossFight::Turn(Character& alien, Character& hero) {
     if (maxPriorityQueue.top() == alien.speed)
         enemyTurn(alien, hero);
     if ( playerTurn(alien, hero))
@@ -186,7 +184,7 @@ bool bossFight::Turn(Alien& alien, Hero& hero) {
     else return false;
 }
 
-bool bossFight::playerTurn(Alien& alien, Hero& hero) {
+bool bossFight::playerTurn(Character& alien, Character& hero) {
 
     // Verifica se a tecla Enter está pressionada
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect_opBattle) {
@@ -221,7 +219,6 @@ bool bossFight::playerTurn(Alien& alien, Hero& hero) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed_opBattle) {
         if (pos_opBattle < 3) {
             ++pos_opBattle;
-            pressed_opBattle = true;
             texts_opBattle[pos_opBattle].setOutlineThickness(4);
             texts_opBattle[pos_opBattle - 1].setOutlineThickness(0);
             pressed_opBattle = false;
@@ -231,7 +228,6 @@ bool bossFight::playerTurn(Alien& alien, Hero& hero) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed_opBattle) {
         if (pos_opBattle > 0) {
             --pos_opBattle;
-            pressed_opBattle = true;
             texts_opBattle[pos_opBattle].setOutlineThickness(4);
             texts_opBattle[pos_opBattle + 1].setOutlineThickness(0);
             pressed_opBattle = false;
@@ -242,7 +238,7 @@ bool bossFight::playerTurn(Alien& alien, Hero& hero) {
 }
 
 
-void bossFight::enemyTurn(Alien& alien, Hero& hero) {
+void bossFight::enemyTurn(Character& alien, Character& hero) {
     if (prob(90))
         attack1(alien, hero);
     else attack2(alien, hero);
@@ -252,81 +248,81 @@ void bossFight::enemyTurn(Alien& alien, Hero& hero) {
         hero.isAlive = false;
     }
 }
-void bossFight::layoutBattle(Alien& alien, Hero& hero)
+void bossFight::layoutBattle(Character& alien, Character& hero)
 {
     //Criação de retângulos envolventes
     roundedTexture.loadFromFile("./Images/rounded(5).png");
-    hero.roundedHero.setTexture(roundedTexture);
-    alien.roundedBoss.setTexture(roundedTexture);
-    hero.roundedHero.setScale(-1.3f,0.4f);
-    alien.roundedBoss.setScale(1.9f,0.4f);
+    hero.roundedCharacter.setTexture(roundedTexture);
+    alien.roundedCharacter.setTexture(roundedTexture);
+    hero.roundedCharacter.setScale(-1.3f,0.4f);
+    alien.roundedCharacter.setScale(1.9f,0.4f);
 
     //Criação dos personagens
-    hero.heroTexture.loadFromFile("./Images/hero.png");
-    alien.bossTexture.loadFromFile("./Images/alien_boss_true.png");
-    hero.heroSprite.setTexture(hero.heroTexture);
-    alien.bossSprite.setTexture(alien.bossTexture);
+    hero.characterTexture.loadFromFile("./Images/hero.png");
+    alien.characterTexture.loadFromFile("./Images/alien_boss_true.png");
+    hero.characterSprite.setTexture(hero.characterTexture);
+    alien.characterSprite.setTexture(alien.characterTexture);
 
     //Texto
     font_bar.loadFromFile("ethn.otf");
-    alien.textBoss.setFont(font_bar);
-    alien.textBoss.setString("Boss HP");
-    alien.textBoss.setCharacterSize(12);
-    hero.textHero.setFont(font_bar);
-    hero.textHero.setString("Hero HP");
-    hero.textHero.setCharacterSize(12);
+    alien.textCharacter.setFont(font_bar);
+    alien.textCharacter.setString("Boss HP");
+    alien.textCharacter.setCharacterSize(12);
+    hero.textCharacter.setFont(font_bar);
+    hero.textCharacter.setString("Hero HP");
+    hero.textCharacter.setCharacterSize(12);
 
     //Pintura
-    hero.playerHp.setFillColor(sf::Color(144,238,144));
-    alien.bossHp.setFillColor(sf::Color(144,238,144));
-    alien.textBoss.setFillColor(sf::Color(0,128,128));
-    hero.textHero.setFillColor(sf::Color(0,128,128));
-    alien.roundedBoss.setColor(sf::Color(222,184,135));
-    hero.roundedHero.setColor(sf::Color(222,184,135));
+    hero.characterHp.setFillColor(sf::Color(144,238,144));
+    alien.characterHp.setFillColor(sf::Color(144,238,144));
+    alien.textCharacter.setFillColor(sf::Color(0,128,128));
+    hero.textCharacter.setFillColor(sf::Color(0,128,128));
+    alien.roundedCharacter.setColor(sf::Color(222,184,135));
+    hero.roundedCharacter.setColor(sf::Color(222,184,135));
 
     //Posicionamento
-    hero.playerHp.setPosition(600.f,400.f);
-    alien.bossHp.setPosition(0,64.f);
-    alien.roundedBoss.setPosition(-130.f,30.f);
-    hero.roundedHero.setPosition(900.f,370.f);
-    alien.textBoss.setPosition(20.f,40.f);
-    hero.textHero.setPosition(705.f,380.f);
+    hero.characterHp.setPosition(600.f,400.f);
+    alien.characterHp.setPosition(0,64.f);
+    alien.roundedCharacter.setPosition(-130.f,30.f);
+    hero.roundedCharacter.setPosition(900.f,370.f);
+    alien.textCharacter.setPosition(20.f,40.f);
+    hero.textCharacter.setPosition(705.f,380.f);
 
     // Ajusta a escala e posicionamento das Sprites Hero e Boss
-    sf::Vector2f positionHero(static_cast<float>(hero.heroTexture.getSize().x), static_cast<float>(hero.heroTexture.getSize().y));
-    sf::Vector2f positionBoss(static_cast<float>(alien.bossTexture.getSize().x), static_cast<float>(alien.bossTexture.getSize().y));
+    sf::Vector2f positionHero(static_cast<float>(hero.characterTexture.getSize().x), static_cast<float>(hero.characterTexture.getSize().y));
+    sf::Vector2f positionBoss(static_cast<float>(alien.characterTexture.getSize().x), static_cast<float>(alien.characterTexture.getSize().y));
     positionHero.x = positionHero.x / 2;
     positionHero.y = positionHero.y / 2;
     positionBoss.x = positionBoss.x / 2;
     positionHero.y = positionBoss.y / 2;
-    hero.heroSprite.setOrigin(positionHero);
-    alien.bossSprite.setOrigin(positionBoss);
-    hero.heroSprite.setPosition(150.f,380.f);
-    alien.bossSprite.setPosition(650.f,370.f);
-    alien.bossSprite.setScale(0.5f,0.5f);
-    hero.heroSprite.setScale(0.5f,0.5f);
+    hero.characterSprite.setOrigin(positionHero);
+    alien.characterSprite.setOrigin(positionBoss);
+    hero.characterSprite.setPosition(150.f,380.f);
+    alien.characterSprite.setPosition(650.f,370.f);
+    alien.characterSprite.setScale(0.5f,0.5f);
+    hero.characterSprite.setScale(0.5f,0.5f);
 
 }
-void bossFight::drawBattle(Alien& alien, Hero& hero)
+void bossFight::drawBattle(Character& alien, Character& hero)
 {
     layoutBattle(alien, hero);
 
     window.clear();
     window.draw(background);
-    window.draw(alien.roundedBoss);
-    window.draw(hero.roundedHero);
-    window.draw(hero.playerHp);
-    window.draw(alien.bossHp);
-    window.draw(alien.textBoss);
-    window.draw(hero.textHero);
-    window.draw(hero.heroSprite);
-    window.draw(alien.bossSprite);
+    window.draw(alien.roundedCharacter);
+    window.draw(hero.roundedCharacter);
+    window.draw(hero.characterHp);
+    window.draw(alien.characterHp);
+    window.draw(alien.textCharacter);
+    window.draw(hero.textCharacter);
+    window.draw(hero.characterSprite);
+    window.draw(alien.characterSprite);
     for(auto t : texts_opBattle){
         window.draw(t);
     }
     window.display();
 }
-void bossFight::modeBattle(Alien& alien, Hero& hero)
+void bossFight::modeBattle(Character& alien, Character& hero)
 {
     backgroundTexture.loadFromFile("./Images/background_battle_2.png");
     background.setTexture(backgroundTexture);
@@ -377,8 +373,8 @@ void bossFight::modeBattle(Alien& alien, Hero& hero)
                 window.close();
 
 
-            hero.playerHp.setSize(sf::Vector2f(hero.hp, 13));
-            alien.bossHp.setSize(sf::Vector2f(0.45*alien.hp, 13));
+            hero.characterHp.setSize(sf::Vector2f(hero.hp, 13));
+            alien.characterHp.setSize(sf::Vector2f(0.45f*alien.hp, 13));
 
         }
         drawBattle(alien, hero);

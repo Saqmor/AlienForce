@@ -51,9 +51,9 @@ public:
     ~SpaceMap();
     void numVertices(std::size_t n);
     void update();
-    void loopSpaceMap (Alien& alien, Hero& hero);
+    void loopSpaceMap (Character& alien, Character& hero);
     void render();
-    void runSpaceMap ();
+    void runSpaceMap (Character& alien, Character& hero);
     void set_values();
     void move_ship();
     float set_angle(sf::Vector2f direction);
@@ -63,7 +63,13 @@ private:
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     sf::Sprite background;
-
+//-------------------------------------------//
+    sf::RectangleShape buttom_save;
+    sf::RectangleShape buttom_quit;
+    sf::Font font; 
+    sf::Text save_text;
+    sf::Text quit_text;
+//-------------------------------------------//
     sf::Texture rocketTexture;
     sf::Sprite rocket;
     sf::Vector2f rocketPosition;

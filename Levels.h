@@ -6,14 +6,14 @@ class Game
 {
 public:
 
-    void run(sf::Sprite,Hero &hero,std::string);
+    void run(sf::Sprite,Character& hero,std::string);
     void setValues();
 
 private:
     void processEvents();
     void update();
     void update_enemy1();
-    void render(sf::Sprite,struct Hero &hero,std::string);
+    void render(sf::Sprite,struct Character& hero,std::string);
 
     sf::RenderWindow window;
     sf::Event event;

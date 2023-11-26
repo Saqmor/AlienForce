@@ -6,7 +6,7 @@
 
 class Menu {
     int pos;
-    bool pressed, theselect, selectedPlay;
+    bool pressed, theselect, selectedPlay, selectedContinue;
 
     sf::RenderWindow * window;
     sf::RectangleShape * winclose;

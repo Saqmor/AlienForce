@@ -1,0 +1,12 @@
+hero
+HP 108 isAlive 1 speed 12
+TypeBomb IceBomb Quantidade 0
+TypeBomb FireBomb Quantidade 0
+TypeBomb PoisonBomb Quantidade 0
+TypeBomb Flashbang Quantidade 0
+alien
+HP 218 isAlive 1 speed 5
+TypeBomb IceBomb Quantidade 0
+TypeBomb FireBomb Quantidade 0
+TypeBomb PoisonBomb Quantidade 0
+TypeBomb Flashbang Quantidade 0
