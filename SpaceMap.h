@@ -84,6 +84,7 @@ private:
     World* worlds;
     std::vector<sf::Vector2f> coordsWorlds;
     std::vector<float> sizeWorlds;
+    std::vector<std::string> equipment;
     sf::Vector2i pos_mouse;
     sf::Vector2f mouse_coord;
 };

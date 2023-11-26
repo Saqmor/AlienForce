@@ -1,23 +1,26 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include "bossFight.h"
 
 class Game
 {
 public:
 
-    void run(sf::Sprite);
+    void run(sf::Sprite,Hero &hero,std::string);
     void setValues();
 
 private:
     void processEvents();
     void update();
     void update_enemy1();
-    void render(sf::Sprite);
+    void render(sf::Sprite,struct Hero &hero,std::string);
 
     sf::RenderWindow window;
     sf::Event event;
-    sf::Texture characterTexture, backgroundTexture, enemy1Texture;
-    sf::Sprite character, background, enemy1;
+    sf::Texture characterTexture, backgroundTexture, enemy1Texture,
+    poisonBombTexture,iceBombTexture,fireBombTexture,flashbangTexture;
+    
+    sf::Sprite character, background, enemy1,poisonBomb,iceBomb,fireBomb,flashbang;
 
     float characterScaleX, characterScaleY;
     sf::Vector2f position;

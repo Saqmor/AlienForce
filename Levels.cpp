@@ -1,4 +1,5 @@
 #include "Levels.h"
+#include "bossFight.h"
 
 void Game::setValues() {
     window.create(sf::VideoMode(800, 600), "My window");
@@ -7,20 +8,47 @@ void Game::setValues() {
     characterTexture.loadFromFile("./Images/chiefsheet.png");
     //backgroundTexture.loadFromFile("./Images/fundo.png");
     enemy1Texture.loadFromFile("./Images/enemy1.png");
+    poisonBombTexture.loadFromFile("./Images/poison.png");
+    iceBombTexture.loadFromFile("./Images/ice.png");
+    fireBombTexture.loadFromFile("./Images/fire.png");
+    flashbangTexture.loadFromFile("./Images/flashbang.png");
 
     character.setTexture(characterTexture);
     //background.setTexture(backgroundTexture);
     enemy1.setTexture(enemy1Texture);
-
+    poisonBomb.setTexture(poisonBombTexture);
+    iceBomb.setTexture(iceBombTexture);
+    fireBomb.setTexture(fireBombTexture);
+    flashbang.setTexture(flashbangTexture);
     // Ajusta a escala inicial junto com o centro da figura
 
     sf::Vector2f centerM(enemy1Texture.getSize().x,enemy1Texture.getSize().y);
     centerM.x = centerM.x / 2;
     centerM.y = centerM.y / 2;
     enemy1.setOrigin(centerM);
+
+   centerM.x=poisonBombTexture.getSize().x/2;
+   centerM.y=poisonBombTexture.getSize().y/2;
+   poisonBomb.setOrigin(centerM);
+   poisonBomb.setScale(0.5f,0.5f);
+
+   centerM.x=iceBombTexture.getSize().x/2;
+   centerM.y=iceBombTexture.getSize().y/2;
+   iceBomb.setOrigin(centerM);
+   iceBomb.setScale(0.5f,0.5f);
+
+   centerM.x=fireBombTexture.getSize().x/2;
+   centerM.y=fireBombTexture.getSize().y/2;
+   fireBomb.setOrigin(centerM);
+   fireBomb.setScale(0.5f,0.5f);
+
+   centerM.x=flashbangTexture.getSize().x/2;
+   centerM.y=flashbangTexture.getSize().y/2;
+   flashbang.setOrigin(centerM);
+   flashbang.setScale(0.5f,0.5f);
 }
 
-void Game::run(sf::Sprite background_level)
+void Game::run(sf::Sprite background_level,Hero &hero,std::string equipment)
 {
     setValues();
     while (window.isOpen())
@@ -28,7 +56,7 @@ void Game::run(sf::Sprite background_level)
         processEvents();
         update();
         update_enemy1();
-        render(background_level);
+        render(background_level,hero,equipment);
     }
 }
 
@@ -191,10 +219,18 @@ void Game::update_enemy1()
     position_enemy1 = enemy1.getPosition();
     enemy1.setPosition(position_enemy1.x,400.f);
 }
-void Game::render(sf::Sprite background_level)
+void Game::render(sf::Sprite background_level,Hero &hero,std::string equipment)
 {
     window.clear();
     window.draw(background_level);
+    if(!hero.fireBomb && equipment== "fire")
+        window.draw(fireBomb);
+    if(!hero.flashbang && equipment =="flashbang")
+        window.draw(flashbang);
+    if(!hero.poisonBomb && equipment == "poison")
+        window.draw(poisonBomb);
+    if(!hero.iceBomb && equipment =="ice")
+        window.draw(iceBomb);
     window.draw(character);
     window.draw(enemy1);
     window.display();

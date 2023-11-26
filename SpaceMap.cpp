@@ -197,10 +197,12 @@ void SpaceMap::read_planets_data(){
     std::ifstream is;
     is.open("coords_worlds.txt");
     float a,b,r;
+    std::string word;
     for (std::size_t i = 0; i < order(); i++){
-        is>>a>>b>>r;
+        is>>a>>b>>r>>word;
         coordsWorlds.emplace_back(a, b);
         sizeWorlds.push_back(r);
+        equipment.push_back(word);
     }
     is.close();
 }
@@ -234,7 +236,7 @@ void SpaceMap::set_values()
 
     for (std::size_t i = 0; i < order(); ++i) {
         worlds[i].shape.setRadius(sizeWorlds[i]);
-        worlds[i].shape.setFillColor(sf::Color::Green);
+        worlds[i].shape.setFillColor(sf::Color::Transparent);
         worlds[i].shape.setOrigin(worlds[i].shape.getRadius(),worlds[i].shape.getRadius());
         worlds[i].shape.setPosition(coordsWorlds[i]);
     }
@@ -260,14 +262,13 @@ void SpaceMap::loopSpaceMap(Alien& alien, Hero& hero) {
                 if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
                     track=min_way(planet,i);
                     move_ship();
-                    worlds[i].game.run(worlds[i].level_sprite);
+                    worlds[i].game.run(worlds[i].level_sprite,hero,equipment[i]);
                     //indo do planet -> i;
                 }
             }
         }
         enterWorld = false;
     }
-
 }
 
 void SpaceMap::render() {
@@ -277,7 +278,6 @@ void SpaceMap::render() {
     for (int i = 0; i < order(); ++i) {
         window.draw(worlds[i].shape);
     }
-    
     //window.draw(character);
     //window.draw(worlds);
     window.display();
