@@ -22,10 +22,10 @@ void Game::setValues() {
     flashbang.setTexture(flashbangTexture);
     // Ajusta a escala inicial junto com o centro da figura
 
-    sf::Vector2f centerM(enemy1Texture.getSize().x,enemy1Texture.getSize().y);
-    centerM.x = centerM.x / 2;
-    centerM.y = centerM.y / 2;
-    enemy1.setOrigin(centerM);
+   sf::Vector2f centerM(enemy1Texture.getSize().x,enemy1Texture.getSize().y);
+   centerM.x = centerM.x / 2;
+   centerM.y = centerM.y / 2;
+   enemy1.setOrigin(centerM);
 
    centerM.x=poisonBombTexture.getSize().x/2;
    centerM.y=poisonBombTexture.getSize().y/2;
@@ -118,38 +118,43 @@ void Game::update()
     // Verifica se o personagem está se movendo
     bool isMoving = (velocity.x != 0.f || velocity.y != 0.f);
 
+        //sf::IntRect textureRect=sf::IntRect(static_cast<int>(frameAtualEsquerda) * textureSize.x, linha * textureSize.y, textureSize.x, textureSize.y);
+        //character.setTextureRect(textureRect);
     // Atualiza a lógica da animação
     if (isMoving) {
         // Calcula o frame atual baseado no tempo ou eventos de teclado
         // Substitua esta lógica com a sua própria animação
-
         if (velocity.x > 0.f) {
 
             if (frameAtualEsquerda > 4) {
                 frameAtualEsquerda = 0.f;
             }
-            //Seta qual figura vai aparecer
-            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualEsquerda) * textureSize.x, 2 * textureSize.y, textureSize.x, textureSize.y));
+            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualEsquerda) * textureSize.x, 
+            linha * textureSize.y, textureSize.x, textureSize.y));
         } else if (velocity.x < 0.f) {
 
             if (frameAtualDireita > 4) {
                 frameAtualDireita = 0.f;
             }
-            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualDireita) * textureSize.x, 1 * textureSize.y, textureSize.x, textureSize.y));
+            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualDireita) * textureSize.x, 
+            linha * textureSize.y, textureSize.x, textureSize.y));
         }
 
         if (velocity.y < 0.f) {
 
             if (frameAtualCima > 4) {
                 frameAtualCima = 0.f;
-            }
-            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualCima) * textureSize.x, 3 * textureSize.y, textureSize.x, textureSize.y));
-        } else if (velocity.y > 0.f) {
+        }
+        character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualCima) * textureSize.x, 
+            linha * textureSize.y, textureSize.x, textureSize.y));
+        } 
+        else if (velocity.y > 0.f) {
 
             if (frameAtualBaixo > 4) {
                 frameAtualBaixo = 0.f;
             }
-            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualBaixo) * textureSize.x, 0 * textureSize.y, textureSize.x, textureSize.y));
+            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualBaixo) * textureSize.x, 
+            linha * textureSize.y, textureSize.x, textureSize.y));
         }
     } else {
         // Se o personagem não estiver se movendo, exibir um frame parado
@@ -174,8 +179,11 @@ void Game::update()
         else
         velocity.y=1.5*std::sin(-std::fabs(angle));
     } */
+    sf::IntRect texturerect =character.getTextureRect();
     float velocidadeMovimento = 100.f;
+    character.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
     character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
+    std::cout<<character.getPosition().x<<" "<<character.getPosition().y<<std::endl;
 }
 void Game::update_enemy1()
 {
@@ -204,6 +212,8 @@ void Game::update_enemy1()
         enemy1.setTextureRect(sf::IntRect(static_cast<int>(frameAtualDireita_enemy) * textureSize.x, 1 * textureSize.y, textureSize.x, textureSize.y));
     }
     float velocidadeMovimento = 100.f;
+    sf::IntRect texturerect=enemy1.getTextureRect();
+    enemy1.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
     enemy1.move(velocity_enemy1 * velocidadeMovimento * 0.016f);
     sf::Vector2f position_enemy1=enemy1.getPosition();
     //Verifica se o personagem ultrapassou as bordas da janela
@@ -211,8 +221,8 @@ void Game::update_enemy1()
         position_enemy1.x = 0;
         enemy1.setPosition(position_enemy1.x,200.f);
         velocity_enemy1.x=0.4f;
-    } else if (position_enemy1.x > window.getSize().x - textureSize.x * enemyScaleX) {
-        position_enemy1.x = window.getSize().x - textureSize.x * enemyScaleX;
+    } else if (position_enemy1.x >= 800) {
+        position_enemy1.x = 800;
         enemy1.setPosition(position_enemy1.x,200.f);
         velocity_enemy1.x = -0.4f;
     }
