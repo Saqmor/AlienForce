@@ -30,7 +30,8 @@ void Game::setValues() {
    centerM.x=poisonBombTexture.getSize().x/2;
    centerM.y=poisonBombTexture.getSize().y/2;
    poisonBomb.setOrigin(centerM);
-   poisonBomb.setScale(0.5f,0.5f);
+   poisonBomb.setScale(0.1f,0.1f);
+   poisonBomb.setPosition(window.getSize().x/2,500);
 
    centerM.x=iceBombTexture.getSize().x/2;
    centerM.y=iceBombTexture.getSize().y/2;
@@ -40,12 +41,14 @@ void Game::setValues() {
    centerM.x=fireBombTexture.getSize().x/2;
    centerM.y=fireBombTexture.getSize().y/2;
    fireBomb.setOrigin(centerM);
-   fireBomb.setScale(0.5f,0.5f);
+   fireBomb.setScale(0.2f,0.2f);
+   fireBomb.setPosition(400,525);
 
    centerM.x=flashbangTexture.getSize().x/2;
    centerM.y=flashbangTexture.getSize().y/2;
    flashbang.setOrigin(centerM);
    flashbang.setScale(0.5f,0.5f);
+   flashbang.setPosition(600.f,230.f);
 }
 
 void Game::run(sf::Sprite background_level,Hero &hero,std::string equipment)
@@ -183,7 +186,6 @@ void Game::update()
     float velocidadeMovimento = 100.f;
     character.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
     character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
-    std::cout<<character.getPosition().x<<" "<<character.getPosition().y<<std::endl;
 }
 void Game::update_enemy1()
 {

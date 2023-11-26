@@ -225,6 +225,10 @@ void SpaceMap::set_values()
         address= address + ss.str() + ".jpg";
         worlds[i].level_background.loadFromFile(address);
         worlds[i].level_sprite.setTexture(worlds[i].level_background);
+        
+        float scaleX = (800) / worlds[i].level_background.getSize().x;
+        float scaleY = (600) / worlds[i].level_background.getSize().y;
+        worlds[i].level_sprite.setScale(scaleX,scaleY);
     }
     rocketTexture.loadFromFile("./Images/ship.png");
     rocket.setTexture(rocketTexture);
