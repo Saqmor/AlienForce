@@ -63,13 +63,13 @@ private:
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     sf::Sprite background;
-//-------------------------------------------//
+
     sf::RectangleShape buttom_save;
     sf::RectangleShape buttom_quit;
     sf::Font font; 
     sf::Text save_text;
     sf::Text quit_text;
-//-------------------------------------------//
+
     sf::Texture rocketTexture;
     sf::Sprite rocket;
     sf::Vector2f rocketPosition;

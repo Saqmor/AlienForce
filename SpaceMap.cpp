@@ -247,30 +247,30 @@ void SpaceMap::set_values()
     }
     pos_mouse = {0,0};
     mouse_coord = {0, 0};
-//......................................................................................//  
-    buttom_save.setSize(sf::Vector2f(80,40));
-    buttom_quit.setSize(sf::Vector2f(80,40));
+    
+    buttom_save.setSize(sf::Vector2f(130,30));
     buttom_save.setFillColor(sf::Color::Red);
-    buttom_quit.setFillColor(sf::Color::Blue);
     buttom_save.setOrigin(buttom_save.getSize().x/2.f,buttom_save.getSize().y/2.f);
+    buttom_save.setPosition(716,105);
+
+    buttom_quit.setSize(sf::Vector2f(105,30));
+    buttom_quit.setFillColor(sf::Color::Blue); 
     buttom_quit.setOrigin(buttom_quit.getSize().x/2.f,buttom_quit.getSize().y/2.f);
-    buttom_save.setPosition(700,100);
-    buttom_quit.setPosition(700,200);
-//..........................................................................................//
+    buttom_quit.setPosition(711,155);
+
     font.loadFromFile("ethn.otf");
 
     save_text.setFont(font);
     save_text.setString("Save");
-    save_text.setCharacterSize(20);
+    save_text.setCharacterSize(30);
     save_text.setOutlineColor(sf::Color::Black);
-    save_text.setPosition(700,100);
+    save_text.setPosition(655,87);
 
     quit_text.setFont(font);
     quit_text.setString("Quit");
-    quit_text.setCharacterSize(20);
+    quit_text.setCharacterSize(30);
     quit_text.setOutlineColor(sf::Color::Black);
-    quit_text.setPosition(700,200);
-//..........................................................................................//
+    quit_text.setPosition(664,137);
 }
 
 void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
@@ -319,15 +319,12 @@ void SpaceMap::render() {
     for (int i = 0; i < order(); ++i) {
         window.draw(worlds[i].shape);
     }
-    //window.draw(character);
-    //window.draw(worlds);
-//..............................................//
+
     window.draw(buttom_save);
     window.draw(buttom_quit);
     window.draw(save_text);
     window.draw(quit_text);
 
-//................................................//
     window.display();
 }
 
