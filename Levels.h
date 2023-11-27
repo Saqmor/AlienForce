@@ -11,9 +11,9 @@ public:
 
 private:
     void processEvents();
-    void update();
+    void update(Character& hero,std::string);
     void update_enemy1();
-    void render(sf::Sprite,struct Character& hero,std::string);
+    void render(sf::Sprite,Character& hero,std::string);
 
     sf::RenderWindow window;
     sf::Event event;

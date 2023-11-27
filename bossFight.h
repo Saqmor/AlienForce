@@ -7,6 +7,7 @@
 #include <random>
 #include <vector>
 #include <queue>
+#include <string>
 
 /*struct Hero{
     float hp = 240;
@@ -36,7 +37,12 @@ struct Alien{
     sf::Sprite roundedBoss;
     sf::Text textBoss;
 };*/
-
+struct Grenade{
+    std::string type;
+    bool full=false;
+    sf::Texture bomb_texture;
+    sf::Sprite bomb_sprite;
+};
 struct Character{
     std::string name;
     float hp;
@@ -46,6 +52,7 @@ struct Character{
     bool lessAccuracy = false;
     std::map<std::string, int> bombs = {{"IceBomb", 0}, {"FireBomb", 0}, {"PoisonBomb", 0}, {"Flashbang", 0}};
     std::vector<std::pair<std::string, int>> Bombs = {{"IceBomb", 0}, {"FireBomb", 0}, {"PoisonBomb", 0}, {"Flashbang", 0}};
+    std::vector<Grenade> Grenades;
     int speed;
     sf::RectangleShape characterHp;
     sf::Texture characterTexture;

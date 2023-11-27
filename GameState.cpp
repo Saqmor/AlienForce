@@ -8,8 +8,11 @@ std::ostream& operator<<(std::ostream& os,  Character& personage) {
        "speed " << personage.speed <<std::endl;
     /*for(const auto& bomb : personage.bombs)
     os << "TypeBomb" << " " << bomb.first << " " << "Quantidade" << " " << bomb.second << " ";*/
-    for (const auto& bomb : personage.Bombs) {
+    /*for () {
         os << "TypeBomb " << bomb.first << " Quantidade " << bomb.second<< std::endl;
+    }*/
+    for (int i = 0; i < 4; ++i) {
+        os << "TypeBomb " << personage.Grenades[i].type <<  " Quantidade " << personage.Grenades[i].full << std::endl;
     }
     return os;
 }
@@ -26,11 +29,12 @@ std::istream& operator>>(std::istream& is, Character& personage) {
         is >> typeBomb >> typeBomb >> quantBomb >> numBomb;
         personage.Bombs.push_back(typeBomb, numBomb);
     }*/
+    Grenade aux;
     for (int i = 0; i < 4; ++i) {
-        is >> Tbomb >> typeBomb >> quantBomb >> numBomb;
-        personage.Bombs[i].first = typeBomb;
-        personage.Bombs[i].second = numBomb;
+        is >> Tbomb >> aux.type >> quantBomb >> aux.full;
+        personage.Grenades.push_back(aux);
     }
+
     return is;
 }
 

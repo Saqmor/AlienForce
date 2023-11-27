@@ -149,7 +149,43 @@ void Menu::run_menu(){
     if (selectedContinue){
         LoadSave(hero, alien);
     }
-
+    for(size_t i=0;i<4;i++)
+    {
+        Grenade grenade;
+        if(i==0)
+        {
+            grenade.type ="IceBomb";
+            grenade.bomb_texture.loadFromFile("./Images/ice.png");
+            grenade.bomb_sprite.setScale(0.5f,0.5f);
+            grenade.bomb_sprite.setPosition(400,500);
+        }
+        if(i==1)
+        {
+            grenade.type="FireBomb";
+            grenade.bomb_texture.loadFromFile("./Images/fire.png");
+            grenade.bomb_sprite.setScale(0.2f,0.2f);
+            grenade.bomb_sprite.setPosition(400,525);
+        }
+        if(i==2)
+        {
+            grenade.type="PoisonBomb";
+            grenade.bomb_texture.loadFromFile("./Images/poison.png");
+            grenade.bomb_sprite.setScale(0.1f,0.1f);
+            grenade.bomb_sprite.setPosition(400,500);
+        }
+        if(i==3)
+        {
+            grenade.type ="Flashbang";
+            grenade.bomb_texture.loadFromFile("./Images/flashbang.png");
+            grenade.bomb_sprite.setScale(0.5f,0.5f);
+            grenade.bomb_sprite.setPosition(600,230);
+        }
+        grenade.bomb_sprite.setTexture(grenade.bomb_texture);
+        sf::Vector2f centerM(grenade.bomb_texture.getSize().x/2.f,grenade.bomb_texture.getSize().y/2.f);
+        grenade.bomb_sprite.setOrigin(centerM);
+        grenade.bomb_sprite.setPosition(400,500);
+        hero.Grenades.push_back(grenade);
+    }
     SpaceMap space(read_base());
     space.runSpaceMap(alien, hero);
 }
@@ -161,5 +197,4 @@ int Menu::read_base(){
     is>>vertex;
     is.close();
     return vertex;
-
 }

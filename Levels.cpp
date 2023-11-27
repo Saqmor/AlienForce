@@ -8,18 +8,18 @@ void Game::setValues() {
     characterTexture.loadFromFile("./Images/chiefsheet.png");
     //backgroundTexture.loadFromFile("./Images/fundo.png");
     enemy1Texture.loadFromFile("./Images/enemy1.png");
-    poisonBombTexture.loadFromFile("./Images/poison.png");
+    /*poisonBombTexture.loadFromFile("./Images/poison.png");
     iceBombTexture.loadFromFile("./Images/ice.png");
     fireBombTexture.loadFromFile("./Images/fire.png");
-    flashbangTexture.loadFromFile("./Images/flashbang.png");
+    flashbangTexture.loadFromFile("./Images/flashbang.png");*/
 
     character.setTexture(characterTexture);
     //background.setTexture(backgroundTexture);
     enemy1.setTexture(enemy1Texture);
-    poisonBomb.setTexture(poisonBombTexture);
+    /*poisonBomb.setTexture(poisonBombTexture);
     iceBomb.setTexture(iceBombTexture);
     fireBomb.setTexture(fireBombTexture);
-    flashbang.setTexture(flashbangTexture);
+    flashbang.setTexture(flashbangTexture);*/
     // Ajusta a escala inicial junto com o centro da figura
 
    sf::Vector2f centerM(enemy1Texture.getSize().x,enemy1Texture.getSize().y);
@@ -27,7 +27,7 @@ void Game::setValues() {
    centerM.y = centerM.y / 2;
    enemy1.setOrigin(centerM);
 
-   centerM.x=poisonBombTexture.getSize().x/2;
+   /*centerM.x=poisonBombTexture.getSize().x/2;
    centerM.y=poisonBombTexture.getSize().y/2;
    poisonBomb.setOrigin(centerM);
    poisonBomb.setScale(0.1f,0.1f);
@@ -48,7 +48,7 @@ void Game::setValues() {
    centerM.y=flashbangTexture.getSize().y/2;
    flashbang.setOrigin(centerM);
    flashbang.setScale(0.5f,0.5f);
-   flashbang.setPosition(600.f,230.f);
+   flashbang.setPosition(600.f,230.f);*/
 }
 
 void Game::run(sf::Sprite background_level,Character& hero,std::string equipment)
@@ -57,7 +57,7 @@ void Game::run(sf::Sprite background_level,Character& hero,std::string equipment
     while (window.isOpen())
     {
         processEvents();
-        update();
+        update(hero,equipment);
         update_enemy1();
         render(background_level,hero,equipment);
     }
@@ -72,7 +72,7 @@ void Game::processEvents()
     }
 }
 
-void Game::update()
+void Game::update(Character& hero, std::string equipment)
 {
     sf::Vector2u textureSize = characterTexture.getSize();
     textureSize.x /= 4;  // Assumindo 4 frames na horizontal
@@ -186,6 +186,30 @@ void Game::update()
     float velocidadeMovimento = 100.f;
     character.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
     character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
+    for (size_t i = 0; i < 4; i++)
+    {
+        if(!hero.Grenades[i].full)
+            {   
+                if(hero.Grenades[i].type==equipment && 
+                std::abs(character.getPosition().x-hero.Grenades[i].bomb_sprite.getPosition().x)<10 && 
+                std::abs(character.getPosition().y-hero.Grenades[i].bomb_sprite.getPosition().y)<10)
+                hero.Grenades[i].full=true;
+                
+                /*if(hero.Bombs[i].first=="FireBomb" && std::abs(character.getPosition().x-fireBomb.getPosition().x)<10 && 
+    std::abs(character.getPosition().y-fireBomb.getPosition().y)<10)
+                    hero.Grenades[i].full=true;
+                if(hero.Bombs[i].first=="PoisonBomb" && std::abs(character.getPosition().x-poisonBomb.getPosition().x)<10 && 
+    std::abs(character.getPosition().y-poisonBomb.getPosition().y)<10)
+                    hero.Grenades[i].full=true;
+                if(hero.Bombs[i].first=="IceBomb" && std::abs(character.getPosition().x-iceBomb.getPosition().x)<10 && 
+    std::abs(character.getPosition().y-iceBomb.getPosition().y)<10)
+                    hero.Grenades[i].full=true;
+                if(hero.Bombs[i].first=="Flashbang" && std::abs(character.getPosition().x-flashbang.getPosition().x)<10 && 
+    std::abs(character.getPosition().y-flashbang.getPosition().y)<10)
+                    hero.Grenades[i].full=true;
+            }*/
+            }
+    }
 }
 void Game::update_enemy1()
 {
@@ -237,20 +261,9 @@ void Game::render(sf::Sprite background_level,Character& hero,std::string equipm
     window.draw(background_level);
     for (size_t i = 0; i < 4; i++)
     {
-        if (hero.Bombs[i].second == 0)
-        {
-            if (hero.Bombs[i].first == "FireBomb")
-                    window.draw(fireBomb);
-            if (hero.Bombs[i].first == "Flashbang")
-                    window.draw(fireBomb);
-            if (hero.Bombs[i].first == "PoisonBomb")
-                    window.draw(fireBomb);
-            if (hero.Bombs[i].first == "IceBomb")
-                    window.draw(fireBomb);
-        }
-        
+        if (!hero.Grenades[i].full && hero.Grenades[i].type==equipment)
+            window.draw(hero.Grenades[i].bomb_sprite);
     }
-    
     /*if(!hero.fireBomb && equipment== "fire")
         window.draw(fireBomb);
     if(!hero.flashbang && equipment =="flashbang")
