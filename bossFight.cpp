@@ -46,6 +46,7 @@ void bossFight::setValues() {
 /*---------------------------------------------------------------------------------------------------------------*/
     }
     texts[0].setOutlineThickness(4);
+    finishAttck2 = false;
     posBomb = 0;
 }
 

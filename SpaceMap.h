@@ -82,11 +82,11 @@ private:
     //sf::CircleShape worldsArray[8];
     struct World{
         sf::CircleShape shape;
-        bossFight Fight;
         Game game;
         sf::Texture level_background; 
         sf::Sprite level_sprite;
     };
+    bossFight Fight;
     World* worlds;
     std::vector<sf::Vector2f> coordsWorlds;
     std::vector<float> sizeWorlds;
