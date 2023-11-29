@@ -1,16 +1,10 @@
 #include "GameState.h"
-#include <fstream>
 
 std::ostream& operator<<(std::ostream& os,  Character& personage) {
     os << personage.name << std::endl <<
        "HP " << personage.hp << " " <<
        "isAlive " << personage.isAlive << " " <<
        "speed " << personage.speed <<std::endl;
-    /*for(const auto& bomb : personage.bombs)
-    os << "TypeBomb" << " " << bomb.first << " " << "Quantidade" << " " << bomb.second << " ";*/
-    /*for () {
-        os << "TypeBomb " << bomb.first << " Quantidade " << bomb.second<< std::endl;
-    }*/
     for (int i = 0; i < 4; ++i) {
         os << "TypeBomb " << personage.grenades[i].type <<  " Quantidade " << personage.grenades[i].full << std::endl;
     }
@@ -20,19 +14,12 @@ std::ostream& operator<<(std::ostream& os,  Character& personage) {
 
 std::istream& operator>>(std::istream& is, Character& personage) {
     std::string nameCharacater, hp, isAlive, speed, typeBomb, Tbomb, quantBomb;
-    int numBomb;
     is >> personage.name >>
        hp >> personage.hp >>
        isAlive >> personage.isAlive >>
        speed >> personage.speed;
-    /*for (const auto& bomb : personage.Bombs){
-        is >> typeBomb >> typeBomb >> quantBomb >> numBomb;
-        personage.Bombs.push_back(typeBomb, numBomb);
-    }*/
-    //Grenade aux;
     for (int i = 0; i < 4; ++i) {
         is >> Tbomb >> personage.grenades[i].type >> quantBomb >> personage.grenades[i].full;
-        //personage.grenades[i].type=aux.type;
     }
 
     return is;

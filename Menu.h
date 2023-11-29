@@ -5,6 +5,7 @@
 #include <fstream>
 
 class Menu {
+private:
     int pos;
     bool pressed, theselect, selectedPlay, selectedContinue;
 
@@ -22,8 +23,6 @@ class Menu {
     std::vector<sf::Text> texts;
     std::vector<std::size_t> sizes;
 
-
-protected:
     void set_values();
     void loop_events();
     void draw_all();
@@ -33,7 +32,5 @@ public:
     ~Menu();
     void run_menu();
 };
-
-
 
 #endif //CODE_GAME_MENU_H

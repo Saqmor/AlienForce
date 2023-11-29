@@ -1,8 +1,4 @@
 #include "Graph.h"
-#include  <stack>
-#include <sstream>
-#include <fstream>
-#include <random>
 
 Graph::Graph(std::size_t nvertices) {
     n = nvertices;

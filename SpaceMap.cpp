@@ -4,12 +4,9 @@
 #include <sstream>
 #include <fstream>
 
-//deletar os ponteiros de struct
-/*-------------------------------------------------------------------------------------------------------------------------------*/
 SpaceMap::~SpaceMap() {
     delete[] worlds;
 }
-/*-------------------------------------------------------------------------------------------------------------------------------*/
 
 void SpaceMap::read_planets_data(){
     std::ifstream is;
@@ -27,14 +24,8 @@ void SpaceMap::read_planets_data(){
 
 void SpaceMap::set_values()
 {
-    std::size_t from, to;
-    float weight;
     add_edges_from_file();
     read_planets_data();
-    //while(std::cin >> from >> to >> weight)
-      //  add_edge(from, to, weight);
-    //coordsWorlds = {{588,855},{280,685},{786,757},{457,501},{650,394},{822,264},{321,290},{510,120}};
-    //sizeWorlds = {50, 57, 39, 52, 36, 59, 48, 53};
     for(std::size_t i=0;i<order();i++)
     {   
         std::string address ="./Images/mundo";
@@ -123,11 +114,9 @@ void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
                     CharactersSave(hero, alien);
                     window.close();
                 }
-                
             }
+        } else enterWorld = false;
 
-        }
-        enterWorld = false;
     }
 }
 
@@ -138,15 +127,12 @@ void SpaceMap::render() {
     for (int i = 0; i < order(); ++i) {
         window.draw(worlds[i].shape);
     }
-
     window.draw(buttom_save);
     window.draw(buttom_quit);
     window.draw(save_text);
     window.draw(quit_text);
-
     window.display();
 }
-
 
 void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
     worlds = new World[order()];

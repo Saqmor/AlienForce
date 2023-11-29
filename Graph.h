@@ -3,6 +3,10 @@
 
 #include <iostream>
 #include <vector>
+#include  <stack>
+#include <sstream>
+#include <fstream>
+#include <random>
 
 class Graph {
 private:
@@ -28,14 +32,10 @@ public:
     void add_num_vertices();
     void add_edges_from_file();
     void add_edges_from_file2(std::string);
-
     void show_all_edges();
-
     std::vector<std::size_t> neighbors(std::size_t v) const;
-
     std::size_t order() const;
     float peso_aresta(std::size_t u,std::size_t v) const;
-
     //Dijkstra
     void start(float* d, std::size_t* p,std::size_t s) const;
     void relax(float* d, std::size_t* p,std::size_t u,std::size_t v) const;

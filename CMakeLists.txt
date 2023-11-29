@@ -20,7 +20,9 @@ add_executable(Code_Game main.cpp
         bossFight.cpp
         bossFight.h
         GameState.h
-        GameState.cpp)
+        GameState.cpp
+        Graph.cpp
+        Graph.h)
 target_link_libraries(Code_Game PRIVATE sfml-graphics)
 target_compile_features(Code_Game PRIVATE cxx_std_17)
 

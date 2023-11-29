@@ -150,7 +150,7 @@ void Game::update(Character& hero, std::string equipment)
         else
         velocity.y=1.5*std::sin(-std::fabs(angle));
     } */
-    sf::IntRect texturerect =character.getTextureRect();
+    sf::IntRect texturerect = character.getTextureRect();
     float velocidadeMovimento = 100.f;
     character.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
     character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
@@ -158,7 +158,7 @@ void Game::update(Character& hero, std::string equipment)
     {
         if(!hero.grenades[i].full)
             {   
-                if(hero.grenades[i].type==equipment && 
+                if(hero.grenades[i].type == equipment &&
                 std::abs(character.getPosition().x-hero.grenades[i].bomb_sprite.getPosition().x)<10 && 
                 std::abs(character.getPosition().y-hero.grenades[i].bomb_sprite.getPosition().y)<10)
                 hero.grenades[i].full=true;
@@ -174,8 +174,8 @@ void Game::update(Character& hero, std::string equipment)
 void Game::update_enemy1()
 {
     sf::Vector2u textureSize = enemy1Texture.getSize();
-    textureSize.x /= 4;  // Assumindo 4 frames na horizontal
-    textureSize.y /= 4;  // Assumindo 4 frames na vertical
+    textureSize.x /= 4;
+    textureSize.y /= 4;
 
     float enemyScaleX =2.f;
     float enemyScaleY =2.f;
@@ -220,18 +220,14 @@ void Game::render(sf::Sprite background_level,Character& hero,std::string equipm
     window.clear();
     window.draw(background_level);
 
-    /*for (size_t i = 0; i < 4; i++)
-    {
-        if (!hero.Grenades[i].full && hero.Grenades[i].type==equipment)
-            window.draw(hero.Grenades[i].bomb_sprite);
-    }*/
-    /*----------------------------------------------------------------------------------------------------------*/
     for (size_t i = 0; i < 4; i++)
     {
-        if (!hero.grenades[i].full && hero.grenades[i].type==equipment)
+        if (!hero.grenades[i].full && hero.grenades[i].type==equipment){
             window.draw(hero.grenades[i].bomb_sprite);
+        }
+
     }
-    /*----------------------------------------------------------------------------------------------------------*/
+
     window.draw(character);
     window.draw(enemy1);
     window.display();
@@ -243,5 +239,4 @@ void Game::take_out_bomb(Character &hero, std::string equipment)
         if(hero.grenades[i].type == equipment && hero.grenades[i].full)
         hero.grenades[i].full = false;
     }
-    return;
 }

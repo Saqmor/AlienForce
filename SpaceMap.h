@@ -34,10 +34,7 @@ private:
     std::size_t planet;
     std::vector<std::size_t>track;
     bool print = false;
-
     bool enterWorld = true;
-    //std::vector<sf::CircleShape, std::allocator<sf::CircleShape>> worlds;
-    //sf::CircleShape worldsArray[8];
     struct World{
         sf::CircleShape shape;
         Game game;

@@ -1,4 +1,5 @@
 #include "bossFight.h"
+#include <fstream>
 
 void readSave(Character& character, std::ifstream& is);
 void writeSave(Character& character, std::fstream& os);
