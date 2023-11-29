@@ -41,12 +41,15 @@ void bossFight::setValues() {
         texts[i].setCharacterSize(sizes[i]);
         texts[i].setOutlineColor(sf::Color::Green);
         texts[i].setPosition(coords_attack2[i]);
+/*---------------------------------------------------------------------------------------------------------------*/
+        texts[i].setOutlineThickness(0);
+/*---------------------------------------------------------------------------------------------------------------*/
     }
     texts[0].setOutlineThickness(4);
     posBomb = 0;
 }
 
-int bossFight::loopChooseBomb() {
+void bossFight::loopChooseBomb(Character& alien, Character& hero) {
     sf::Event event;
     while(window.pollEvent(event)){
         if( event.type == sf::Event::Closed){
@@ -56,13 +59,45 @@ int bossFight::loopChooseBomb() {
             enterPrevState = true;
             switch (posBomb) {
                 case 0:
-                    return 1;
+/*-----------------------------------------------------------------------------------*/
+                    if (hero.Grenades[0].full){
+                        alien.hp -=  prob(40) ? 50.f + 2.f * dice(20) : 0;
+                        alien.speed -= 20;
+                        finishAttck2 = true;
+                    }
+                    else attack2(alien, hero);
+/*-----------------------------------------------------------------------------------*/
+                    break;
                 case 1:
-                    return 2;
+/*-----------------------------------------------------------------------------------*/
+                    if (hero.Grenades[1].full){
+                        alien.hp -=  prob(60) ? 120.f + 2.f * dice(20) : 0;
+                        alien.burn = true;
+                        finishAttck2 = true;
+                    }
+                    else attack2(alien, hero);
+/*-----------------------------------------------------------------------------------*/
+                    break;
                 case 2:
-                    return 3;
+/*-----------------------------------------------------------------------------------*/
+                    if (hero.Grenades[2].full){
+                        alien.hp -=  prob(80) ? 40.f + 2.f * dice(20) : 0;
+                        alien.poison = true;
+                        finishAttck2 = true;
+                    }
+                    else attack2(alien, hero);
+/*-----------------------------------------------------------------------------------*/
+                    break;
                 case 3:
-                    return 4;
+/*-----------------------------------------------------------------------------------*/
+                    if (hero.Grenades[3].full){
+                        alien.hp -=  prob(50) ? 50.f + 2.f * dice(20) : 0;
+                        alien.lessAccuracy = true;
+                        finishAttck2 = true;
+                    }
+                    else attack2(alien, hero);
+/*-----------------------------------------------------------------------------------*/
+                    break;
                 default:
                     break;
             }
@@ -89,7 +124,6 @@ int bossFight::loopChooseBomb() {
             }
         }
     }
-    return -1;
 }
 
 void bossFight::drawSpecialAttack(Character& alien, Character& hero) {
@@ -109,16 +143,13 @@ void bossFight::drawSpecialAttack(Character& alien, Character& hero) {
     window.display();
 }
 
-int bossFight::runChooseBomb(Character& alien, Character& hero){
-    int num = -1;
+void bossFight::runChooseBomb(Character& alien, Character& hero){
     enterPrevState = true;
     setValues();
-    while (num == -1){
-        num = loopChooseBomb();
+    while (!finishAttck2){
+        loopChooseBomb(alien, hero);
         drawSpecialAttack(alien, hero);
     }
-    texts[posBomb].setOutlineThickness(0);
-    return num;
 }
 
 void bossFight::attack2(Character& alien, Character& hero){
@@ -126,26 +157,35 @@ void bossFight::attack2(Character& alien, Character& hero){
     if (maxPriorityQueue.top() == alien.speed)
         hero.hp -= 60.f + 2.f * dice(12);
     if (maxPriorityQueue.top() == hero.speed){
-        switch (runChooseBomb(alien, hero)) {
+        runChooseBomb(alien, hero);
+        /*switch (runChooseBomb(alien, hero)) {
             case 1:
-                alien.hp -=  prob(40) ? 50.f + 2.f * dice(20) : 0;
-                alien.speed -= 20;
+                if (hero.Grenades[0].full){
+                    alien.hp -=  prob(40) ? 50.f + 2.f * dice(20) : 0;
+                    alien.speed -= 20;
+                }
                 break;
             case 2:
-                alien.hp -=  prob(60) ? 120.f + 2.f * dice(20) : 0;
-                alien.burn = true;
+                if (hero.Grenades[1].full){
+                    alien.hp -=  prob(60) ? 120.f + 2.f * dice(20) : 0;
+                    alien.burn = true;
+                }
                 break;
             case 3:
-                alien.hp -=  prob(80) ? 40.f + 2.f * dice(20) : 0;
-                alien.poison = true;
+                if (hero.Grenades[2].full){
+                    alien.hp -=  prob(80) ? 40.f + 2.f * dice(20) : 0;
+                    alien.poison = true;
+                }
                 break;
             case 4:
-                alien.hp -=  prob(50) ? 50.f + 2.f * dice(20) : 0;
-                alien.lessAccuracy = true;
+                if (hero.Grenades[3].full){
+                    alien.hp -=  prob(50) ? 50.f + 2.f * dice(20) : 0;
+                    alien.lessAccuracy = true;
+                }
                 break;
             default:
                 std::cout << "Invalid option.\n";
-        }
+        }*/
     }
     maxPriorityQueue.pop();
 }
@@ -198,7 +238,15 @@ bool bossFight::playerTurn(Character& alien, Character& hero) {
                 break;
             case 1:
                 // Code for "Attack2" option
-                attack2(alien, hero);
+                /*----------------------------------------------------------------------------------------------------------*/
+                for (int i = 0; i < hero.Grenades.size() && !hero.gotEquipament; ++i) {
+                    if (hero.Grenades[i].full){
+                        hero.gotEquipament = true;
+                    }
+                }
+                /*----------------------------------------------------------------------------------------------------------*/
+                if (hero.gotEquipament)
+                    attack2(alien, hero);
                 break;
             case 2:
                 // Code for "Heal" option
@@ -344,6 +392,9 @@ void bossFight::modeBattle(Character& alien, Character& hero)
         texts_opBattle[i].setCharacterSize(sizes_opBattle[i]);
         texts_opBattle[i].setOutlineColor(sf::Color::Green);
         texts_opBattle[i].setPosition(coords_opBattle[i]);
+/*---------------------------------------------------------------------------------------------------------------*/
+        texts_opBattle[i].setOutlineThickness(0);
+/*---------------------------------------------------------------------------------------------------------------*/
     }
     texts_opBattle[0].setOutlineThickness(4);
     pos_opBattle = 0;

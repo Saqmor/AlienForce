@@ -15,6 +15,7 @@ private:
     void update_enemy1();
     void render(sf::Sprite,Character& hero,std::string);
 
+
     sf::RenderWindow window;
     sf::Event event;
     sf::Texture characterTexture, backgroundTexture, enemy1Texture,

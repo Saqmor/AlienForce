@@ -98,6 +98,7 @@ void Menu::loop_events(){
                 case 2:
                     // Code for "Options" option
                     selectedContinue = true;
+                    window->close();
                     break;
                 case 3:
                     // Code for "About" option
@@ -142,6 +143,7 @@ void Menu::run_menu(){
     Character hero;
     hero.hp = 250;
     hero.speed = 12;
+
     if (selectedPlay){
         hero.name = "hero";
         alien.name = "alien";
@@ -186,8 +188,75 @@ void Menu::run_menu(){
         grenade.bomb_sprite.setPosition(400,500);
         hero.Grenades.push_back(grenade);
     }
+    /*----------------------------------------------------------------------------------------------------------*/
+    hero.grenades = new Grenade[4];
+    for(size_t i=0;i<4;i++)
+    {
+        if(i==0)
+        {
+            hero.grenades[i].type ="IceBomb";
+            hero.grenades[i].bomb_texture.loadFromFile("./Images/ice.png");
+            hero.grenades[i].bomb_sprite.setScale(0.5f,0.5f);
+            hero.grenades[i].bomb_sprite.setPosition(400,500);
+        }
+        if(i==1)
+        {
+            hero.grenades[i].type="FireBomb";
+            hero.grenades[i].bomb_texture.loadFromFile("./Images/fire.png");
+            hero.grenades[i].bomb_sprite.setScale(0.2f,0.2f);
+            hero.grenades[i].bomb_sprite.setPosition(400,525);
+        }
+        if(i==2)
+        {
+            hero.grenades[i].type="PoisonBomb";
+            hero.grenades[i].bomb_texture.loadFromFile("./Images/poison.png");
+            hero.grenades[i].bomb_sprite.setScale(0.1f,0.1f);
+            hero.grenades[i].bomb_sprite.setPosition(400,500);
+        }
+        if(i==3)
+        {
+            hero.grenades[i].type ="Flashbang";
+            hero.grenades[i].bomb_texture.loadFromFile("./Images/flashbang.png");
+            hero.grenades[i].bomb_sprite.setScale(0.5f,0.5f);
+            hero.grenades[i].bomb_sprite.setPosition(600,230);
+        }
+        hero.grenades[i].bomb_sprite.setTexture(hero.grenades[i].bomb_texture);
+        sf::Vector2f centerM(hero.grenades[i].bomb_texture.getSize().x/2.f,hero.grenades[i].bomb_texture.getSize().y/2.f);
+        hero.grenades[i].bomb_sprite.setOrigin(centerM);
+        hero.grenades[i].bomb_sprite.setPosition(400,500);
+    }
+    /*----------------------------------------------------------------------------------------------------------*/
+    for(size_t i=0;i<4;i++)
+    {
+        Grenade grenade;
+        if(i==0)
+        {
+            grenade.type ="IceBomb";
+            grenade.full = false;
+        }
+        if(i==1)
+        {
+            grenade.type="FireBomb";
+            grenade.full = false;
+        }
+        if(i==2)
+        {
+            grenade.type="PoisonBomb";
+            grenade.full = false;
+        }
+        if(i==3)
+        {
+            grenade.type ="Flashbang";
+            grenade.full = false;
+        }
+        alien.Grenades.push_back(grenade);
+    }
+    /*----------------------------------------------------------------------------------------------------------*/
     SpaceMap space(read_base());
     space.runSpaceMap(alien, hero);
+    /*----------------------------------------------------------------------------------------------------------*/
+    delete[] hero.grenades;
+    /*----------------------------------------------------------------------------------------------------------*/
 }
 
 int Menu::read_base(){

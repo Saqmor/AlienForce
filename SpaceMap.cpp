@@ -191,8 +191,11 @@ void Graph::show_all_edges(){
 
 
 //deletar os ponteiros de struct
+/*-------------------------------------------------------------------------------------------------------------------------------*/
 SpaceMap::~SpaceMap() {
+    delete[] worlds;
 }
+/*-------------------------------------------------------------------------------------------------------------------------------*/
 
 void SpaceMap::read_planets_data(){
     std::ifstream is;
@@ -388,6 +391,8 @@ void SpaceMap::move_ship()
             window.clear();
             window.draw(background);
             window.draw(rocket);
+
+
             for (int i = 0; i < order(); ++i)
                 window.draw(worlds[i].shape);
             window.display();   

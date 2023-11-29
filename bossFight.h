@@ -50,9 +50,11 @@ struct Character{
     bool burn = false;
     bool poison = false;
     bool lessAccuracy = false;
-    std::map<std::string, int> bombs = {{"IceBomb", 0}, {"FireBomb", 0}, {"PoisonBomb", 0}, {"Flashbang", 0}};
-    std::vector<std::pair<std::string, int>> Bombs = {{"IceBomb", 0}, {"FireBomb", 0}, {"PoisonBomb", 0}, {"Flashbang", 0}};
     std::vector<Grenade> Grenades;
+    /*----------------------------------------------------------------------------------------------------------*/
+    bool gotEquipament = false;
+    Grenade* grenades;
+    /*----------------------------------------------------------------------------------------------------------*/
     int speed;
     sf::RectangleShape characterHp;
     sf::Texture characterTexture;
@@ -71,6 +73,7 @@ private:
     int posBomb;
     bool pressed_opBattle, theselect_opBattle, pressed, theselect;
     bool enterPrevState;
+    bool finishAttck2 = false;
 
     sf::Font font;
     sf::Texture image;
@@ -96,9 +99,9 @@ public:
     void attack1(Character& alien, Character& hero);
     void attack2(Character& alien, Character& hero);
     void setValues();
-    int loopChooseBomb();
+    void loopChooseBomb(Character& alien, Character& hero);
     void drawSpecialAttack(Character& alien, Character& hero);
-    int runChooseBomb(Character& alien, Character& hero);
+    void runChooseBomb(Character& alien, Character& hero);
     void heal(Character& hero);
     void defineTurns(Character& alien, Character& hero);
     void damageCondition(Character& alien);

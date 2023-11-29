@@ -213,6 +213,8 @@ void Game::update(Character& hero, std::string equipment)
 }
 void Game::update_enemy1()
 {
+
+
     sf::Vector2u textureSize = enemy1Texture.getSize();
     textureSize.x /= 4;  // Assumindo 4 frames na horizontal
     textureSize.y /= 4;  // Assumindo 4 frames na vertical
@@ -259,11 +261,19 @@ void Game::render(sf::Sprite background_level,Character& hero,std::string equipm
 {
     window.clear();
     window.draw(background_level);
-    for (size_t i = 0; i < 4; i++)
+
+    /*for (size_t i = 0; i < 4; i++)
     {
         if (!hero.Grenades[i].full && hero.Grenades[i].type==equipment)
             window.draw(hero.Grenades[i].bomb_sprite);
+    }*/
+    /*----------------------------------------------------------------------------------------------------------*/
+    for (size_t i = 0; i < 4; i++)
+    {
+        if (!hero.Grenades[i].full && hero.grenades[i].type==equipment)
+            window.draw(hero.grenades[i].bomb_sprite);
     }
+    /*----------------------------------------------------------------------------------------------------------*/
     /*if(!hero.fireBomb && equipment== "fire")
         window.draw(fireBomb);
     if(!hero.flashbang && equipment =="flashbang")
