@@ -1,8 +1,11 @@
 #include "Levels.h"
 #include "bossFight.h"
+#include "GameState.h"
 
 void Game::setValues() {
     window.create(sf::VideoMode(800, 600), "My window");
+    nvertices = read_base();
+
     characterScaleX = 1.f;
     characterScaleY = 1.f;
     characterTexture.loadFromFile("./Images/chiefsheet.png");
@@ -153,33 +156,23 @@ void Game::update(Character& hero, std::string equipment)
     character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
     for (size_t i = 0; i < 4; i++)
     {
-        if(!hero.Grenades[i].full)
+        if(!hero.grenades[i].full)
             {   
-                if(hero.Grenades[i].type==equipment && 
-                std::abs(character.getPosition().x-hero.Grenades[i].bomb_sprite.getPosition().x)<10 && 
-                std::abs(character.getPosition().y-hero.Grenades[i].bomb_sprite.getPosition().y)<10)
-                hero.Grenades[i].full=true;
-                
-                /*if(hero.Bombs[i].first=="FireBomb" && std::abs(character.getPosition().x-fireBomb.getPosition().x)<10 && 
-    std::abs(character.getPosition().y-fireBomb.getPosition().y)<10)
-                    hero.Grenades[i].full=true;
-                if(hero.Bombs[i].first=="PoisonBomb" && std::abs(character.getPosition().x-poisonBomb.getPosition().x)<10 && 
-    std::abs(character.getPosition().y-poisonBomb.getPosition().y)<10)
-                    hero.Grenades[i].full=true;
-                if(hero.Bombs[i].first=="IceBomb" && std::abs(character.getPosition().x-iceBomb.getPosition().x)<10 && 
-    std::abs(character.getPosition().y-iceBomb.getPosition().y)<10)
-                    hero.Grenades[i].full=true;
-                if(hero.Bombs[i].first=="Flashbang" && std::abs(character.getPosition().x-flashbang.getPosition().x)<10 && 
-    std::abs(character.getPosition().y-flashbang.getPosition().y)<10)
-                    hero.Grenades[i].full=true;
-            }*/
+                if(hero.grenades[i].type==equipment && 
+                std::abs(character.getPosition().x-hero.grenades[i].bomb_sprite.getPosition().x)<10 && 
+                std::abs(character.getPosition().y-hero.grenades[i].bomb_sprite.getPosition().y)<10)
+                hero.grenades[i].full=true;
             }
     }
+    if(std::abs(character.getPosition().x-enemy1.getPosition().x)<30 && 
+        std::abs(character.getPosition().y-enemy1.getPosition().y)<60)
+        {
+        character.setPosition(400,50);
+        take_out_bomb(hero,equipment);
+        }
 }
 void Game::update_enemy1()
 {
-
-
     sf::Vector2u textureSize = enemy1Texture.getSize();
     textureSize.x /= 4;  // Assumindo 4 frames na horizontal
     textureSize.y /= 4;  // Assumindo 4 frames na vertical
@@ -235,19 +228,20 @@ void Game::render(sf::Sprite background_level,Character& hero,std::string equipm
     /*----------------------------------------------------------------------------------------------------------*/
     for (size_t i = 0; i < 4; i++)
     {
-        if (!hero.Grenades[i].full && hero.grenades[i].type==equipment)
+        if (!hero.grenades[i].full && hero.grenades[i].type==equipment)
             window.draw(hero.grenades[i].bomb_sprite);
     }
     /*----------------------------------------------------------------------------------------------------------*/
-    /*if(!hero.fireBomb && equipment== "fire")
-        window.draw(fireBomb);
-    if(!hero.flashbang && equipment =="flashbang")
-        window.draw(flashbang);
-    if(!hero.poisonBomb && equipment == "poison")
-        window.draw(poisonBomb);
-    if(!hero.iceBomb && equipment =="ice")
-        window.draw(iceBomb);*/
     window.draw(character);
     window.draw(enemy1);
     window.display();
+}
+void Game::take_out_bomb(Character &hero, std::string equipment)
+{   
+    for (size_t i = 0; i<4; i++)
+    {
+        if(hero.grenades[i].type == equipment && hero.grenades[i].full)
+        hero.grenades[i].full = false;
+    }
+    return;
 }

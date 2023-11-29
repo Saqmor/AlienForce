@@ -61,7 +61,7 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
             switch (posBomb) {
                 case 0:
 /*-----------------------------------------------------------------------------------*/
-                    if (hero.Grenades[0].full){
+                    if (hero.grenades[0].full){
                         alien.hp -=  prob(40) ? 50.f + 2.f * dice(20) : 0;
                         alien.speed -= 20;
                         finishAttck2 = true;
@@ -71,7 +71,7 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
                     break;
                 case 1:
 /*-----------------------------------------------------------------------------------*/
-                    if (hero.Grenades[1].full){
+                    if (hero.grenades[1].full){
                         alien.hp -=  prob(60) ? 120.f + 2.f * dice(20) : 0;
                         alien.burn = true;
                         finishAttck2 = true;
@@ -81,7 +81,7 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
                     break;
                 case 2:
 /*-----------------------------------------------------------------------------------*/
-                    if (hero.Grenades[2].full){
+                    if (hero.grenades[2].full){
                         alien.hp -=  prob(80) ? 40.f + 2.f * dice(20) : 0;
                         alien.poison = true;
                         finishAttck2 = true;
@@ -91,7 +91,7 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
                     break;
                 case 3:
 /*-----------------------------------------------------------------------------------*/
-                    if (hero.Grenades[3].full){
+                    if (hero.grenades[3].full){
                         alien.hp -=  prob(50) ? 50.f + 2.f * dice(20) : 0;
                         alien.lessAccuracy = true;
                         finishAttck2 = true;
@@ -240,8 +240,8 @@ bool bossFight::playerTurn(Character& alien, Character& hero) {
             case 1:
                 // Code for "Attack2" option
                 /*----------------------------------------------------------------------------------------------------------*/
-                for (int i = 0; i < hero.Grenades.size() && !hero.gotEquipament; ++i) {
-                    if (hero.Grenades[i].full){
+                for (int i = 0; i < 4 && !hero.gotEquipament; ++i) {
+                    if (hero.grenades[i].full){
                         hero.gotEquipament = true;
                     }
                 }
@@ -355,7 +355,6 @@ void bossFight::layoutBattle(Character& alien, Character& hero)
 void bossFight::drawBattle(Character& alien, Character& hero)
 {
     layoutBattle(alien, hero);
-
     window.clear();
     window.draw(background);
     window.draw(alien.roundedCharacter);
@@ -364,15 +363,31 @@ void bossFight::drawBattle(Character& alien, Character& hero)
     window.draw(alien.characterHp);
     window.draw(alien.textCharacter);
     window.draw(hero.textCharacter);
-    window.draw(hero.characterSprite);
-    window.draw(alien.characterSprite);
+    if(hero.recovery_time.getElapsedTime()>interval || hero.hp_turn==hero.hp)
+     window.draw(hero.characterSprite);
+    if(alien.recovery_time.getElapsedTime()>interval)
+     window.draw(alien.characterSprite);
+
+    if(hero.hp<hero.hp_turn)
+    {
+        hero.recovery_time.restart();
+        hero.hp_turn=hero.hp;
+    }
+     if(alien.hp<alien.hp_turn)
+     {  
+        alien.recovery_time.restart();
+        alien.hp_turn =alien.hp;
+     }
+    
     for(auto t : texts_opBattle){
         window.draw(t);
     }
     window.display();
 }
 void bossFight::modeBattle(Character& alien, Character& hero)
-{
+{   
+    hero.hp_turn=hero.hp;
+    alien.hp_turn=alien.hp;
     backgroundTexture.loadFromFile("./Images/background_battle_2.png");
     background.setTexture(backgroundTexture);
     window.create(sf::VideoMode(800,600),"My window");
@@ -411,14 +426,12 @@ void bossFight::modeBattle(Character& alien, Character& hero)
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            if (hero.isAlive && alien.isAlive && !endBattle){
+            if (hero.isAlive && alien.isAlive){
                 if (maxPriorityQueue.empty())
                     defineTurns(alien, hero);
                 if (!Turn(alien, hero))
                     endBattle = true;
-                if (!alien.isAlive)
-                    endBattle = true;
-                if (!hero.isAlive)
+                if (!alien.isAlive || !hero.isAlive)
                     endBattle = true;
             }
             if (endBattle)

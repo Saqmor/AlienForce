@@ -151,7 +151,7 @@ void Menu::run_menu(){
     if (selectedContinue){
         LoadSave(hero, alien);
     }
-    for(size_t i=0;i<4;i++)
+/* for(size_t i=0;i<4;i++)
     {
         Grenade grenade;
         if(i==0)
@@ -186,8 +186,8 @@ void Menu::run_menu(){
         sf::Vector2f centerM(grenade.bomb_texture.getSize().x/2.f,grenade.bomb_texture.getSize().y/2.f);
         grenade.bomb_sprite.setOrigin(centerM);
         grenade.bomb_sprite.setPosition(400,500);
-        hero.Grenades.push_back(grenade);
-    }
+        //hero.grenades.push_back(grenade);
+    } */
     /*----------------------------------------------------------------------------------------------------------*/
     hero.grenades = new Grenade[4];
     for(size_t i=0;i<4;i++)
@@ -226,35 +226,35 @@ void Menu::run_menu(){
         hero.grenades[i].bomb_sprite.setPosition(400,500);
     }
     /*----------------------------------------------------------------------------------------------------------*/
+    alien.grenades = new Grenade[4];
     for(size_t i=0;i<4;i++)
     {
-        Grenade grenade;
         if(i==0)
         {
-            grenade.type ="IceBomb";
-            grenade.full = false;
+            alien.grenades[i].type ="IceBomb";
+            alien.grenades[i].full = false;
         }
         if(i==1)
         {
-            grenade.type="FireBomb";
-            grenade.full = false;
+            alien.grenades[i].type="FireBomb";
+            alien.grenades[i].full = false;
         }
         if(i==2)
         {
-            grenade.type="PoisonBomb";
-            grenade.full = false;
+            alien.grenades[i].type="PoisonBomb";
+            alien.grenades[i].full = false;
         }
         if(i==3)
         {
-            grenade.type ="Flashbang";
-            grenade.full = false;
+            alien.grenades[i].type ="Flashbang";
+            alien.grenades[i].full = false;
         }
-        alien.Grenades.push_back(grenade);
-    }
+    } 
     /*----------------------------------------------------------------------------------------------------------*/
     SpaceMap space(read_base());
     space.runSpaceMap(alien, hero);
     /*----------------------------------------------------------------------------------------------------------*/
     delete[] hero.grenades;
+    delete[] alien.grenades;
     /*----------------------------------------------------------------------------------------------------------*/
 }

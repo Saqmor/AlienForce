@@ -46,11 +46,12 @@ struct Grenade{
 struct Character{
     std::string name;
     float hp;
+    float hp_turn;
     bool isAlive = true;
     bool burn = false;
     bool poison = false;
     bool lessAccuracy = false;
-    std::vector<Grenade> Grenades;
+    //std::vector<Grenade> Grenades;
     /*----------------------------------------------------------------------------------------------------------*/
     bool gotEquipament = false;
     Grenade* grenades;
@@ -61,6 +62,8 @@ struct Character{
     sf::Sprite characterSprite;
     sf::Sprite roundedCharacter;
     sf::Text textCharacter;
+    bool took_damage =false;
+    sf::Clock recovery_time;
 };
 
 
@@ -84,6 +87,8 @@ private:
     sf::Texture backgroundTexture;
     sf::Texture roundedTexture;
     sf::Font font_bar;
+    sf::Clock elapsed_time;
+    const sf::Time interval = sf::seconds(2);
 
     std::vector<sf::Text> texts;
     std::vector<const char *> optionsBattle;

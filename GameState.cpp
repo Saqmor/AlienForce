@@ -12,7 +12,7 @@ std::ostream& operator<<(std::ostream& os,  Character& personage) {
         os << "TypeBomb " << bomb.first << " Quantidade " << bomb.second<< std::endl;
     }*/
     for (int i = 0; i < 4; ++i) {
-        os << "TypeBomb " << personage.Grenades[i].type <<  " Quantidade " << personage.Grenades[i].full << std::endl;
+        os << "TypeBomb " << personage.grenades[i].type <<  " Quantidade " << personage.grenades[i].full << std::endl;
     }
     return os;
 }
@@ -29,10 +29,10 @@ std::istream& operator>>(std::istream& is, Character& personage) {
         is >> typeBomb >> typeBomb >> quantBomb >> numBomb;
         personage.Bombs.push_back(typeBomb, numBomb);
     }*/
-    Grenade aux;
+    //Grenade aux;
     for (int i = 0; i < 4; ++i) {
-        is >> Tbomb >> aux.type >> quantBomb >> aux.full;
-        personage.Grenades.push_back(aux);
+        is >> Tbomb >> personage.grenades[i].type >> quantBomb >> personage.grenades[i].full;
+        //personage.grenades[i].type=aux.type;
     }
 
     return is;
@@ -72,7 +72,7 @@ void  CharactersSave(Character& ms, Character& hs){
         std::cerr << "Erro ao abrir o arquivo.\n";
     }
 }
-int read_base(){
+std::size_t read_base(){
     std::ifstream is;
     int vertex;
     is.open("graph_input.txt");

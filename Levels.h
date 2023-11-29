@@ -15,7 +15,10 @@ private:
     void update(Character& hero,std::string);
     void update_enemy1();
     void render(sf::Sprite,Character& hero,std::string);
+    void take_out_bomb(Character &hero,std::string);
+    std::size_t nvertices;
     //Graph graph;
+    Graph create_graph(std::size_t);
 
 
     sf::RenderWindow window;
