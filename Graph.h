@@ -1,3 +1,6 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+
 #include <iostream>
 #include <vector>
 
@@ -42,3 +45,4 @@ public:
     std::vector<std::size_t> min_way(std::size_t u,std::size_t v) const;
     void print_min_caminh(std::size_t u,std::size_t v) const;
 };
+#endif

@@ -258,12 +258,3 @@ void Menu::run_menu(){
     delete[] hero.grenades;
     /*----------------------------------------------------------------------------------------------------------*/
 }
-
-int Menu::read_base(){
-    std::ifstream is;
-    int vertex;
-    is.open("graph_input.txt");
-    is>>vertex;
-    is.close();
-    return vertex;
-}

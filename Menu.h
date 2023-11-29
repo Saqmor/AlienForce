@@ -32,7 +32,6 @@ public:
     Menu();
     ~Menu();
     void run_menu();
-    int read_base();
 };
 
 

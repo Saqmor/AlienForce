@@ -1,6 +1,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include "bossFight.h"
+#include "Graph.h"
 
 class Game
 {
@@ -14,6 +15,7 @@ private:
     void update(Character& hero,std::string);
     void update_enemy1();
     void render(sf::Sprite,Character& hero,std::string);
+    //Graph graph;
 
 
     sf::RenderWindow window;
