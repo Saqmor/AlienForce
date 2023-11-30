@@ -2,5 +2,5 @@
 
 int main(){
     Menu menu;
-    menu.run_menu();
+    menu.runMenu();
 }

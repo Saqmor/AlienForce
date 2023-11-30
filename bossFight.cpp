@@ -1,6 +1,5 @@
 #include "bossFight.h"
 
-
 int dice(int n) {
     std::random_device dev;
     auto gen = std::mt19937(dev());
@@ -16,9 +15,9 @@ bool prob(int n) {
     }
 }
 
-void bossFight::modeBattle(Character& alien, Character& hero)
+void bossFight::modeFight(Character& alien, Character& hero)
 {
-    setValues_Battle(alien, hero);
+    setValuesFight(alien, hero);
     while (window.isOpen())
     {
         sf::Event event;
@@ -34,40 +33,40 @@ void bossFight::modeBattle(Character& alien, Character& hero)
             hero.characterHp.setSize(sf::Vector2f(hero.hp, 13));
             alien.characterHp.setSize(sf::Vector2f(0.45f*alien.hp, 13));
         }
-        drawBattle(alien, hero);
+        drawFight(alien, hero);
     }
 }
 
-void bossFight::setValues_Battle(Character& alien, Character& hero) {
-    hero.hp_turn = hero.hp;
-    alien.hp_turn = alien.hp;
+void bossFight::setValuesFight(Character& alien, Character& hero) {
+    hero.hpTurn = hero.hp;
+    alien.hpTurn = alien.hp;
     backgroundTexture.loadFromFile("./Images/background_battle_2.png");
     background.setTexture(backgroundTexture);
     window.create(sf::VideoMode(800,600),"My window");
 
-    pressed_opBattle = theselect_opBattle = false;
+    optionFight.pressed = optionFight.theselect = false;
     font.loadFromFile("./ethn.otf");
-    optionsBattle = {"Atirar", "Especial", "Curar", "Fugir"};
-    texts_opBattle.resize(4);
-    coords_opBattle = {{70,500},{229,500},{419,500},{600,500}};
-    sizes_opBattle = {20,20,20,20,20};
-    for (std::size_t i{}; i < texts_opBattle.size(); ++i){
-        texts_opBattle[i].setFont(font);
-        texts_opBattle[i].setString(optionsBattle[i]);
-        texts_opBattle[i].setCharacterSize(sizes_opBattle[i]);
-        texts_opBattle[i].setOutlineColor(sf::Color::Green);
-        texts_opBattle[i].setPosition(coords_opBattle[i]);
-        texts_opBattle[i].setOutlineThickness(0);
+    optionFight.words = {"Atirar", "Especial", "Curar", "Fugir"};
+    optionFight.texts.resize(4);
+    optionFight.coords = {{70,500},{229,500},{419,500},{600,500}};
+    optionFight.sizes = {20,20,20,20,20};
+    for (std::size_t i{}; i < optionFight.texts.size(); ++i){
+        optionFight.texts[i].setFont(font);
+        optionFight.texts[i].setString(optionFight.words[i]);
+        optionFight.texts[i].setCharacterSize(optionFight.sizes[i]);
+        optionFight.texts[i].setOutlineColor(sf::Color::Green);
+        optionFight.texts[i].setPosition(optionFight.coords[i]);
+        optionFight.texts[i].setOutlineThickness(0);
     }
-    texts_opBattle[0].setOutlineThickness(4);
-    pos_opBattle = 0;
+    optionFight.texts[0].setOutlineThickness(4);
+    optionFight.position = 0;
 
     defineTurns(alien, hero);
 }
 
-void bossFight::drawBattle(Character& alien, Character& hero)
+void bossFight::drawFight(Character& alien, Character& hero)
 {
-    layoutBattle(alien, hero);
+    layoutFight(alien, hero);
     window.clear();
     window.draw(background);
     window.draw(alien.roundedCharacter);
@@ -76,27 +75,27 @@ void bossFight::drawBattle(Character& alien, Character& hero)
     window.draw(alien.characterHp);
     window.draw(alien.textCharacter);
     window.draw(hero.textCharacter);
-    if(hero.recovery_time.getElapsedTime()>interval || hero.hp_turn==hero.hp)
+    if(hero.recoveryTime.getElapsedTime()>interval || hero.hpTurn == hero.hp)
         window.draw(hero.characterSprite);
-    if(alien.recovery_time.getElapsedTime()>interval)
+    if(alien.recoveryTime.getElapsedTime()>interval || alien.hpTurn == alien.hp)
         window.draw(alien.characterSprite);
-    if(hero.hp<hero.hp_turn)
+    if(hero.hp<hero.hpTurn)
     {
-        hero.recovery_time.restart();
-        hero.hp_turn=hero.hp;
+        hero.recoveryTime.restart();
+        hero.hpTurn=hero.hp;
     }
-    if(alien.hp<alien.hp_turn)
+    if(alien.hp<alien.hpTurn)
     {
-        alien.recovery_time.restart();
-        alien.hp_turn =alien.hp;
+        alien.recoveryTime.restart();
+        alien.hpTurn =alien.hp;
     }
-    for(auto t : texts_opBattle){
+    for(auto t : optionFight.texts){
         window.draw(t);
     }
     window.display();
 }
 
-void bossFight::layoutBattle(Character& alien, Character& hero)
+void bossFight::layoutFight(Character& alien, Character& hero)
 {
     //Criação de retângulos envolventes
     roundedTexture.loadFromFile("./Images/rounded(5).png");
@@ -112,11 +111,11 @@ void bossFight::layoutBattle(Character& alien, Character& hero)
     alien.characterSprite.setTexture(alien.characterTexture);
 
     //Texto
-    font_bar.loadFromFile("ethn.otf");
-    alien.textCharacter.setFont(font_bar);
+    fontBar.loadFromFile("ethn.otf");
+    alien.textCharacter.setFont(fontBar);
     alien.textCharacter.setString("Boss HP");
     alien.textCharacter.setCharacterSize(12);
-    hero.textCharacter.setFont(font_bar);
+    hero.textCharacter.setFont(fontBar);
     hero.textCharacter.setString("Hero HP");
     hero.textCharacter.setCharacterSize(12);
 
@@ -169,10 +168,10 @@ void bossFight::Turn(Character& alien, Character& hero) {
 }
 
 void bossFight::playerTurn(Character& alien, Character& hero) {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect_opBattle) {
-        theselect_opBattle = true;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !optionFight.theselect) {
+        optionFight.theselect = true;
         std::cout << "entrou ";
-        switch (pos_opBattle) {
+        switch (optionFight.position) {
             case 0:
                 attack1(alien, hero);
                 break;
@@ -194,22 +193,22 @@ void bossFight::playerTurn(Character& alien, Character& hero) {
                 break;
         }
     } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
-        theselect_opBattle = false;
+        optionFight.theselect = false;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed_opBattle) {
-        if (pos_opBattle < 3) {
-            ++pos_opBattle;
-            texts_opBattle[pos_opBattle].setOutlineThickness(4);
-            texts_opBattle[pos_opBattle - 1].setOutlineThickness(0);
-            pressed_opBattle = false;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !optionFight.pressed) {
+        if (optionFight.position < 3) {
+            ++optionFight.position;
+            optionFight.texts[optionFight.position].setOutlineThickness(4);
+            optionFight.texts[optionFight.position - 1].setOutlineThickness(0);
+            optionFight.pressed = false;
         }
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed_opBattle) {
-        if (pos_opBattle > 0) {
-            --pos_opBattle;
-            texts_opBattle[pos_opBattle].setOutlineThickness(4);
-            texts_opBattle[pos_opBattle + 1].setOutlineThickness(0);
-            pressed_opBattle = false;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !optionFight.pressed) {
+        if (optionFight.position > 0) {
+            --optionFight.position;
+            optionFight.texts[optionFight.position].setOutlineThickness(4);
+            optionFight.texts[optionFight.position + 1].setOutlineThickness(0);
+            optionFight.pressed = false;
         }
     }
 }
@@ -242,52 +241,52 @@ void bossFight::attack2(Character& alien, Character& hero){
     if (maxPriorityQueue.top() == alien.speed)
         hero.hp -= 60.f + 2.f * dice(12);
     if (maxPriorityQueue.top() == hero.speed)
-        runChooseBomb(alien, hero);
+        runAttack2(alien, hero);
     maxPriorityQueue.pop();
 }
 
-void bossFight::runChooseBomb(Character& alien, Character& hero){
-    setValues_chooseBomb();
-    while (!finishAttck2){
-        loopChooseBomb(alien, hero);
-        drawSpecialAttack(alien, hero);
+void bossFight::runAttack2(Character& alien, Character& hero){
+    setValuesAttack2();
+    while (!finishAttack2){
+        loopAttack2(alien, hero);
+        drawAttack2(alien, hero);
     }
 }
 
-void bossFight::setValues_chooseBomb() {
-    choicesBomb = {"Ice Bomb", "Fire Bomb", "Poison Bomb", "Flashbang"};
-    texts.resize(4);
-    sizes = {20,20,20,20,20};
-    coords_attack2 = {{15,500},{160,500},{325,500},{550,500}};
+void bossFight::setValuesAttack2() {
+    optionAttack2.words = {"Ice Bomb", "Fire Bomb", "Poison Bomb", "Flashbang"};
+    optionAttack2.texts.resize(4);
+    optionAttack2.sizes = {20,20,20,20,20};
+    optionAttack2.coords = {{15,500},{160,500},{325,500},{550,500}};
 
-    for (std::size_t i{}; i < texts.size(); ++i){
-        texts[i].setFont(font);
-        texts[i].setString(choicesBomb[i]);
-        texts[i].setCharacterSize(sizes[i]);
-        texts[i].setOutlineColor(sf::Color::Green);
-        texts[i].setPosition(coords_attack2[i]);
-        texts[i].setOutlineThickness(0);
+    for (std::size_t i{}; i < optionAttack2.texts.size(); ++i){
+        optionAttack2.texts[i].setFont(font);
+        optionAttack2.texts[i].setString(optionAttack2.words[i]);
+        optionAttack2.texts[i].setCharacterSize(optionAttack2.sizes[i]);
+        optionAttack2.texts[i].setOutlineColor(sf::Color::Green);
+        optionAttack2.texts[i].setPosition(optionAttack2.coords[i]);
+        optionAttack2.texts[i].setOutlineThickness(0);
     }
-    texts[0].setOutlineThickness(4);
-    finishAttck2 = false;
-    theselect_chooseBomb = true;
-    posBomb = 0;
+    optionAttack2.texts[0].setOutlineThickness(4);
+    finishAttack2 = false;
+    optionAttack2.theselect = true;
+    optionAttack2.position = 0;
 }
 
-void bossFight::loopChooseBomb(Character& alien, Character& hero) {
+void bossFight::loopAttack2(Character& alien, Character& hero) {
     sf::Event event;
     while(window.pollEvent(event)){
         if( event.type == sf::Event::Closed){
             window.close();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect_chooseBomb) {
-            theselect_chooseBomb = true;
-            switch (posBomb) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !optionAttack2.theselect) {
+            optionAttack2.theselect = true;
+            switch (optionAttack2.position) {
                 case 0:
                     if (hero.grenades[0].full){
                         alien.hp -=  prob(40) ? 50.f + 2.f * dice(20) : 0;
                         alien.speed -= 20;
-                        finishAttck2 = true;
+                        finishAttack2 = true;
                     }
                     else attack2(alien, hero);
                     break;
@@ -295,7 +294,7 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
                     if (hero.grenades[1].full){
                         alien.hp -=  prob(60) ? 120.f + 2.f * dice(20) : 0;
                         alien.burn = true;
-                        finishAttck2 = true;
+                        finishAttack2 = true;
                     }
                     else attack2(alien, hero);
                     break;
@@ -303,7 +302,7 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
                     if (hero.grenades[2].full){
                         alien.hp -=  prob(80) ? 40.f + 2.f * dice(20) : 0;
                         alien.poison = true;
-                        finishAttck2 = true;
+                        finishAttack2 = true;
                     }
                     else attack2(alien, hero);
                     break;
@@ -311,7 +310,7 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
                     if (hero.grenades[3].full){
                         alien.hp -=  prob(50) ? 50.f + 2.f * dice(20) : 0;
                         alien.lessAccuracy = true;
-                        finishAttck2 = true;
+                        finishAttack2 = true;
                     }
                     else attack2(alien, hero);
                     break;
@@ -319,30 +318,30 @@ void bossFight::loopChooseBomb(Character& alien, Character& hero) {
                     break;
             }
         } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
-            theselect_chooseBomb = false;
+            optionAttack2.theselect = false;
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed) {
-            if (posBomb < 3) {
-                ++posBomb;
-                texts[posBomb].setOutlineThickness(4);
-                texts[posBomb - 1].setOutlineThickness(0);
-                pressed = false;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !optionAttack2.pressed) {
+            if (optionAttack2.position < 3) {
+                ++optionAttack2.position;
+                optionAttack2.texts[optionAttack2.position].setOutlineThickness(4);
+                optionAttack2.texts[optionAttack2.position - 1].setOutlineThickness(0);
+                optionAttack2.pressed = false;
             }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed) {
-            if (posBomb > 0) {
-                --posBomb;
-                texts[posBomb].setOutlineThickness(4);
-                texts[posBomb + 1].setOutlineThickness(0);
-                pressed = false;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !optionAttack2.pressed) {
+            if (optionAttack2.position > 0) {
+                --optionAttack2.position;
+                optionAttack2.texts[optionAttack2.position].setOutlineThickness(4);
+                optionAttack2.texts[optionAttack2.position + 1].setOutlineThickness(0);
+                optionAttack2.pressed = false;
             }
         }
     }
 }
 
-void bossFight::drawSpecialAttack(Character& alien, Character& hero) {
+void bossFight::drawAttack2(Character& alien, Character& hero) {
     window.clear();
     window.draw(background);
     window.draw(alien.roundedCharacter);
@@ -353,7 +352,7 @@ void bossFight::drawSpecialAttack(Character& alien, Character& hero) {
     window.draw(hero.textCharacter);
     window.draw(hero.characterSprite);
     window.draw(alien.characterSprite);
-    for(auto t : texts){
+    for(auto t : optionAttack2.texts){
         window.draw(t);
     }
     window.display();

@@ -12,13 +12,13 @@
 struct Grenade{
     std::string type;
     bool full;
-    sf::Texture bomb_texture;
-    sf::Sprite bomb_sprite;
+    sf::Texture bombTexture;
+    sf::Sprite bombSprite;
 };
 struct Character{
     std::string name;
     float hp;
-    float hp_turn;
+    float hpTurn;
     bool isAlive = true;
     bool burn = false;
     bool poison = false;
@@ -31,17 +31,23 @@ struct Character{
     sf::Sprite characterSprite;
     sf::Sprite roundedCharacter;
     sf::Text textCharacter;
-    bool took_damage =false;
-    sf::Clock recovery_time;
+    sf::Clock recoveryTime;
 };
-
 
 class bossFight{
 private:
-    int pos_opBattle;
-    int posBomb;
-    bool pressed_opBattle, theselect_opBattle, pressed, theselect_chooseBomb;
-    bool finishAttck2 = false;
+    struct Option {
+        int position;
+        bool theselect;
+        bool pressed;
+        std::vector<sf::Text> texts;
+        std::vector<std::string> words;
+        std::vector<sf::Vector2f> coords;
+        std::vector<std::size_t> sizes;
+    };
+    Option optionFight;
+    Option optionAttack2;
+    bool finishAttack2 = false;
 
     sf::Font font;
     sf::RenderWindow window;
@@ -49,37 +55,31 @@ private:
     sf::Sprite background;
     sf::Texture backgroundTexture;
     sf::Texture roundedTexture;
-    sf::Font font_bar;
-    sf::Clock elapsed_time;
+
+    sf::Font fontBar;
+    sf::Clock elapsedTime;
     const sf::Time interval = sf::seconds(2);
 
-    std::vector<sf::Text> texts;
-    std::vector<std::string> optionsBattle;
-    std::vector<sf::Vector2f> coords_opBattle;
-    std::vector<sf::Vector2f> coords_attack2;
-    std::vector<sf::Text> texts_opBattle;
-    std::vector<std::size_t> sizes_opBattle;
-    std::vector<std::size_t> sizes;
-    std::vector<std::string> choicesBomb;
-
     std::priority_queue<int> maxPriorityQueue;
-public:
-    void attack1(Character& alien, Character& hero);
-    void attack2(Character& alien, Character& hero);
-    void setValues_chooseBomb();
-    void loopChooseBomb(Character& alien, Character& hero);
-    void drawSpecialAttack(Character& alien, Character& hero);
-    void runChooseBomb(Character& alien, Character& hero);
-    void heal(Character& hero);
+
+    void setValuesFight(Character& alien, Character& hero);
+    void drawFight(Character& alien, Character& hero);
+    void layoutFight(Character& alien, Character& hero);
     void defineTurns(Character& alien, Character& hero);
-    void damageCondition(Character& alien);
     void Turn(Character& alien, Character& hero);
     void playerTurn(Character& alien, Character& hero);
     void enemyTurn(Character& alien, Character& hero);
-    void modeBattle(Character& alien, Character& hero);
-    void setValues_Battle(Character& alien, Character& hero);
-    void drawBattle(Character& alien, Character& hero);
-    void layoutBattle(Character& alien, Character& hero);
+    void attack1(Character& alien, Character& hero);
+    void attack2(Character& alien, Character& hero);
+    void runAttack2(Character& alien, Character& hero);
+    void setValuesAttack2();
+    void loopAttack2(Character& alien, Character& hero);
+    void drawAttack2(Character& alien, Character& hero);
+    void heal(Character& hero);
+    void damageCondition(Character& alien);
+
+public:
+    void modeFight(Character& alien, Character& hero);
 };
 
 

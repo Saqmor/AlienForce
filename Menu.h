@@ -15,22 +15,22 @@ private:
     sf::Texture * image;
     sf::Sprite * bg;
 
-    sf::Vector2i pos_mouse;
-    sf::Vector2f mouse_coord;
+    sf::Vector2i posMouse;
+    sf::Vector2f mouseCoord;
 
     std::vector<std::string> options;
     std::vector<sf::Vector2f> coords;
     std::vector<sf::Text> texts;
     std::vector<std::size_t> sizes;
 
-    void set_values();
-    void loop_events();
-    void draw_all();
+    void setValues();
+    void loopEvents();
+    void drawAll();
 
 public:
     Menu();
     ~Menu();
-    void run_menu();
+    void runMenu();
 };
 
 #endif //CODE_GAME_MENU_H

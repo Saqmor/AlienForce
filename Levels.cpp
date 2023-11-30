@@ -2,31 +2,33 @@
 #include "bossFight.h"
 #include "GameState.h"
 
-void Game::setValues() {
+void Game::setValues() 
+{
     window.create(sf::VideoMode(800, 600), "My window");
 
-    characterScaleX = 1.f;
-    characterScaleY = 1.f;
-    characterTexture.loadFromFile("./Images/chiefsheet.png");
-    enemy1Texture.loadFromFile("./Images/enemy1.png");
-
-    character.setTexture(characterTexture);
-    enemy1.setTexture(enemy1Texture);
-   sf::Vector2f centerM(enemy1Texture.getSize().x,enemy1Texture.getSize().y);
-   centerM.x = centerM.x / 2;
-   centerM.y = centerM.y / 2;
-   enemy1.setOrigin(centerM);
+    float playerScaleX = 2.f;
+    float playerScaleY = 2.f;
+    playerTexture.loadFromFile("./Images/chiefsheet.png");
+    enemyTexture.loadFromFile("./Images/enemy1.png");
+    player.setTexture(playerTexture);
+    player.setScale(playerScaleX,playerScaleY);
+    enemy.setTexture(enemyTexture);
+    
+    sf::Vector2f centerM(enemyTexture.getSize().x,enemyTexture.getSize().y);
+    centerM.x = centerM.x / 2;
+    centerM.y = centerM.y / 2;
+    enemy.setOrigin(centerM);
 }
 
-void Game::run(sf::Sprite background_level,Character& hero,std::string equipment)
+void Game::run(sf::Sprite backgroundLevel,Character& hero,std::string equipment)
 {
     setValues();
     while (window.isOpen())
     {
         processEvents();
-        update_enemy1();
+        updateEnemy();
         update(hero,equipment);
-        render(background_level,hero,equipment);
+        render(backgroundLevel,hero,equipment);
     }
 }
 
@@ -42,173 +44,161 @@ void Game::processEvents()
 
 void Game::update(Character& hero, std::string equipment)
 {
-    sf::Vector2u textureSize = characterTexture.getSize();
+    sf::Vector2u textureSize = playerTexture.getSize();
     textureSize.x /= 4;
     textureSize.y /= 4;
 
-    float characterScaleX = 2.f;
-    float characterScaleY = 2.f;
-    character.setScale(characterScaleX, characterScaleY);
     sf::Vector2f velocity(0.f, 0.f);
-
-
+    
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-
         velocity.x = -0.05f;
-        frameAtualDireita += velocidadeAnimacao;
-        linha =1;
-
+        currentRightFrames += velocityAnimation;
+        lineAnimation = 1;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-
         velocity.x = 0.05f;
-        frameAtualEsquerda += velocidadeAnimacao;
-        linha=2;
-
+        currentLeftFrames += velocityAnimation;
+        lineAnimation = 2;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
 
         velocity.y = -0.05f;
-        frameAtualCima += velocidadeAnimacao;
-        linha =3;
+        currentUpFrames += velocityAnimation;
+        lineAnimation = 3;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
-
         velocity.y = 0.05f;
-        frameAtualBaixo += velocidadeAnimacao;
-        linha =0;
+        currentDownFrames += velocityAnimation;
+        lineAnimation = 0;
     }
-    position = character.getPosition();
 
     bool isMoving = (velocity.x != 0.f || velocity.y != 0.f);
-
-
     if (isMoving) {
 
         if (velocity.x > 0.f) {
 
-            if (frameAtualEsquerda > 4) {
-                frameAtualEsquerda = 0.f;
+            if (currentLeftFrames > 4) {
+                currentLeftFrames = 0.f;
             }
-            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualEsquerda) * textureSize.x, 
-            linha * textureSize.y, textureSize.x, textureSize.y));
+            player.setTextureRect(sf::IntRect(static_cast<int>(currentLeftFrames) * textureSize.x, 
+            lineAnimation * textureSize.y, textureSize.x, textureSize.y));
         } else if (velocity.x < 0.f) {
 
-            if (frameAtualDireita > 4) {
-                frameAtualDireita = 0.f;
+            if (currentRightFrames > 4) {
+                currentRightFrames = 0.f;
             }
-            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualDireita) * textureSize.x, 
-            linha * textureSize.y, textureSize.x, textureSize.y));
+            player.setTextureRect(sf::IntRect(static_cast<int>(currentRightFrames) * textureSize.x, 
+            lineAnimation * textureSize.y, textureSize.x, textureSize.y));
         }
 
         if (velocity.y < 0.f) {
 
-            if (frameAtualCima > 4) {
-                frameAtualCima = 0.f;
+            if (currentUpFrames > 4) {
+                currentUpFrames = 0.f;
         }
-        character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualCima) * textureSize.x, 
-            linha * textureSize.y, textureSize.x, textureSize.y));
+        player.setTextureRect(sf::IntRect(static_cast<int>(currentUpFrames) * textureSize.x, 
+            lineAnimation * textureSize.y, textureSize.x, textureSize.y));
         } 
         else if (velocity.y > 0.f) {
 
-            if (frameAtualBaixo > 4) {
-                frameAtualBaixo = 0.f;
+            if (currentDownFrames > 4) {
+                currentDownFrames = 0.f;
             }
-            character.setTextureRect(sf::IntRect(static_cast<int>(frameAtualBaixo) * textureSize.x, 
-            linha * textureSize.y, textureSize.x, textureSize.y));
+            player.setTextureRect(sf::IntRect(static_cast<int>(currentDownFrames) * textureSize.x, 
+            lineAnimation * textureSize.y, textureSize.x, textureSize.y));
         }
     } else {
 
-        character.setTextureRect(sf::IntRect(0, linha*textureSize.y, textureSize.x, textureSize.y));
+        player.setTextureRect(sf::IntRect(0, lineAnimation*textureSize.y, textureSize.x, textureSize.y));
     }
 
-    sf::IntRect texturerect = character.getTextureRect();
-    float velocidadeMovimento = 100.f;
-    character.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
-    character.move(velocity * velocidadeMovimento * 0.016f);  // Multiplica pelo deltaTime
+    sf::IntRect texturerect = player.getTextureRect();
+    float velocityMoviment = 100.f;
+    player.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
+    player.move(velocity * velocityMoviment * 0.016f); 
+    
     for (size_t i = 0; i < 4; i++)
     {
         if(!hero.grenades[i].full)
             {   
                 if(hero.grenades[i].type == equipment &&
-                std::abs(character.getPosition().x-hero.grenades[i].bomb_sprite.getPosition().x)<10 && 
-                std::abs(character.getPosition().y-hero.grenades[i].bomb_sprite.getPosition().y)<10)
+                std::abs(player.getPosition().x-hero.grenades[i].bombSprite.getPosition().x)<10 && 
+                std::abs(player.getPosition().y-hero.grenades[i].bombSprite.getPosition().y)<10)
                 hero.grenades[i].full=true;
             }
     }
-    if(std::abs(character.getPosition().x-enemy1.getPosition().x)<30 &&
-        std::abs(character.getPosition().y-enemy1.getPosition().y)<60)
+
+    if(std::abs(player.getPosition().x-enemy.getPosition().x)<30 &&
+        std::abs(player.getPosition().y-enemy.getPosition().y)<60)
     {
-        std::cout<< "estive aqui";
-        character.setPosition(400,50);
-        take_out_bomb(hero,equipment);
+        player.setPosition(400,50);
+        takeOutBomb(hero,equipment);
     }
 }
-void Game::update_enemy1()
+void Game::updateEnemy()
 {
-    sf::Vector2u textureSize = enemy1Texture.getSize();
+    sf::Vector2u textureSize = enemyTexture.getSize();
     textureSize.x /= 4;
     textureSize.y /= 4;
 
     float enemyScaleX =2.f;
     float enemyScaleY =2.f;
 
-    enemy1.setScale(enemyScaleX, enemyScaleY);
-    sf::Vector2f velocity =velocity_enemy1;
+    enemy.setScale(enemyScaleX, enemyScaleY);
+    sf::Vector2f velocity =velocityEnemy;
 
     if (velocity.x > 0.f) {
-        frameAtualEsquerda_enemy += velocidadeAnimacao;
-        if (frameAtualEsquerda_enemy > 4) {
-            frameAtualEsquerda_enemy = 0.f;
+        currentLeftFramesEnemy += velocityAnimation;
+        if (currentLeftFramesEnemy > 4) {
+            currentLeftFramesEnemy = 0.f;
         }
-        //Seta qual figura vai aparecer
-        enemy1.setTextureRect(sf::IntRect(static_cast<int>(frameAtualEsquerda_enemy) * textureSize.x, 2 * textureSize.y, textureSize.x, textureSize.y));
+        enemy.setTextureRect(sf::IntRect(static_cast<int>(currentLeftFramesEnemy) * textureSize.x, 2 * textureSize.y, textureSize.x, textureSize.y));
     } else if (velocity.x < 0.f) {
-        frameAtualDireita_enemy += velocidadeAnimacao;
-        if (frameAtualDireita_enemy > 4) {
-            frameAtualDireita_enemy = 0.f;
+        currentRightFramesEnemy += velocityAnimation;
+        if (currentRightFramesEnemy > 4) {
+            currentRightFramesEnemy = 0.f;
         }
-        enemy1.setTextureRect(sf::IntRect(static_cast<int>(frameAtualDireita_enemy) * textureSize.x, 1 * textureSize.y, textureSize.x, textureSize.y));
+        enemy.setTextureRect(sf::IntRect(static_cast<int>(currentRightFramesEnemy) * textureSize.x, 1 * textureSize.y, textureSize.x, textureSize.y));
     }
-    float velocidadeMovimento = 100.f;
-    sf::IntRect texturerect=enemy1.getTextureRect();
-    enemy1.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
-    enemy1.move(velocity_enemy1 * velocidadeMovimento * 0.016f);
-    sf::Vector2f position_enemy1=enemy1.getPosition();
+    float velocityMoviment = 100.f;
+    sf::IntRect texturerect=enemy.getTextureRect();
+    enemy.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
+    enemy.move(velocityEnemy * velocityMoviment * 0.016f);
+    sf::Vector2f positionEnemy = enemy.getPosition();
 
-    if (position_enemy1.x <=0) {
-        position_enemy1.x = 0;
-        enemy1.setPosition(position_enemy1.x,200.f);
-        velocity_enemy1.x=0.1f;
-    } else if (position_enemy1.x >= 800) {
-        position_enemy1.x = 800;
-        enemy1.setPosition(position_enemy1.x,200.f);
-        velocity_enemy1.x = -0.1f;
+    if (positionEnemy.x <=0) {
+        positionEnemy.x = 0;
+        enemy.setPosition(positionEnemy.x,200.f);
+        velocityEnemy.x=0.1f;
+    } else if (positionEnemy.x >= 800) {
+        positionEnemy.x = 800;
+        enemy.setPosition(positionEnemy.x,200.f);
+        velocityEnemy.x = -0.1f;
     }
-    position_enemy1 = enemy1.getPosition();
-    enemy1.setPosition(position_enemy1.x,400.f);
+    positionEnemy = enemy.getPosition();
+    enemy.setPosition(positionEnemy.x,400.f);
 }
-void Game::render(sf::Sprite background_level,Character& hero,std::string equipment)
+void Game::render(sf::Sprite backgroundLevel,Character& hero,std::string equipment)
 {
     window.clear();
-    window.draw(background_level);
+    window.draw(backgroundLevel);
 
     for (size_t i = 0; i < 4; i++)
     {
         if (!hero.grenades[i].full && hero.grenades[i].type==equipment){
-            window.draw(hero.grenades[i].bomb_sprite);
+            window.draw(hero.grenades[i].bombSprite);
         }
     }
 
-    window.draw(character);
-    window.draw(enemy1);
+    window.draw(player);
+    window.draw(enemy);
     window.display();
 }
-void Game::take_out_bomb(Character &hero, std::string equipment)
+void Game::takeOutBomb(Character &hero, std::string equipment)
 {   
     for (size_t i = 0; i<4; i++)
     {

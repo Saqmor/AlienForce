@@ -59,7 +59,7 @@ void  CharactersSave(Character& ms, Character& hs){
         std::cerr << "Erro ao abrir o arquivo.\n";
     }
 }
-std::size_t read_base(){
+std::size_t readBase(){
     std::ifstream is;
     int vertex;
     is.open("graph_input.txt");

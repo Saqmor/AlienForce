@@ -8,32 +8,28 @@ class Game
 public:
 
     void run(sf::Sprite,Character& hero,std::string);
-    void setValues();
 
 private:
+    void setValues();
     void processEvents();
     void update(Character& hero,std::string);
-    void update_enemy1();
+    void updateEnemy();
     void render(sf::Sprite,Character& hero,std::string);
-    void take_out_bomb(Character &hero,std::string);
+    void takeOutBomb(Character &hero,std::string);
 
     sf::RenderWindow window;
     sf::Event event;
-    sf::Texture characterTexture, backgroundTexture, enemy1Texture,
-    poisonBombTexture,iceBombTexture,fireBombTexture,flashbangTexture;
-    sf::Sprite character, background, enemy1,poisonBomb,iceBomb,fireBomb,flashbang;
-    float characterScaleX, characterScaleY;
-    sf::Vector2f position;
-    sf::Vector2f velocity_enemy1;
+    sf::Texture playerTexture, backgroundTexture, enemyTexture,
+    poisonBombTexture, iceBombTexture, fireBombTexture, flashbangTexture;
+    sf::Sprite player, background, enemy, poisonBomb, iceBomb, fireBomb, flashbang;
+    sf::Vector2f velocityEnemy;
 
-    float frameAtualBaixo = 0.f;
-    float frameAtualEsquerda = 0.f;
-    float frameAtualDireita = 0.f;
-    float frameAtualCima = 0.f;
-    float frameAtualBaixo_enemy = 0.f;
-    float frameAtualEsquerda_enemy = 0.f;
-    float frameAtualDireita_enemy = 0.f;
-    float frameAtualCima_enemy = 0.f;
-    float velocidadeAnimacao = 0.002f;
-    int linha;
+    float currentDownFrames = 0.f;
+    float currentLeftFrames = 0.f;
+    float currentRightFrames = 0.f;
+    float currentUpFrames = 0.f;
+    float currentLeftFramesEnemy = 0.f;
+    float currentRightFramesEnemy = 0.f;
+    float velocityAnimation = 0.002f;
+    int lineAnimation=0;
 };

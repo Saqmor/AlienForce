@@ -9,7 +9,7 @@ Menu::Menu(){
     image = new sf::Texture();
     bg = new sf::Sprite();
 
-    set_values();
+    setValues();
 }
 
 Menu::~Menu(){
@@ -20,7 +20,7 @@ Menu::~Menu(){
     delete bg;
 }
 
-void Menu::set_values(){
+void Menu::setValues(){
     window->create(sf::VideoMode(1280,720), "Menu SFML", sf::Style::Titlebar | sf::Style::Close);
     window->setPosition(sf::Vector2i(0,0));
 
@@ -31,8 +31,8 @@ void Menu::set_values(){
 
     bg->setTexture(*image);
 
-    pos_mouse = {0,0};
-    mouse_coord = {0, 0};
+    posMouse = {0,0};
+    mouseCoord = {0, 0};
 
     options = {"AlienForce", "New game", "Continue", "About", "Quit"};
     texts.resize(5);
@@ -55,15 +55,15 @@ void Menu::set_values(){
 
 }
 
-void Menu::loop_events(){
+void Menu::loopEvents(){
     sf::Event event;
     while(window->pollEvent(event)){
         if( event.type == sf::Event::Closed){
             window->close();
         }
 
-        pos_mouse = sf::Mouse::getPosition(*window);
-        mouse_coord = window->mapPixelToCoords(pos_mouse);
+        posMouse = sf::Mouse::getPosition(*window);
+        mouseCoord = window->mapPixelToCoords(posMouse);
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed){
             if( pos < 4){
@@ -110,14 +110,14 @@ void Menu::loop_events(){
         }
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-            if(winclose->getGlobalBounds().contains(mouse_coord)){
+            if(winclose->getGlobalBounds().contains(mouseCoord)){
                 window->close();
             }
         }
     }
 }
 
-void Menu::draw_all(){
+void Menu::drawAll(){
     window->clear();
     window->draw(*bg);
     for(auto t : texts){
@@ -126,11 +126,11 @@ void Menu::draw_all(){
     window->display();
 }
 
-void Menu::run_menu(){
+void Menu::runMenu(){
     selectedPlay = false;
     while(window->isOpen()){
-        loop_events();
-        draw_all();
+        loopEvents();
+        drawAll();
     }
     Character alien;
     alien.hp = 700;
@@ -143,73 +143,32 @@ void Menu::run_menu(){
     if (selectedPlay){
         hero.name = "hero";
         alien.name = "alien";
-        for (int i = 0; i < 4; ++i) {
-            if(i==0)
-            {
-                hero.grenades[i].type ="IceBomb";
-                hero.grenades[i].full = false;
-                alien.grenades[i].type ="IceBomb";
-                alien.grenades[i].full = false;
-            }
-            if(i==1)
-            {
-                hero.grenades[i].type="FireBomb";
-                hero.grenades[i].full = false;
-                alien.grenades[i].type="FireBomb";
-                alien.grenades[i].full = false;
-            }
-            if(i==2)
-            {
-                hero.grenades[i].type="PoisonBomb";
-                hero.grenades[i].full = false;
-                alien.grenades[i].type="PoisonBomb";
-                alien.grenades[i].full = false;
-            }
-            if(i==3)
-            {
-                hero.grenades[i].type ="Flashbang";
-                hero.grenades[i].full = false;
-                alien.grenades[i].type ="Flashbang";
-                alien.grenades[i].full = false;
-            }
+        std::vector<std::string> typeBombs={"IceBomb","FireBomb","PoisonBomb","Flashbang"};
+        for (int i = 0; i < 4; ++i) 
+        {
+            hero.grenades[i].type = typeBombs[i];
+            hero.grenades[i].full = false;
+            alien.grenades[i].type = typeBombs[i];
+            alien.grenades[i].full = false;
         }
     }
     if (selectedContinue){
         LoadSave(hero, alien);
     }
-
+    std::vector<sf::Vector2f> scales= {{0.15f,0.15f},{0.2f,0.2f},{0.1f,0.1f},{0.5f,0.5f}};
+    std::vector<sf::Vector2f> positions = {{400,500},{400,525},{400,500},{600,230}};
     for(size_t i=0;i<4;i++)
-    {
-        if(i==0)
-        {
-            hero.grenades[i].bomb_texture.loadFromFile("./Images/ice.png");
-            hero.grenades[i].bomb_sprite.setScale(0.15f,0.15f);
-            hero.grenades[i].bomb_sprite.setPosition(400,500);
-        }
-        if(i==1)
-        {
-            hero.grenades[i].bomb_texture.loadFromFile("./Images/fire.png");
-            hero.grenades[i].bomb_sprite.setScale(0.2f,0.2f);
-            hero.grenades[i].bomb_sprite.setPosition(400,525);
-        }
-        if(i==2)
-        {
-            hero.grenades[i].bomb_texture.loadFromFile("./Images/poison.png");
-            hero.grenades[i].bomb_sprite.setScale(0.1f,0.1f);
-            hero.grenades[i].bomb_sprite.setPosition(400,500);
-        }
-        if(i==3)
-        {
-            hero.grenades[i].bomb_texture.loadFromFile("./Images/flashbang.png");
-            hero.grenades[i].bomb_sprite.setScale(0.5f,0.5f);
-            hero.grenades[i].bomb_sprite.setPosition(600,230);
-        }
-        hero.grenades[i].bomb_sprite.setTexture(hero.grenades[i].bomb_texture);
-        sf::Vector2f centerM(hero.grenades[i].bomb_texture.getSize().x/2.f,hero.grenades[i].bomb_texture.getSize().y/2.f);
-        hero.grenades[i].bomb_sprite.setOrigin(centerM);
-        hero.grenades[i].bomb_sprite.setPosition(400,500);
+    {   
+        std::string address = "./Images/" + hero.grenades[i].type + ".png";
+        hero.grenades[i].bombTexture.loadFromFile(address);
+        hero.grenades[i].bombSprite.setScale(scales[i]);
+        hero.grenades[i].bombSprite.setPosition(positions[i]);
+        hero.grenades[i].bombSprite.setTexture(hero.grenades[i].bombTexture);
+        sf::Vector2f centerM(hero.grenades[i].bombTexture.getSize().x/2.f,hero.grenades[i].bombTexture.getSize().y/2.f);
+        hero.grenades[i].bombSprite.setOrigin(centerM);
+        hero.grenades[i].bombSprite.setPosition(400,500);
     }
-    SpaceMap space(read_base());
+    SpaceMap space(readBase());
     space.runSpaceMap(alien, hero);
 
     delete[] hero.grenades;
