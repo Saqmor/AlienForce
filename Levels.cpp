@@ -55,7 +55,7 @@ void Game::update(Character& hero, std::string equipment)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
 
-        velocity.x = -0.1f;
+        velocity.x = -0.05f;
         frameAtualDireita += velocidadeAnimacao;
         linha =1;
 
@@ -63,7 +63,7 @@ void Game::update(Character& hero, std::string equipment)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
 
-        velocity.x = 0.1f;
+        velocity.x = 0.05f;
         frameAtualEsquerda += velocidadeAnimacao;
         linha=2;
 
@@ -71,14 +71,14 @@ void Game::update(Character& hero, std::string equipment)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
 
-        velocity.y = -0.1f;
+        velocity.y = -0.05f;
         frameAtualCima += velocidadeAnimacao;
         linha =3;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
 
-        velocity.y = 0.1f;
+        velocity.y = 0.05f;
         frameAtualBaixo += velocidadeAnimacao;
         linha =0;
     }
@@ -183,11 +183,11 @@ void Game::update_enemy1()
     if (position_enemy1.x <=0) {
         position_enemy1.x = 0;
         enemy1.setPosition(position_enemy1.x,200.f);
-        velocity_enemy1.x=0.4f;
+        velocity_enemy1.x=0.1f;
     } else if (position_enemy1.x >= 800) {
         position_enemy1.x = 800;
         enemy1.setPosition(position_enemy1.x,200.f);
-        velocity_enemy1.x = -0.4f;
+        velocity_enemy1.x = -0.1f;
     }
     position_enemy1 = enemy1.getPosition();
     enemy1.setPosition(position_enemy1.x,400.f);

@@ -1,3 +1,4 @@
+This branch is the backup of 30/11/2023 3PM - Brazilian official time
 This code is about a game of astronaut and aliens
 O programa roda em sistema operacional Linux e compilado no editor de código-fonte, VScode, pelo Makefile com o comando "make" e após dê o comando de 
 ./prog
