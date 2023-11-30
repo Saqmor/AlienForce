@@ -34,6 +34,6 @@ private:
     float frameAtualEsquerda_enemy = 0.f;
     float frameAtualDireita_enemy = 0.f;
     float frameAtualCima_enemy = 0.f;
-    float velocidadeAnimacao = 0.01f;
+    float velocidadeAnimacao = 0.002f;
     int linha;
 };
