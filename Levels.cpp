@@ -25,8 +25,8 @@ void Game::run(sf::Sprite background_level,Character& hero,std::string equipment
     while (window.isOpen())
     {
         processEvents();
-        update(hero,equipment);
         update_enemy1();
+        update(hero,equipment);
         render(background_level,hero,equipment);
     }
 }
@@ -38,6 +38,7 @@ void Game::processEvents()
         if (event.type == sf::Event::Closed)
             window.close();
     }
+
 }
 
 void Game::update(Character& hero, std::string equipment)
@@ -164,12 +165,13 @@ void Game::update(Character& hero, std::string equipment)
                 hero.grenades[i].full=true;
             }
     }
-    if(std::abs(character.getPosition().x-enemy1.getPosition().x)<30 && 
+    if(std::abs(character.getPosition().x-enemy1.getPosition().x)<30 &&
         std::abs(character.getPosition().y-enemy1.getPosition().y)<60)
-        {
+    {
+        std::cout<< "estive aqui";
         character.setPosition(400,50);
         take_out_bomb(hero,equipment);
-        }
+    }
 }
 void Game::update_enemy1()
 {
@@ -225,7 +227,6 @@ void Game::render(sf::Sprite background_level,Character& hero,std::string equipm
         if (!hero.grenades[i].full && hero.grenades[i].type==equipment){
             window.draw(hero.grenades[i].bomb_sprite);
         }
-
     }
 
     window.draw(character);

@@ -11,7 +11,7 @@
 
 struct Grenade{
     std::string type;
-    bool full=false;
+    bool full;
     sf::Texture bomb_texture;
     sf::Sprite bomb_sprite;
 };
