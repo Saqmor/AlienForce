@@ -42,7 +42,7 @@ void SpaceMap::set_values()
     rocketTexture.loadFromFile("./Images/ship.png");
     rocket.setTexture(rocketTexture);
     rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
-    planet =0;
+    planet = 0;
     rocketPosition = rocket.getPosition();
     rocket.setScale(0.5f,0.5f);
 
@@ -78,6 +78,12 @@ void SpaceMap::set_values()
     quit_text.setCharacterSize(30);
     quit_text.setOutlineColor(sf::Color::Black);
     quit_text.setPosition(664,137);
+
+    heroEndTexture.loadFromFile("./Images/Win_screen.png");
+    heroEnd.setTexture(heroEndTexture);
+
+    alienEndTexture.loadFromFile("./Images/GameOver_screen.png");
+    alienEnd.setTexture(alienEndTexture);
 }
 
 void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
@@ -137,21 +143,21 @@ void SpaceMap::fix_scale(float scaleX,float scaleY)
     sf::Vector2f new_position;
     for (size_t i = 0; i < coordsWorlds.size(); i++)
     {
-         coordsWorlds[i].x=coordsWorlds[i].x * scaleX;
-         coordsWorlds[i].y=coordsWorlds[i].y * scaleY;
-         new_position= worlds[i].shape.getPosition();
-         new_position.x=new_position.x*scaleX;
-         new_position.y=new_position.y*scaleY;
+         coordsWorlds[i].x = coordsWorlds[i].x * scaleX;
+         coordsWorlds[i].y = coordsWorlds[i].y * scaleY;
+         new_position = worlds[i].shape.getPosition();
+         new_position.x = new_position.x*scaleX;
+         new_position.y = new_position.y*scaleY;
          worlds[i].shape.setPosition(new_position);
     }
-    new_position=buttom_quit.getPosition();
-    new_position.x=new_position.x*scaleX;
-    new_position.y=new_position.y*scaleY;
+    new_position = buttom_quit.getPosition();
+    new_position.x = new_position.x*scaleX;
+    new_position.y = new_position.y*scaleY;
     buttom_quit.setPosition(new_position);
 
-    new_position=buttom_save.getPosition();
-    new_position.x=new_position.x*scaleX;
-    new_position.y=new_position.y*scaleY;
+    new_position = buttom_save.getPosition();
+    new_position.x = new_position.x*scaleX;
+    new_position.y = new_position.y*scaleY;
     buttom_save.setPosition(new_position);
 
     new_position=save_text.getPosition();
@@ -165,6 +171,14 @@ void SpaceMap::fix_scale(float scaleX,float scaleY)
     quit_text.setPosition(new_position);
 
     rocket.setPosition(coordsWorlds[0]);
+
+    scaleX = static_cast<float>(window.getSize().x) / heroEndTexture.getSize().x;
+    scaleY = static_cast<float>(window.getSize().y) / heroEndTexture.getSize().y;
+    heroEnd.setScale(scaleX,scaleY);
+
+    scaleX = static_cast<float>(window.getSize().x) / alienEndTexture.getSize().x;
+    scaleY = static_cast<float>(window.getSize().y) / alienEndTexture.getSize().y;
+    alienEnd.setScale(scaleX,scaleY);
 }
 void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
     worlds = new World[order()];
@@ -180,10 +194,37 @@ void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
     fix_scale(scaleX,scaleY);
 
     while (window.isOpen())
-    {
-        loopSpaceMap(alien, hero);
-        render();
+    {   
+         who_wins(alien,hero);
+        if(!alien_wins && !hero_wins)
+        {
+            loopSpaceMap(alien, hero);
+            render();
+        }
+        else
+        {   
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                window.close();
+            render_end(alien, hero);
+        
     }
+}
+}
+void SpaceMap::who_wins(Character &alien, Character &hero)
+{
+    if(alien.hp<=0)
+        hero_wins = true;
+    if(hero.hp<=0)
+        alien_wins = true;
+}
+void SpaceMap::render_end(Character &alien, Character &hero)
+{   
+    window.clear();
+    if(hero_wins)
+        window.draw(heroEnd);
+    if(alien_wins)
+        window.draw(alienEnd);
+    window.display();
 }
 float SpaceMap::set_angle(sf::Vector2f direction)
 {

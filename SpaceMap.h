@@ -17,11 +17,18 @@ public:
     float set_angle(sf::Vector2f direction);
     void read_planets_data();
     void fix_scale(float scaleX,float scaleY);
+    void render_end(Character &alien, Character &hero);
+    void who_wins(Character &alien, Character &hero);
 
 private:
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     sf::Sprite background;
+
+    sf::Texture heroEndTexture;
+    sf::Sprite heroEnd;
+    sf::Texture alienEndTexture;
+    sf::Sprite alienEnd;
 
     sf::RectangleShape buttom_save;
     sf::RectangleShape buttom_quit;
@@ -49,4 +56,6 @@ private:
     std::vector<std::string> equipment;
     sf::Vector2i pos_mouse;
     sf::Vector2f mouse_coord;
+    bool hero_wins=false;
+    bool alien_wins=false;
 };
