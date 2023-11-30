@@ -36,7 +36,7 @@ void Menu::set_values(){
 
     options = {"AlienForce", "New game", "Continue", "About", "Quit"};
     texts.resize(5);
-    coords = {{572,40},{585,191},{583,280},{600,370},{623,457}};
+    coords = {{556,36},{585,191},{583,280},{600,370},{623,457}};
     sizes = {25,21,24,24,24};
 
     for (std::size_t i{}; i < texts.size(); ++i){
@@ -91,21 +91,17 @@ void Menu::loop_events(){
             theselect = true;
             switch (pos) {
                 case 1:
-                    // Code for "Play" option
                     selectedPlay = true;
                     window->close();
                     break;
                 case 2:
-                    // Code for "Continue" option
                     selectedContinue = true;
                     window->close();
                     break;
                 case 3:
-                    // Code for "About" option
                     std::cout << "About selected!\n";
                     break;
                 case 4:
-                    // Code for "Quit" option
                     window->close();
                     break;
                 default:
@@ -115,7 +111,6 @@ void Menu::loop_events(){
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
             if(winclose->getGlobalBounds().contains(mouse_coord)){
-                //std::cout << "Close the window!" << '\n';
                 window->close();
             }
         }
@@ -152,24 +147,28 @@ void Menu::run_menu(){
             if(i==0)
             {
                 hero.grenades[i].type ="IceBomb";
+                hero.grenades[i].full = false;
                 alien.grenades[i].type ="IceBomb";
                 alien.grenades[i].full = false;
             }
             if(i==1)
             {
                 hero.grenades[i].type="FireBomb";
+                hero.grenades[i].full = false;
                 alien.grenades[i].type="FireBomb";
                 alien.grenades[i].full = false;
             }
             if(i==2)
             {
                 hero.grenades[i].type="PoisonBomb";
+                hero.grenades[i].full = false;
                 alien.grenades[i].type="PoisonBomb";
                 alien.grenades[i].full = false;
             }
             if(i==3)
             {
                 hero.grenades[i].type ="Flashbang";
+                hero.grenades[i].full = false;
                 alien.grenades[i].type ="Flashbang";
                 alien.grenades[i].full = false;
             }
@@ -184,7 +183,7 @@ void Menu::run_menu(){
         if(i==0)
         {
             hero.grenades[i].bomb_texture.loadFromFile("./Images/ice.png");
-            hero.grenades[i].bomb_sprite.setScale(0.5f,0.5f);
+            hero.grenades[i].bomb_sprite.setScale(0.15f,0.15f);
             hero.grenades[i].bomb_sprite.setPosition(400,500);
         }
         if(i==1)

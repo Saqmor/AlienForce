@@ -8,14 +8,13 @@ public:
     SpaceMap(std::size_t nvertices):Graph(nvertices){}
     ~SpaceMap();
     void numVertices(std::size_t n);
-    void update();
-    void loopSpaceMap (Character& alien, Character& hero);
-    void render();
     void runSpaceMap (Character& alien, Character& hero);
     void set_values();
+    void read_planets_data();
+    void loopSpaceMap (Character& alien, Character& hero);
+    void render();
     void move_ship();
     float set_angle(sf::Vector2f direction);
-    void read_planets_data();
     void fix_scale(float scaleX,float scaleY);
     void render_end(Character &alien, Character &hero);
     void who_wins(Character &alien, Character &hero);

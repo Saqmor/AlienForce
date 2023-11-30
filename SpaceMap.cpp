@@ -8,18 +8,33 @@ SpaceMap::~SpaceMap() {
     delete[] worlds;
 }
 
-void SpaceMap::read_planets_data(){
-    std::ifstream is;
-    is.open("coords_worlds.txt");
-    float a,b,r;
-    std::string word;
-    for (std::size_t i = 0; i < order(); i++){
-        is>>a>>b>>r>>word;
-        coordsWorlds.emplace_back(a, b);
-        sizeWorlds.push_back(r);
-        equipment.push_back(word);
+void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
+    worlds = new World[order()];
+    set_values();
+    window.create(sf::VideoMode(1105, 961), "My window");
+    window.setPosition(sf::Vector2i(0,0));
+    backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
+    float scaleX = static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x;
+    float scaleY = static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y;
+    background.setScale(scaleX,scaleY);
+    background.setTexture(backgroundTexture);
+    fix_scale(scaleX,scaleY);
+
+    while (window.isOpen())
+    {
+        who_wins(alien,hero);
+        if(!alien_wins && !hero_wins)
+        {
+            loopSpaceMap(alien, hero);
+            render();
+        }
+        else
+        {
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                window.close();
+            render_end(alien, hero);
+        }
     }
-    is.close();
 }
 
 void SpaceMap::set_values()
@@ -86,69 +101,31 @@ void SpaceMap::set_values()
     alienEnd.setTexture(alienEndTexture);
 }
 
-void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
-        if( event.type == sf::Event::Closed) {
-            window.close();
-        }
-        pos_mouse = sf::Mouse::getPosition(window);
-        mouse_coord = window.mapPixelToCoords(pos_mouse);
-
-        if((sf::Mouse::isButtonPressed(sf::Mouse::Left)) && !enterWorld){
-            enterWorld = true;
-            if(worlds[order() - 1].shape.getGlobalBounds().contains(mouse_coord)){
-                track=min_way(planet,order()-1);
-                    move_ship();
-                Fight.modeBattle(alien, hero);
-            }
-            for (std::size_t i = 0; i < order() - 1; ++i) {
-                if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
-                    track=min_way(planet,i);
-                    move_ship();
-                    worlds[i].game.run(worlds[i].level_sprite,hero,equipment[i]);
-                    //indo do planet -> i;
-                }
-            }
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                if(buttom_save.getGlobalBounds().contains(mouse_coord)){
-                    CharactersSave(hero, alien);
-                }
-                if (buttom_quit.getGlobalBounds().contains(mouse_coord))
-                {
-                    CharactersSave(hero, alien);
-                    window.close();
-                }
-            }
-        } else enterWorld = false;
-
+void SpaceMap::read_planets_data(){
+    std::ifstream is;
+    is.open("coords_worlds.txt");
+    float a,b,r;
+    std::string word;
+    for (std::size_t i = 0; i < order(); i++){
+        is>>a>>b>>r>>word;
+        coordsWorlds.emplace_back(a, b);
+        sizeWorlds.push_back(r);
+        equipment.push_back(word);
     }
+    is.close();
 }
 
-void SpaceMap::render() {
-    window.clear();
-    window.draw(background);
-    window.draw(rocket);
-    for (int i = 0; i < order(); ++i) {
-        window.draw(worlds[i].shape);
-    }
-    window.draw(buttom_save);
-    window.draw(buttom_quit);
-    window.draw(save_text);
-    window.draw(quit_text);
-    window.display();
-}
 void SpaceMap::fix_scale(float scaleX,float scaleY)
 {
     sf::Vector2f new_position;
     for (size_t i = 0; i < coordsWorlds.size(); i++)
     {
-         coordsWorlds[i].x = coordsWorlds[i].x * scaleX;
-         coordsWorlds[i].y = coordsWorlds[i].y * scaleY;
-         new_position = worlds[i].shape.getPosition();
-         new_position.x = new_position.x*scaleX;
-         new_position.y = new_position.y*scaleY;
-         worlds[i].shape.setPosition(new_position);
+        coordsWorlds[i].x = coordsWorlds[i].x * scaleX;
+        coordsWorlds[i].y = coordsWorlds[i].y * scaleY;
+        new_position = worlds[i].shape.getPosition();
+        new_position.x = new_position.x*scaleX;
+        new_position.y = new_position.y*scaleY;
+        worlds[i].shape.setPosition(new_position);
     }
     new_position = buttom_quit.getPosition();
     new_position.x = new_position.x*scaleX;
@@ -180,63 +157,55 @@ void SpaceMap::fix_scale(float scaleX,float scaleY)
     scaleY = static_cast<float>(window.getSize().y) / alienEndTexture.getSize().y;
     alienEnd.setScale(scaleX,scaleY);
 }
-void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
-    worlds = new World[order()];
-    set_values();
-    //1105 961
-    window.create(sf::VideoMode(1105, 961), "My window");
-    window.setPosition(sf::Vector2i(0,0));
-    backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
-    float scaleX = static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x;
-    float scaleY = static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y;
-    background.setScale(scaleX,scaleY);
-    background.setTexture(backgroundTexture);
-    fix_scale(scaleX,scaleY);
 
-    while (window.isOpen())
-    {   
-         who_wins(alien,hero);
-        if(!alien_wins && !hero_wins)
-        {
-            loopSpaceMap(alien, hero);
-            render();
+void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        if( event.type == sf::Event::Closed) {
+            window.close();
         }
-        else
-        {   
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-                window.close();
-            render_end(alien, hero);
-        
+        pos_mouse = sf::Mouse::getPosition(window);
+        mouse_coord = window.mapPixelToCoords(pos_mouse);
+
+        if((sf::Mouse::isButtonPressed(sf::Mouse::Left)) && !enterWorld){
+            enterWorld = true;
+            if(worlds[order() - 1].shape.getGlobalBounds().contains(mouse_coord)){
+                track=min_way(planet,order()-1);
+                    move_ship();
+                Fight.modeBattle(alien, hero);
+            }
+            for (std::size_t i = 0; i < order() - 1; ++i) {
+                if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
+                    track=min_way(planet,i);
+                    move_ship();
+                    worlds[i].game.run(worlds[i].level_sprite,hero,equipment[i]);
+                }
+            }
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                if(buttom_save.getGlobalBounds().contains(mouse_coord)){
+                    CharactersSave(hero, alien);
+                }
+                if (buttom_quit.getGlobalBounds().contains(mouse_coord))
+                {
+                    CharactersSave(hero, alien);
+                    window.close();
+                }
+            }
+        } else enterWorld = false;
     }
 }
-}
-void SpaceMap::who_wins(Character &alien, Character &hero)
-{
-    if(alien.hp<=0)
-        hero_wins = true;
-    if(hero.hp<=0)
-        alien_wins = true;
-}
-void SpaceMap::render_end(Character &alien, Character &hero)
-{   
-    window.clear();
-    if(hero_wins)
-        window.draw(heroEnd);
-    if(alien_wins)
-        window.draw(alienEnd);
-    window.display();
-}
+
 float SpaceMap::set_angle(sf::Vector2f direction)
 {
     float angle;
     if(direction.x>0)
-       if(direction.y>0)
+        if(direction.y>0)
             angle = M_PI_2 + std::abs(std::acos(direction.x));
         else
             angle =M_PI-2 - std::abs(std::acos(direction.x));
     if(direction.x<=0)
         if(direction.y>0)
-        {   
+        {
             sf::Vector2f scale=rocket.getScale();
             rocket.setScale(scale.x,-scale.y);
             angle=std::abs(std::asin(direction.y));
@@ -247,12 +216,12 @@ float SpaceMap::set_angle(sf::Vector2f direction)
     return angle;
 }
 void SpaceMap::move_ship()
-{   
+{
     sf::Vector2f velocity;
     for(std::size_t i =0;i<track.size()-1;i++)
-    {   
+    {
         double angle = std::atan2((coordsWorlds[track[i+1]].y-coordsWorlds[track[i]].y),
-        (coordsWorlds[track[i+1]].x-coordsWorlds[track[i]].x));
+                                  (coordsWorlds[track[i+1]].x-coordsWorlds[track[i]].x));
         if(coordsWorlds[track[i+1]].x>coordsWorlds[track[i]].x)
             velocity.x =std::abs(std::cos(angle));
         else
@@ -266,7 +235,7 @@ void SpaceMap::move_ship()
         rocket.setRotation(angle);
         print = true;
         while(std::abs(rocket.getPosition().x-(coordsWorlds[track[i+1]]).x)>2)
-        {   
+        {
             rocket.setPosition(rocket.getPosition() + velocity*0.2f);
             window.clear();
             window.draw(background);
@@ -275,29 +244,44 @@ void SpaceMap::move_ship()
 
             for (int i = 0; i < order(); ++i)
                 window.draw(worlds[i].shape);
-            window.display();   
+            window.display();
         }
         rocket.setPosition(coordsWorlds[track[i+1]]);
         rocket.setRotation(0);
         rocket.setScale(0.5f,0.5f);
-       //Movimentação Mouse (Melhorar orientação)
-    /*
-    if (event.type == sf::Event::MouseButtonPressed) {
-    // Atualização da posição do objeto pela posição do mouse quando ocorre um clique
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        velocity.x=1.f;
-        velocity.y=1.f;
-        sf::Vector2f characterPosition = character.getPosition();
-        
-        if(mousePosition.x>characterPosition.x)
-        velocity.x=1.5*std::cos(std::fabs(angle));
-        else
-        velocity.x=1.5*std::cos(-std::fabs(angle));
-        if(mousePosition.y>characterPosition.y)
-        velocity.y=1.5*std::sin(std::fabs(angle));
-        else
-        velocity.y=1.5*std::sin(-std::fabs(angle));
-    } */ 
     }
     planet = track.back();
 }
+
+void SpaceMap::render() {
+    window.clear();
+    window.draw(background);
+    window.draw(rocket);
+    for (int i = 0; i < order(); ++i) {
+        window.draw(worlds[i].shape);
+    }
+    window.draw(buttom_save);
+    window.draw(buttom_quit);
+    window.draw(save_text);
+    window.draw(quit_text);
+    window.display();
+}
+
+void SpaceMap::who_wins(Character &alien, Character &hero)
+{
+    if(alien.hp<=0)
+        hero_wins = true;
+    if(hero.hp<=0)
+        alien_wins = true;
+}
+
+void SpaceMap::render_end(Character &alien, Character &hero)
+{   
+    window.clear();
+    if(hero_wins)
+        window.draw(heroEnd);
+    if(alien_wins)
+        window.draw(alienEnd);
+    window.display();
+}
+

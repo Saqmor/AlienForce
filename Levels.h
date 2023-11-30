@@ -16,9 +16,6 @@ private:
     void update_enemy1();
     void render(sf::Sprite,Character& hero,std::string);
     void take_out_bomb(Character &hero,std::string);
-    std::size_t nvertices;
-    //Graph graph;
-    Graph create_graph(std::size_t);
 
     sf::RenderWindow window;
     sf::Event event;
@@ -28,7 +25,7 @@ private:
     float characterScaleX, characterScaleY;
     sf::Vector2f position;
     sf::Vector2f velocity_enemy1;
-    // Adiciona variáveis para rastrear a animação em cada direção
+
     float frameAtualBaixo = 0.f;
     float frameAtualEsquerda = 0.f;
     float frameAtualDireita = 0.f;

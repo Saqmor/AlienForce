@@ -4,7 +4,6 @@
 
 void Game::setValues() {
     window.create(sf::VideoMode(800, 600), "My window");
-    nvertices = read_base();
 
     characterScaleX = 1.f;
     characterScaleY = 1.f;
@@ -44,58 +43,52 @@ void Game::processEvents()
 void Game::update(Character& hero, std::string equipment)
 {
     sf::Vector2u textureSize = characterTexture.getSize();
-    textureSize.x /= 4;  // Assumindo 4 frames na horizontal
-    textureSize.y /= 4;  // Assumindo 4 frames na vertical
+    textureSize.x /= 4;
+    textureSize.y /= 4;
 
     float characterScaleX = 2.f;
     float characterScaleY = 2.f;
     character.setScale(characterScaleX, characterScaleY);
     sf::Vector2f velocity(0.f, 0.f);
 
-    //Movimentação por setas
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        // left key is pressed: move our character
+
         velocity.x = -0.1f;
         frameAtualDireita += velocidadeAnimacao;
         linha =1;
-        // Ajusta a escala para inverter horizontalmente
-        //characterScaleX = std::abs(characterScaleX);
+
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        // right key is pressed: move our character
+
         velocity.x = 0.1f;
         frameAtualEsquerda += velocidadeAnimacao;
         linha=2;
-        // Ajusta a escala para inverter horizontalmente
-        //characterScaleX = -std::abs(characterScaleX);
+
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        // up key is pressed: move our character
+
         velocity.y = -0.1f;
         frameAtualCima += velocidadeAnimacao;
         linha =3;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
-        // down key is pressed: move our character
+
         velocity.y = 0.1f;
         frameAtualBaixo += velocidadeAnimacao;
         linha =0;
     }
     position = character.getPosition();
 
-    // Verifica se o personagem está se movendo
     bool isMoving = (velocity.x != 0.f || velocity.y != 0.f);
 
-        //sf::IntRect textureRect=sf::IntRect(static_cast<int>(frameAtualEsquerda) * textureSize.x, linha * textureSize.y, textureSize.x, textureSize.y);
-        //character.setTextureRect(textureRect);
-    // Atualiza a lógica da animação
+
     if (isMoving) {
-        // Calcula o frame atual baseado no tempo ou eventos de teclado
-        // Substitua esta lógica com a sua própria animação
+
         if (velocity.x > 0.f) {
 
             if (frameAtualEsquerda > 4) {
@@ -129,28 +122,10 @@ void Game::update(Character& hero, std::string equipment)
             linha * textureSize.y, textureSize.x, textureSize.y));
         }
     } else {
-        // Se o personagem não estiver se movendo, exibir um frame parado
+
         character.setTextureRect(sf::IntRect(0, linha*textureSize.y, textureSize.x, textureSize.y));
     }
 
-    //Movimentação Mouse (Melhorar orientação)
-    /*
-    if (event.type == sf::Event::MouseButtonPressed) {
-    // Atualização da posição do objeto pela posição do mouse quando ocorre um clique
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        velocity.x=1.f;
-        velocity.y=1.f;
-        sf::Vector2f characterPosition = character.getPosition();
-        double angle = std::atan2((mousePosition.y-characterPosition.y),(mousePosition.x-characterPosition.x));
-        if(mousePosition.x>characterPosition.x)
-        velocity.x=1.5*std::cos(std::fabs(angle));
-        else
-        velocity.x=1.5*std::cos(-std::fabs(angle));
-        if(mousePosition.y>characterPosition.y)
-        velocity.y=1.5*std::sin(std::fabs(angle));
-        else
-        velocity.y=1.5*std::sin(-std::fabs(angle));
-    } */
     sf::IntRect texturerect = character.getTextureRect();
     float velocidadeMovimento = 100.f;
     character.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
@@ -204,7 +179,7 @@ void Game::update_enemy1()
     enemy1.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
     enemy1.move(velocity_enemy1 * velocidadeMovimento * 0.016f);
     sf::Vector2f position_enemy1=enemy1.getPosition();
-    //Verifica se o personagem ultrapassou as bordas da janela
+
     if (position_enemy1.x <=0) {
         position_enemy1.x = 0;
         enemy1.setPosition(position_enemy1.x,200.f);
