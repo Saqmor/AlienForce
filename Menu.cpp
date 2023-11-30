@@ -210,10 +210,6 @@ void Menu::run_menu(){
         hero.grenades[i].bomb_sprite.setOrigin(centerM);
         hero.grenades[i].bomb_sprite.setPosition(400,500);
     }
-    std::cout << hero.grenades[0].full << hero.grenades[0].type << std::endl;
-    std::cout << hero.grenades[1].full << hero.grenades[1].type << std::endl;
-    std::cout << hero.grenades[2].full << hero.grenades[2].type << std::endl;
-    std::cout << hero.grenades[3].full << hero.grenades[3].type << std::endl;
     SpaceMap space(read_base());
     space.runSpaceMap(alien, hero);
 
