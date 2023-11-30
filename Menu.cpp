@@ -184,7 +184,7 @@ void Menu::run_menu(){
         if(i==0)
         {
             hero.grenades[i].bomb_texture.loadFromFile("./Images/ice.png");
-            hero.grenades[i].bomb_sprite.setScale(0.5f,0.5f);
+            hero.grenades[i].bomb_sprite.setScale(0.15f,0.15f);
             hero.grenades[i].bomb_sprite.setPosition(400,500);
         }
         if(i==1)
