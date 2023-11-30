@@ -42,8 +42,7 @@ void SpaceMap::set_values()
     rocketTexture.loadFromFile("./Images/ship.png");
     rocket.setTexture(rocketTexture);
     rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
-    rocket.setPosition(coordsWorlds[7]);
-    planet =7;
+    planet =0;
     rocketPosition = rocket.getPosition();
     rocket.setScale(0.5f,0.5f);
 
@@ -133,15 +132,53 @@ void SpaceMap::render() {
     window.draw(quit_text);
     window.display();
 }
+void SpaceMap::fix_scale(float scaleX,float scaleY)
+{
+    sf::Vector2f new_position;
+    for (size_t i = 0; i < coordsWorlds.size(); i++)
+    {
+         coordsWorlds[i].x=coordsWorlds[i].x * scaleX;
+         coordsWorlds[i].y=coordsWorlds[i].y * scaleY;
+         new_position= worlds[i].shape.getPosition();
+         new_position.x=new_position.x*scaleX;
+         new_position.y=new_position.y*scaleY;
+         worlds[i].shape.setPosition(new_position);
+    }
+    new_position=buttom_quit.getPosition();
+    new_position.x=new_position.x*scaleX;
+    new_position.y=new_position.y*scaleY;
+    buttom_quit.setPosition(new_position);
 
+    new_position=buttom_save.getPosition();
+    new_position.x=new_position.x*scaleX;
+    new_position.y=new_position.y*scaleY;
+    buttom_save.setPosition(new_position);
+
+    new_position=save_text.getPosition();
+    new_position.x=new_position.x*scaleX;
+    new_position.y=new_position.y*scaleY;
+    save_text.setPosition(new_position);
+
+    new_position=quit_text.getPosition();
+    new_position.x=new_position.x*scaleX;
+    new_position.y=new_position.y*scaleY;
+    quit_text.setPosition(new_position);
+
+    rocket.setPosition(coordsWorlds[0]);
+}
 void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
     worlds = new World[order()];
     set_values();
+    //1105 961
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
     backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
-    
+    float scaleX = static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x;
+    float scaleY = static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y;
+    background.setScale(scaleX,scaleY);
     background.setTexture(backgroundTexture);
+    fix_scale(scaleX,scaleY);
+
     while (window.isOpen())
     {
         loopSpaceMap(alien, hero);
