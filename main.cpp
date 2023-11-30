@@ -1,9 +1,6 @@
-#include "VerriPG.h"
+#include "Menu.h"
 
-int main()
-{
+int main(){
     Menu menu;
     menu.run_menu();
-
-    return 0;
 }
