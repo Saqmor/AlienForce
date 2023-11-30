@@ -9,14 +9,14 @@ Graph::~Graph() {
     delete[] matrix;
 }
 
-bool Graph::edge_exists(std::size_t u, std::size_t v) const {
+bool Graph::edgeExists(std::size_t u, std::size_t v) const {
     if (u < v){
         std::swap(u, v);
     }
     return matrix[u*(u+1)/2+v].used;
 }
 
-void Graph::add_edge(std::size_t u, std::size_t v,float w) {
+void Graph::addEdge(std::size_t u, std::size_t v,float w) {
     if (u < v){
         std::swap(u, v);
     }
@@ -24,7 +24,7 @@ void Graph::add_edge(std::size_t u, std::size_t v,float w) {
     matrix[u*(u+1)/2+v].weight = w;
 }
 
-void Graph::rem_edge(std::size_t u, std::size_t v) {
+void Graph::remEdge(std::size_t u, std::size_t v) {
     if (u < v){
         std::swap(u, v);
     }
@@ -34,7 +34,7 @@ void Graph::rem_edge(std::size_t u, std::size_t v) {
 std::vector<std::size_t> Graph::neighbors(std::size_t v) const {
     std::vector<std::size_t> neigh;
     for (std::size_t from = 0; from < n; ++from){
-        if (edge_exists(from, v))
+        if (edgeExists(from, v))
             neigh.push_back(from);
     }
     return neigh;
@@ -44,7 +44,7 @@ std::size_t Graph::order() const {
     return n;
 }
 
-float Graph::peso_aresta(std::size_t u,std::size_t v)const{
+float Graph::pesoAresta(std::size_t u,std::size_t v)const{
     if (u < v){
         std::swap(u,v);
     }
@@ -59,14 +59,14 @@ void Graph::start(float* d, std::size_t* p,std::size_t s) const{
     d[s]=0;
 }
 
-void Graph::relax(float* d, std::size_t* p,std::size_t u,std::size_t v) const{
-    if(d[u]+ peso_aresta(u,v)<d[v]){
-        d[v]=d[u]+ peso_aresta(u,v);
+void Graph::relaxEdge(float* d, std::size_t* p,std::size_t u,std::size_t v) const{
+    if(d[u]+ pesoAresta(u,v)<d[v]){
+        d[v]=d[u]+ pesoAresta(u,v);
         p[v]=u;
     }
 }
 
-bool Graph::exist_open(bool* open)const{
+bool Graph::existOpen(bool* open)const{
     for(std::size_t i=0; i<n; i++){
         if(open[i])
             return true;
@@ -74,7 +74,7 @@ bool Graph::exist_open(bool* open)const{
     return false;
 }
 
-std::size_t Graph::minimum_dist(bool* open,float* d) const{
+std::size_t Graph::minimumDist(bool* open,float* d) const{
     std::size_t i,min;
 
     for(i=0; i<n; i++){
@@ -101,13 +101,13 @@ std::size_t* Graph::dijkstra(std::size_t s) const{
 
     start(d,p,s);
 
-    while(exist_open(open)){
-        std::size_t u = minimum_dist(open,d);
+    while(existOpen(open)){
+        std::size_t u = minimumDist(open,d);
         open[u]=false;
 
         for(std::size_t i: neighbors(u)){
             if(open[i]){
-                relax(d,p,u,i);
+                relaxEdge(d,p,u,i);
             }
         }
     }
@@ -115,26 +115,26 @@ std::size_t* Graph::dijkstra(std::size_t s) const{
 }
 
 
-std::vector<std::size_t> Graph::min_way(std::size_t u,std::size_t v) const{
+std::vector<std::size_t> Graph::minWay(std::size_t u,std::size_t v) const{
 
     auto p=dijkstra(u);
     std::stack<std::size_t> aux;
-    std::vector<std::size_t> min_way;
+    std::vector<std::size_t> minWay;
 
     for(std::size_t i=v; i!=u; i=p[i]){
         aux.push(i);
     }
 
-    min_way.push_back(u);
+    minWay.push_back(u);
     while(!aux.empty()){
-        min_way.push_back(aux.top());
+        minWay.push_back(aux.top());
         aux.pop();
     }
-    return min_way;
+    return minWay;
 }
 
-void Graph::print_min_caminh(std::size_t u,std::size_t v) const{
-    auto m = min_way(u,v);
+void Graph::printMinWay(std::size_t u,std::size_t v) const{
+    auto m = minWay(u,v);
 
     std::cout<<std::endl;
     for(std::size_t i=0; i<m.size();i++){
@@ -144,11 +144,11 @@ void Graph::print_min_caminh(std::size_t u,std::size_t v) const{
     std::cout<<std::endl;
 }
 
-void Graph::add_num_vertices() {
+void Graph::addNumVertices() {
     std::cin >> n;
 }
 
-void Graph::add_edges_from_file(){
+void Graph::addEdgesFromFile(){
     std::ifstream is;
     std::size_t u,v;
     float w;
@@ -156,12 +156,12 @@ void Graph::add_edges_from_file(){
     is.open("graph_input.txt");
     is>>w;
     while(is>>u>>v>>w)
-        add_edge(u,v,w);
+        addEdge(u,v,w);
     is.close();
 }
 
 
-void Graph::add_edges_from_file2(std::string name_file){
+void Graph::addEdgesFromFile2(std::string name_file){
     std::ifstream is;
     std::size_t u,v;
     float w;
@@ -169,17 +169,19 @@ void Graph::add_edges_from_file2(std::string name_file){
     is>>w;
     is.open(name_file);
     while(is>>u>>v>>w)
-        add_edge(u,v,w);
+        addEdge(u,v,w);
     is.close();
 }
 
-void Graph::show_all_edges(){
+void Graph::showAllEdges() const{
     std::size_t u,v;
 
     for(u=0; u<n; u++){
         for(v=u; v<n; v++){
-            if(edge_exists(u,v)){
-                std::cout<<u<<" "<<v<<" "<<peso_aresta(u,v)<<std::endl;
+            if(edgeExists(u,v)){
+                std::cout<<u<<" "<<v<<" ";
+                std::cout<<pesoAresta(u,v);
+                std::cout<<std::endl;
             }
         }
     }

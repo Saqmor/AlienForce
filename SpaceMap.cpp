@@ -10,7 +10,7 @@ SpaceMap::~SpaceMap() {
 
 void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
     worlds = new World[order()];
-    set_values();
+    setValues();
     window.create(sf::VideoMode(1105, 961), "My window");
     window.setPosition(sf::Vector2i(0,0));
     backgroundTexture.loadFromFile("./Images/mapa_espacial.png");
@@ -18,12 +18,12 @@ void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
     float scaleY = static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y;
     background.setScale(scaleX,scaleY);
     background.setTexture(backgroundTexture);
-    fix_scale(scaleX,scaleY);
+    fixScale(scaleX,scaleY);
 
     while (window.isOpen())
     {
-        who_wins(alien,hero);
-        if(!alien_wins && !hero_wins)
+        whoWins(alien,hero);
+        if(!alienWins && !heroWins)
         {
             loopSpaceMap(alien, hero);
             render();
@@ -32,28 +32,29 @@ void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
         {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
                 window.close();
-            render_end(alien, hero);
+            renderEnd(alien, hero);
         }
     }
 }
 
-void SpaceMap::set_values()
+void SpaceMap::setValues()
 {
-    add_edges_from_file();
-    read_planets_data();
+    addEdgesFromFile();
+    readPlanetsData();
     for(std::size_t i=0;i<order();i++)
     {   
         std::string address ="./Images/mundo";
         std::stringstream ss;
         ss<<i;
         address= address + ss.str() + ".jpg";
-        worlds[i].level_background.loadFromFile(address);
-        worlds[i].level_sprite.setTexture(worlds[i].level_background);
+        worlds[i].levelBackground.loadFromFile(address);
+        worlds[i].levelSprite.setTexture(worlds[i].levelBackground);
         
-        float scaleX = static_cast<float>(800) / worlds[i].level_background.getSize().x;
-        float scaleY = static_cast<float>(600) / worlds[i].level_background.getSize().y;
-        worlds[i].level_sprite.setScale(scaleX,scaleY);
+        float scaleX = static_cast<float>(800) / worlds[i].levelBackground.getSize().x;
+        float scaleY = static_cast<float>(600) / worlds[i].levelBackground.getSize().y;
+        worlds[i].levelSprite.setScale(scaleX,scaleY);
     }
+
     rocketTexture.loadFromFile("./Images/ship.png");
     rocket.setTexture(rocketTexture);
     rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
@@ -67,32 +68,32 @@ void SpaceMap::set_values()
         worlds[i].shape.setOrigin(worlds[i].shape.getRadius(),worlds[i].shape.getRadius());
         worlds[i].shape.setPosition(coordsWorlds[i]);
     }
-    pos_mouse = {0,0};
-    mouse_coord = {0, 0};
+    posMouse = {0,0};
+    mouseCoord = {0, 0};
     
-    buttom_save.setSize(sf::Vector2f(130,30));
-    buttom_save.setFillColor(sf::Color::Red);
-    buttom_save.setOrigin(buttom_save.getSize().x/2.f,buttom_save.getSize().y/2.f);
-    buttom_save.setPosition(716,105);
+    buttomSave.setSize(sf::Vector2f(130,30));
+    buttomSave.setFillColor(sf::Color::Red);
+    buttomSave.setOrigin(buttomSave.getSize().x/2.f,buttomSave.getSize().y/2.f);
+    buttomSave.setPosition(716,105);
 
-    buttom_quit.setSize(sf::Vector2f(105,30));
-    buttom_quit.setFillColor(sf::Color::Blue); 
-    buttom_quit.setOrigin(buttom_quit.getSize().x/2.f,buttom_quit.getSize().y/2.f);
-    buttom_quit.setPosition(711,155);
+    buttomQuit.setSize(sf::Vector2f(105,30));
+    buttomQuit.setFillColor(sf::Color::Blue); 
+    buttomQuit.setOrigin(buttomQuit.getSize().x/2.f,buttomQuit.getSize().y/2.f);
+    buttomQuit.setPosition(711,155);
 
     font.loadFromFile("ethn.otf");
 
-    save_text.setFont(font);
-    save_text.setString("Save");
-    save_text.setCharacterSize(30);
-    save_text.setOutlineColor(sf::Color::Black);
-    save_text.setPosition(655,87);
+    saveText.setFont(font);
+    saveText.setString("Save");
+    saveText.setCharacterSize(30);
+    saveText.setOutlineColor(sf::Color::Black);
+    saveText.setPosition(655,87);
 
-    quit_text.setFont(font);
-    quit_text.setString("Quit");
-    quit_text.setCharacterSize(30);
-    quit_text.setOutlineColor(sf::Color::Black);
-    quit_text.setPosition(664,137);
+    quitText.setFont(font);
+    quitText.setString("Quit");
+    quitText.setCharacterSize(30);
+    quitText.setOutlineColor(sf::Color::Black);
+    quitText.setPosition(664,137);
 
     heroEndTexture.loadFromFile("./Images/Win_screen.png");
     heroEnd.setTexture(heroEndTexture);
@@ -101,7 +102,7 @@ void SpaceMap::set_values()
     alienEnd.setTexture(alienEndTexture);
 }
 
-void SpaceMap::read_planets_data(){
+void SpaceMap::readPlanetsData(){
     std::ifstream is;
     is.open("coords_worlds.txt");
     float a,b,r;
@@ -115,37 +116,37 @@ void SpaceMap::read_planets_data(){
     is.close();
 }
 
-void SpaceMap::fix_scale(float scaleX,float scaleY)
+void SpaceMap::fixScale(float scaleX,float scaleY)
 {
-    sf::Vector2f new_position;
+    sf::Vector2f newPosition;
     for (size_t i = 0; i < coordsWorlds.size(); i++)
     {
         coordsWorlds[i].x = coordsWorlds[i].x * scaleX;
         coordsWorlds[i].y = coordsWorlds[i].y * scaleY;
-        new_position = worlds[i].shape.getPosition();
-        new_position.x = new_position.x*scaleX;
-        new_position.y = new_position.y*scaleY;
-        worlds[i].shape.setPosition(new_position);
+        newPosition = worlds[i].shape.getPosition();
+        newPosition.x = newPosition.x*scaleX;
+        newPosition.y = newPosition.y*scaleY;
+        worlds[i].shape.setPosition(newPosition);
     }
-    new_position = buttom_quit.getPosition();
-    new_position.x = new_position.x*scaleX;
-    new_position.y = new_position.y*scaleY;
-    buttom_quit.setPosition(new_position);
+    newPosition = buttomQuit.getPosition();
+    newPosition.x = newPosition.x*scaleX;
+    newPosition.y = newPosition.y*scaleY;
+    buttomQuit.setPosition(newPosition);
 
-    new_position = buttom_save.getPosition();
-    new_position.x = new_position.x*scaleX;
-    new_position.y = new_position.y*scaleY;
-    buttom_save.setPosition(new_position);
+    newPosition = buttomSave.getPosition();
+    newPosition.x = newPosition.x*scaleX;
+    newPosition.y = newPosition.y*scaleY;
+    buttomSave.setPosition(newPosition);
 
-    new_position=save_text.getPosition();
-    new_position.x=new_position.x*scaleX;
-    new_position.y=new_position.y*scaleY;
-    save_text.setPosition(new_position);
+    newPosition=saveText.getPosition();
+    newPosition.x=newPosition.x*scaleX;
+    newPosition.y=newPosition.y*scaleY;
+    saveText.setPosition(newPosition);
 
-    new_position=quit_text.getPosition();
-    new_position.x=new_position.x*scaleX;
-    new_position.y=new_position.y*scaleY;
-    quit_text.setPosition(new_position);
+    newPosition=quitText.getPosition();
+    newPosition.x=newPosition.x*scaleX;
+    newPosition.y=newPosition.y*scaleY;
+    quitText.setPosition(newPosition);
 
     rocket.setPosition(coordsWorlds[0]);
 
@@ -164,28 +165,28 @@ void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
         if( event.type == sf::Event::Closed) {
             window.close();
         }
-        pos_mouse = sf::Mouse::getPosition(window);
-        mouse_coord = window.mapPixelToCoords(pos_mouse);
+        posMouse = sf::Mouse::getPosition(window);
+        mouseCoord = window.mapPixelToCoords(posMouse);
 
         if((sf::Mouse::isButtonPressed(sf::Mouse::Left)) && !enterWorld){
             enterWorld = true;
-            if(worlds[order() - 1].shape.getGlobalBounds().contains(mouse_coord)){
-                track=min_way(planet,order()-1);
-                    move_ship();
+            if(worlds[order() - 1].shape.getGlobalBounds().contains(mouseCoord)){
+                track=minWay(planet,order()-1);
+                    moveShip();
                 Fight.modeBattle(alien, hero);
             }
             for (std::size_t i = 0; i < order() - 1; ++i) {
-                if(worlds[i].shape.getGlobalBounds().contains(mouse_coord)){
-                    track=min_way(planet,i);
-                    move_ship();
-                    worlds[i].game.run(worlds[i].level_sprite,hero,equipment[i]);
+                if(worlds[i].shape.getGlobalBounds().contains(mouseCoord)){
+                    track=minWay(planet,i);
+                    moveShip();
+                    worlds[i].game.run(worlds[i].levelSprite,hero,equipment[i]);
                 }
             }
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                if(buttom_save.getGlobalBounds().contains(mouse_coord)){
+                if(buttomSave.getGlobalBounds().contains(mouseCoord)){
                     CharactersSave(hero, alien);
                 }
-                if (buttom_quit.getGlobalBounds().contains(mouse_coord))
+                if (buttomQuit.getGlobalBounds().contains(mouseCoord))
                 {
                     CharactersSave(hero, alien);
                     window.close();
@@ -195,14 +196,14 @@ void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
     }
 }
 
-float SpaceMap::set_angle(sf::Vector2f direction)
+float SpaceMap::setAngle(sf::Vector2f direction)
 {
     float angle;
     if(direction.x>0)
         if(direction.y>0)
             angle = M_PI_2 + std::abs(std::acos(direction.x));
         else
-            angle =M_PI-2 - std::abs(std::acos(direction.x));
+            angle = M_PI_2 - std::abs(std::acos(direction.x));
     if(direction.x<=0)
         if(direction.y>0)
         {
@@ -215,13 +216,14 @@ float SpaceMap::set_angle(sf::Vector2f direction)
     angle =(angle *180)/M_PI;
     return angle;
 }
-void SpaceMap::move_ship()
+void SpaceMap::moveShip()
 {
     sf::Vector2f velocity;
     for(std::size_t i =0;i<track.size()-1;i++)
     {
         double angle = std::atan2((coordsWorlds[track[i+1]].y-coordsWorlds[track[i]].y),
                                   (coordsWorlds[track[i+1]].x-coordsWorlds[track[i]].x));
+        
         if(coordsWorlds[track[i+1]].x>coordsWorlds[track[i]].x)
             velocity.x =std::abs(std::cos(angle));
         else
@@ -230,10 +232,12 @@ void SpaceMap::move_ship()
             velocity.y=std::abs(std::sin(angle));
         else
             velocity.y=-std::abs(std::sin(angle));
-        angle = set_angle(velocity);
+
+        angle = setAngle(velocity);
         velocity = velocity *3.f;
         rocket.setRotation(angle);
         print = true;
+        
         while(std::abs(rocket.getPosition().x-(coordsWorlds[track[i+1]]).x)>2)
         {
             rocket.setPosition(rocket.getPosition() + velocity*0.2f);
@@ -260,27 +264,27 @@ void SpaceMap::render() {
     for (int i = 0; i < order(); ++i) {
         window.draw(worlds[i].shape);
     }
-    window.draw(buttom_save);
-    window.draw(buttom_quit);
-    window.draw(save_text);
-    window.draw(quit_text);
+    window.draw(buttomSave);
+    window.draw(buttomQuit);
+    window.draw(saveText);
+    window.draw(quitText);
     window.display();
 }
 
-void SpaceMap::who_wins(Character &alien, Character &hero)
+void SpaceMap::whoWins(Character &alien, Character &hero)
 {
     if(alien.hp<=0)
-        hero_wins = true;
+        heroWins = true;
     if(hero.hp<=0)
-        alien_wins = true;
+        alienWins = true;
 }
 
-void SpaceMap::render_end(Character &alien, Character &hero)
+void SpaceMap::renderEnd(Character &alien, Character &hero)
 {   
     window.clear();
-    if(hero_wins)
+    if(heroWins)
         window.draw(heroEnd);
-    if(alien_wins)
+    if(alienWins)
         window.draw(alienEnd);
     window.display();
 }

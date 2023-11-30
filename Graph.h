@@ -19,30 +19,31 @@ private:
     element* matrix;
     std::size_t n;
 
+    std::size_t* dijkstra(std::size_t s) const;
+    void start(float* d, std::size_t* p,std::size_t s) const;
+    void relaxEdge(float* d, std::size_t* p,std::size_t u,std::size_t v) const;
+    bool existOpen(bool* open)const;
+
+    void addEdgesFromFile2(std::string);
+
 public:
-    // Graph();
-    //Graph(struct element, element *matrix , std::size_t n);
     Graph(std::size_t n);
 
     ~Graph();
 
-    bool edge_exists(std::size_t from, std::size_t to) const;
-    void add_edge(std::size_t from, std::size_t to,float);
-    void rem_edge(std::size_t from, std::size_t to);
-    void add_num_vertices();
-    void add_edges_from_file();
-    void add_edges_from_file2(std::string);
-    void show_all_edges();
+    bool edgeExists(std::size_t from, std::size_t to) const;
+    void addEdge(std::size_t from, std::size_t to,float);
+    void remEdge(std::size_t from, std::size_t to);
+    void addNumVertices();
+    void addEdgesFromFile();
+    
+    void showAllEdges() const;
     std::vector<std::size_t> neighbors(std::size_t v) const;
     std::size_t order() const;
-    float peso_aresta(std::size_t u,std::size_t v) const;
-    //Dijkstra
-    void start(float* d, std::size_t* p,std::size_t s) const;
-    void relax(float* d, std::size_t* p,std::size_t u,std::size_t v) const;
-    bool exist_open(bool* open)const;
-    std::size_t minimum_dist(bool* open,float* d) const;
-    std::size_t* dijkstra(std::size_t s) const;
-    std::vector<std::size_t> min_way(std::size_t u,std::size_t v) const;
-    void print_min_caminh(std::size_t u,std::size_t v) const;
+    float pesoAresta(std::size_t u,std::size_t v) const;
+        
+    std::size_t minimumDist(bool* open,float* d) const;
+    std::vector<std::size_t> minWay(std::size_t u,std::size_t v) const;
+    void printMinWay(std::size_t u,std::size_t v) const;
 };
 #endif
