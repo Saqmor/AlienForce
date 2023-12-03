@@ -2,6 +2,15 @@ cmake_minimum_required(VERSION 3.16)
 project(Code_Game LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Images
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/coords_worlds.txt
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ethn.otf
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/graph_input.txt
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin)
+
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 include(FetchContent)

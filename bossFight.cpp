@@ -165,12 +165,15 @@ void bossFight::Turn(Character& alien, Character& hero) {
         enemyTurn(alien, hero);
     if (maxPriorityQueue.top() == hero.speed)
         playerTurn(alien, hero);
+    if (hero.hp <= 0)
+        hero.isAlive = false;
+    if (alien.hp <= 0)
+        alien.isAlive = false;
 }
 
 void bossFight::playerTurn(Character& alien, Character& hero) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !optionFight.theselect) {
         optionFight.theselect = true;
-        std::cout << "entrou ";
         switch (optionFight.position) {
             case 0:
                 attack1(alien, hero);
@@ -189,6 +192,7 @@ void bossFight::playerTurn(Character& alien, Character& hero) {
                 break;
             case 3:
                 window.close();
+                break;
             default:
                 break;
         }
@@ -285,10 +289,9 @@ void bossFight::loopAttack2(Character& alien, Character& hero) {
                 case 0:
                     if (hero.grenades[0].full){
                         alien.hp -=  prob(40) ? 50.f + 2.f * dice(20) : 0;
-                        alien.speed -= 20;
+                        alien.speed = 5;
                         finishAttack2 = true;
                     }
-                    else attack2(alien, hero);
                     break;
                 case 1:
                     if (hero.grenades[1].full){
@@ -296,7 +299,6 @@ void bossFight::loopAttack2(Character& alien, Character& hero) {
                         alien.burn = true;
                         finishAttack2 = true;
                     }
-                    else attack2(alien, hero);
                     break;
                 case 2:
                     if (hero.grenades[2].full){
@@ -304,7 +306,6 @@ void bossFight::loopAttack2(Character& alien, Character& hero) {
                         alien.poison = true;
                         finishAttack2 = true;
                     }
-                    else attack2(alien, hero);
                     break;
                 case 3:
                     if (hero.grenades[3].full){
@@ -312,7 +313,6 @@ void bossFight::loopAttack2(Character& alien, Character& hero) {
                         alien.lessAccuracy = true;
                         finishAttack2 = true;
                     }
-                    else attack2(alien, hero);
                     break;
                 default:
                     break;

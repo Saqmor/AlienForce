@@ -43,6 +43,7 @@ private:
     std::vector<std::size_t> track;
     bool print = false;
     bool enterWorld = true;
+    bool endPressed = false;
     struct World{
         sf::CircleShape shape;
         Game game;

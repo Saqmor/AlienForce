@@ -30,9 +30,11 @@ void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
         }
         else
         {
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-                window.close();
             renderEnd(alien, hero);
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && endPressed)
+                window.close();
+            else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                endPressed = true;
         }
     }
 }
