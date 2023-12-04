@@ -2,8 +2,7 @@
 #include "bossFight.h"
 #include "GameState.h"
 
-void Game::setValues() 
-{
+void Game::setValues(){
     window.create(sf::VideoMode(800, 600), "My window");
 
     float playerScaleX = 2.f;
@@ -20,8 +19,7 @@ void Game::setValues()
     enemy.setOrigin(centerM);
 }
 
-void Game::run(sf::Sprite backgroundLevel,Character& hero,std::string equipment)
-{
+void Game::run(sf::Sprite backgroundLevel,Character& hero,std::string equipment){
     setValues();
     while (window.isOpen())
     {
@@ -32,8 +30,7 @@ void Game::run(sf::Sprite backgroundLevel,Character& hero,std::string equipment)
     }
 }
 
-void Game::processEvents()
-{
+void Game::processEvents(){
     while (window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
@@ -42,35 +39,30 @@ void Game::processEvents()
 
 }
 
-void Game::update(Character& hero, std::string equipment)
-{
+void Game::update(Character& hero, std::string equipment){
     sf::Vector2u textureSize = playerTexture.getSize();
     textureSize.x /= 4;
     textureSize.y /= 4;
 
     sf::Vector2f velocity(0.f, 0.f);
     
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
         velocity.x = -0.05f;
         currentRightFrames += velocityAnimation;
         lineAnimation = 1;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
         velocity.x = 0.05f;
         currentLeftFrames += velocityAnimation;
         lineAnimation = 2;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 
         velocity.y = -0.05f;
         currentUpFrames += velocityAnimation;
         lineAnimation = 3;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
         velocity.y = 0.05f;
         currentDownFrames += velocityAnimation;
         lineAnimation = 0;
@@ -121,26 +113,22 @@ void Game::update(Character& hero, std::string equipment)
     player.setOrigin(texturerect.width/2.f,texturerect.height/2.f);
     player.move(velocity * velocityMoviment * 0.016f); 
     
-    for (size_t i = 0; i < 4; i++)
-    {
-        if(!hero.grenades[i].full)
-            {   
+    for (size_t i = 0; i < 4; i++){
+        if(!hero.grenades[i].full){
                 if(hero.grenades[i].type == equipment &&
                 std::abs(player.getPosition().x-hero.grenades[i].bombSprite.getPosition().x)<10 && 
                 std::abs(player.getPosition().y-hero.grenades[i].bombSprite.getPosition().y)<10)
                 hero.grenades[i].full=true;
-            }
+        }
     }
 
     if(std::abs(player.getPosition().x-enemy.getPosition().x)<30 &&
-        std::abs(player.getPosition().y-enemy.getPosition().y)<60)
-    {
+        std::abs(player.getPosition().y-enemy.getPosition().y)<60){
         player.setPosition(400,50);
         takeOutBomb(hero,equipment);
     }
 }
-void Game::updateEnemy()
-{
+void Game::updateEnemy(){
     sf::Vector2u textureSize = enemyTexture.getSize();
     textureSize.x /= 4;
     textureSize.y /= 4;
@@ -182,13 +170,11 @@ void Game::updateEnemy()
     positionEnemy = enemy.getPosition();
     enemy.setPosition(positionEnemy.x,400.f);
 }
-void Game::render(sf::Sprite backgroundLevel,Character& hero,std::string equipment)
-{
+void Game::render(sf::Sprite backgroundLevel,Character& hero,std::string equipment){
     window.clear();
     window.draw(backgroundLevel);
 
-    for (size_t i = 0; i < 4; i++)
-    {
+    for (size_t i = 0; i < 4; i++){
         if (!hero.grenades[i].full && hero.grenades[i].type==equipment){
             window.draw(hero.grenades[i].bombSprite);
         }
@@ -198,10 +184,8 @@ void Game::render(sf::Sprite backgroundLevel,Character& hero,std::string equipme
     window.draw(enemy);
     window.display();
 }
-void Game::takeOutBomb(Character &hero, std::string equipment)
-{   
-    for (size_t i = 0; i<4; i++)
-    {
+void Game::takeOutBomb(Character &hero, std::string equipment){
+    for (size_t i = 0; i<4; i++){
         if(hero.grenades[i].type == equipment && hero.grenades[i].full)
         hero.grenades[i].full = false;
     }

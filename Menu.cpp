@@ -91,7 +91,7 @@ void Menu::loopEvents(){
             theselect = true;
             switch (pos) {
                 case 1:
-                    selectedPlay = true;
+                    selectedNewGame = true;
                     window->close();
                     break;
                 case 2:
@@ -127,7 +127,7 @@ void Menu::drawAll(){
 }
 
 void Menu::runMenu(){
-    selectedPlay = false;
+    selectedNewGame = false;
     while(window->isOpen()){
         loopEvents();
         drawAll();
@@ -140,7 +140,7 @@ void Menu::runMenu(){
     hero.speed = 12;
     hero.grenades = new Grenade[4];
     alien.grenades = new Grenade[4];
-    if (selectedPlay){
+    if (selectedNewGame){
         hero.name = "hero";
         alien.name = "alien";
         std::vector<std::string> typeBombs={"IceBomb","FireBomb","PoisonBomb","Flashbang"};

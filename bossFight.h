@@ -31,7 +31,6 @@ struct Character{
     sf::Sprite characterSprite;
     sf::Sprite roundedCharacter;
     sf::Text textCharacter;
-    sf::Clock recoveryTime;
 };
 
 class bossFight{
@@ -39,7 +38,6 @@ private:
     struct Option {
         int position;
         bool theselect;
-        bool pressed;
         std::vector<sf::Text> texts;
         std::vector<std::string> words;
         std::vector<sf::Vector2f> coords;
@@ -57,8 +55,6 @@ private:
     sf::Texture roundedTexture;
 
     sf::Font fontBar;
-    sf::Clock elapsedTime;
-    const sf::Time interval = sf::seconds(2);
 
     std::priority_queue<int> maxPriorityQueue;
 

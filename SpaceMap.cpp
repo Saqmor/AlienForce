@@ -172,15 +172,13 @@ void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
 
         if((sf::Mouse::isButtonPressed(sf::Mouse::Left)) && !enterWorld){
             enterWorld = true;
-            if(worlds[order() - 1].shape.getGlobalBounds().contains(mouseCoord)){
-                track=minWay(planet,order()-1);
-                    moveShip();
-                Fight.modeFight(alien, hero);
-            }
-            for (std::size_t i = 0; i < order() - 1; ++i) {
+            for (std::size_t i = 0; i < order(); ++i) {
                 if(worlds[i].shape.getGlobalBounds().contains(mouseCoord)){
                     track=minWay(planet,i);
                     moveShip();
+                    if (i == order() - 1)
+                        Fight.modeFight(alien, hero);
+                    else
                     worlds[i].game.run(worlds[i].levelSprite,hero,equipment[i]);
                 }
             }

@@ -7,7 +7,7 @@
 class Menu {
 private:
     int pos;
-    bool pressed, theselect, selectedPlay, selectedContinue;
+    bool pressed, theselect, selectedNewGame, selectedContinue;
 
     sf::RenderWindow * window;
     sf::RectangleShape * winclose;

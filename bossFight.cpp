@@ -44,7 +44,8 @@ void bossFight::setValuesFight(Character& alien, Character& hero) {
     background.setTexture(backgroundTexture);
     window.create(sf::VideoMode(800,600),"My window");
 
-    optionFight.pressed = optionFight.theselect = false;
+
+    optionFight.theselect = false;
     font.loadFromFile("./ethn.otf");
     optionFight.words = {"Atirar", "Especial", "Curar", "Fugir"};
     optionFight.texts.resize(4);
@@ -64,8 +65,7 @@ void bossFight::setValuesFight(Character& alien, Character& hero) {
     defineTurns(alien, hero);
 }
 
-void bossFight::drawFight(Character& alien, Character& hero)
-{
+void bossFight::drawFight(Character& alien, Character& hero){
     layoutFight(alien, hero);
     window.clear();
     window.draw(background);
@@ -75,18 +75,14 @@ void bossFight::drawFight(Character& alien, Character& hero)
     window.draw(alien.characterHp);
     window.draw(alien.textCharacter);
     window.draw(hero.textCharacter);
-    if(hero.recoveryTime.getElapsedTime()>interval || hero.hpTurn == hero.hp)
+    if(hero.hpTurn == hero.hp)
         window.draw(hero.characterSprite);
-    if(alien.recoveryTime.getElapsedTime()>interval || alien.hpTurn == alien.hp)
+    if(alien.hpTurn == alien.hp)
         window.draw(alien.characterSprite);
-    if(hero.hp<hero.hpTurn)
-    {
-        hero.recoveryTime.restart();
+    if(hero.hp<hero.hpTurn){
         hero.hpTurn=hero.hp;
     }
-    if(alien.hp<alien.hpTurn)
-    {
-        alien.recoveryTime.restart();
+    if(alien.hp<alien.hpTurn){
         alien.hpTurn =alien.hp;
     }
     for(auto t : optionFight.texts){
@@ -95,8 +91,7 @@ void bossFight::drawFight(Character& alien, Character& hero)
     window.display();
 }
 
-void bossFight::layoutFight(Character& alien, Character& hero)
-{
+void bossFight::layoutFight(Character& alien, Character& hero){
     //Criação de retângulos envolventes
     roundedTexture.loadFromFile("./Images/rounded(5).png");
     hero.roundedCharacter.setTexture(roundedTexture);
@@ -148,7 +143,6 @@ void bossFight::layoutFight(Character& alien, Character& hero)
     alien.characterSprite.setPosition(650.f,370.f);
     alien.characterSprite.setScale(0.5f,0.5f);
     hero.characterSprite.setScale(0.5f,0.5f);
-
 }
 
 void bossFight::defineTurns(Character& alien, Character& hero) {
@@ -196,23 +190,21 @@ void bossFight::playerTurn(Character& alien, Character& hero) {
             default:
                 break;
         }
-    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+    } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
         optionFight.theselect = false;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !optionFight.pressed) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
         if (optionFight.position < 3) {
             ++optionFight.position;
             optionFight.texts[optionFight.position].setOutlineThickness(4);
             optionFight.texts[optionFight.position - 1].setOutlineThickness(0);
-            optionFight.pressed = false;
         }
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !optionFight.pressed) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         if (optionFight.position > 0) {
             --optionFight.position;
             optionFight.texts[optionFight.position].setOutlineThickness(4);
             optionFight.texts[optionFight.position + 1].setOutlineThickness(0);
-            optionFight.pressed = false;
         }
     }
 }
@@ -321,21 +313,19 @@ void bossFight::loopAttack2(Character& alien, Character& hero) {
             optionAttack2.theselect = false;
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !optionAttack2.pressed) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
             if (optionAttack2.position < 3) {
                 ++optionAttack2.position;
                 optionAttack2.texts[optionAttack2.position].setOutlineThickness(4);
                 optionAttack2.texts[optionAttack2.position - 1].setOutlineThickness(0);
-                optionAttack2.pressed = false;
             }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !optionAttack2.pressed) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
             if (optionAttack2.position > 0) {
                 --optionAttack2.position;
                 optionAttack2.texts[optionAttack2.position].setOutlineThickness(4);
                 optionAttack2.texts[optionAttack2.position + 1].setOutlineThickness(0);
-                optionAttack2.pressed = false;
             }
         }
     }
