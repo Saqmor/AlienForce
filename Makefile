@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -std=c++17
 SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
-TARGET = prog
+TARGET = Game
 SRC_FILES = Levels.cpp Menu.cpp bossFight.cpp SpaceMap.cpp GameState.cpp Graph.cpp main.cpp 
 HEADER_FILES = Levels.h Menu.h bossFight.h SpaceMap.h GameState.h Graph.h
 
