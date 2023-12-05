@@ -18,14 +18,6 @@ public:
     void desinitializeBombs(Character &alien, Character &hero);
 
 private:
-    void setValues();
-    void setLayout();
-    void readPlanetsData();
-    void render();
-    void moveShip();
-    float setAngle(sf::Vector2f direction);
-    void fixScale(float scaleX,float scaleY);
-
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     sf::Sprite background;
@@ -64,5 +56,13 @@ private:
     sf::Vector2f mouseCoord;
     bool heroWins=false;
     bool alienWins=false;
+
+    void setValues();
+    void setLayout();
+    void readPlanetsData();
+    void render();
+    void moveShip();
+    float setAngle(sf::Vector2f direction);
+    void fixScale(float scaleX,float scaleY);
 };
 

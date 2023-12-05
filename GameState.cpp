@@ -32,7 +32,7 @@ void readSave(Character& ms, std::ifstream& is){
 
 void  LoadSave(Character& ms, Character& hs){
     std::ifstream is;
-    is.open("save.txt");
+    is.open("./System/save.txt");
 
     if (is.is_open()) {
         readSave(ms, is);
@@ -49,7 +49,7 @@ void writeSave(Character& ms, std::fstream& os) {
 
 void  CharactersSave(Character& ms, Character& hs){
     std::fstream os;
-    os.open("save.txt", std::ios::out);
+    os.open("./System/save.txt", std::ios::out);
 
     if (os.is_open()) {
         writeSave(ms, os);
@@ -62,7 +62,7 @@ void  CharactersSave(Character& ms, Character& hs){
 std::size_t readBase(){
     std::ifstream is;
     int vertex;
-    is.open("graph_input.txt");
+    is.open("./System/graph_input.txt");
     is>>vertex;
     is.close();
     return vertex;

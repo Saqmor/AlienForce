@@ -65,7 +65,7 @@ void SpaceMap::setLayout()
     buttomQuit.setOrigin(buttomQuit.getSize().x/2.f,buttomQuit.getSize().y/2.f);
     buttomQuit.setPosition(711,155);
 
-    font.loadFromFile("ethn.otf");
+    font.loadFromFile("./System/ethn.otf");
 
     saveText.setFont(font);
     saveText.setString("Save");
@@ -102,7 +102,7 @@ void SpaceMap::setValues()
 
 void SpaceMap::readPlanetsData(){
     std::ifstream is;
-    is.open("coords_worlds.txt");
+    is.open("./System/coords_worlds.txt");
     float a,b,r;
     std::string word;
     for (std::size_t i = 0; i < order(); i++){
@@ -230,7 +230,7 @@ void SpaceMap::moveShip()
             velocity.y=-std::abs(std::sin(angle));
 
         angle = setAngle(velocity);
-        velocity = velocity *2.5f;
+        velocity = velocity *2.f;
         rocket.setRotation(angle);
         print = true;
         

@@ -153,7 +153,7 @@ void Graph::addEdgesFromFile(){
     std::size_t u,v;
     float w;
 
-    is.open("graph_input.txt");
+    is.open("./System/graph_input.txt");
     is>>w;
     while(is>>u>>v>>w)
         addEdge(u,v,w);

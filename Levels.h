@@ -10,13 +10,6 @@ public:
     void run(sf::Sprite,Character& hero,std::string);
 
 private:
-    void setValues();
-    void processEvents();
-    void update(Character& hero,std::string);
-    void updateEnemy();
-    void render(sf::Sprite,Character& hero,std::string);
-    void takeOutBomb(Character &hero,std::string);
-
     sf::RenderWindow window;
     sf::Event event;
     sf::Texture playerTexture, backgroundTexture, enemyTexture,
@@ -32,4 +25,11 @@ private:
     float currentRightFramesEnemy = 0.f;
     float velocityAnimation = 0.007f;
     int lineAnimation=0;
+
+    void setValues();
+    void processEvents();
+    void update(Character& hero,std::string);
+    void updateEnemy();
+    void render(sf::Sprite,Character& hero,std::string);
+    void takeOutBomb(Character &hero,std::string);
 };

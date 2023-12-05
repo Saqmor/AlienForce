@@ -26,7 +26,7 @@ void Menu::setValues(){
 
     pos = 0;
     pressed = theselect = false;
-    font->loadFromFile("./ethn.otf");
+    font->loadFromFile("./System/ethn.otf");
     image->loadFromFile("./Images/menu.png");
 
     bg->setTexture(*image);

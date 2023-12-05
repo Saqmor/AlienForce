@@ -46,7 +46,7 @@ void bossFight::setValuesFight(Character& alien, Character& hero) {
 
 
     optionFight.theselect = false;
-    font.loadFromFile("./ethn.otf");
+    font.loadFromFile("./System/ethn.otf");
     optionFight.words = {"Atirar", "Especial", "Curar", "Fugir"};
     optionFight.texts.resize(4);
     optionFight.coords = {{70,500},{229,500},{419,500},{600,500}};
@@ -79,7 +79,7 @@ void bossFight::drawFight(Character& alien, Character& hero){
         window.draw(hero.characterSprite);
     if(alien.hpTurn == alien.hp)
         window.draw(alien.characterSprite);
-    if(hero.hp<hero.hpTurn){
+    if(hero.hp!=hero.hpTurn){
         hero.hpTurn=hero.hp;
     }
     if(alien.hp<alien.hpTurn){
@@ -106,7 +106,7 @@ void bossFight::layoutFight(Character& alien, Character& hero){
     alien.characterSprite.setTexture(alien.characterTexture);
 
     //Texto
-    fontBar.loadFromFile("ethn.otf");
+    fontBar.loadFromFile("./System/ethn.otf");
     alien.textCharacter.setFont(fontBar);
     alien.textCharacter.setString("Boss HP");
     alien.textCharacter.setCharacterSize(12);
