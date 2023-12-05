@@ -132,45 +132,17 @@ void Menu::runMenu(){
         loopEvents();
         drawAll();
     }
-    Character alien;
-    alien.hp = 700;
-    alien.speed = 25;
-    Character hero;
-    hero.hp = 250;
-    hero.speed = 12;
-    hero.grenades = new Grenade[4];
-    alien.grenades = new Grenade[4];
-    if (selectedNewGame){
-        hero.name = "hero";
-        alien.name = "alien";
-        std::vector<std::string> typeBombs={"IceBomb","FireBomb","PoisonBomb","Flashbang"};
-        for (int i = 0; i < 4; ++i) 
-        {
-            hero.grenades[i].type = typeBombs[i];
-            hero.grenades[i].full = false;
-            alien.grenades[i].type = typeBombs[i];
-            alien.grenades[i].full = false;
-        }
-    }
-    if (selectedContinue){
-        LoadSave(hero, alien);
-    }
-    std::vector<sf::Vector2f> scales= {{0.15f,0.15f},{0.2f,0.2f},{0.1f,0.1f},{0.5f,0.5f}};
-    std::vector<sf::Vector2f> positions = {{400,500},{400,525},{400,500},{600,230}};
-    for(size_t i=0;i<4;i++)
-    {   
-        std::string address = "./Images/" + hero.grenades[i].type + ".png";
-        hero.grenades[i].bombTexture.loadFromFile(address);
-        hero.grenades[i].bombSprite.setScale(scales[i]);
-        hero.grenades[i].bombSprite.setPosition(positions[i]);
-        hero.grenades[i].bombSprite.setTexture(hero.grenades[i].bombTexture);
-        sf::Vector2f centerM(hero.grenades[i].bombTexture.getSize().x/2.f,hero.grenades[i].bombTexture.getSize().y/2.f);
-        hero.grenades[i].bombSprite.setOrigin(centerM);
-        hero.grenades[i].bombSprite.setPosition(400,500);
-    }
     SpaceMap space(readBase());
-    space.runSpaceMap(alien, hero);
+    Character alien;
+    Character hero;
+    space.initializeBombs(alien,hero);
 
-    delete[] hero.grenades;
-    delete[] alien.grenades;
+    if (selectedNewGame)
+        space.nameBombs(alien,hero);
+    if (selectedContinue)
+        LoadSave(hero, alien);
+
+    space.setLayoutBombs(alien,hero);
+    space.runSpaceMap(alien, hero);
+    space.desinitializeBombs(alien,hero);
 }

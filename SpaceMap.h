@@ -7,20 +7,25 @@ class SpaceMap:public Graph
 public:
     SpaceMap(std::size_t nvertices):Graph(nvertices){}
     ~SpaceMap();
-    
-    void numVertices(std::size_t n);
+
     void runSpaceMap (Character& alien, Character& hero);
-    void setValues();
-    void readPlanetsData();
     void loopSpaceMap (Character& alien, Character& hero);
+    void renderEnd(Character &alien, Character &hero);
+    void whoWins(Character &alien, Character &hero);
+    void setLayoutBombs(Character &alien, Character &hero);
+    void initializeBombs(Character &alien, Character &hero);
+    void nameBombs(Character &alien, Character &hero);
+    void desinitializeBombs(Character &alien, Character &hero);
+
+private:
+    void setValues();
+    void setLayout();
+    void readPlanetsData();
     void render();
     void moveShip();
     float setAngle(sf::Vector2f direction);
     void fixScale(float scaleX,float scaleY);
-    void renderEnd(Character &alien, Character &hero);
-    void whoWins(Character &alien, Character &hero);
 
-private:
     sf::RenderWindow window;
     sf::Texture backgroundTexture;
     sf::Sprite background;
@@ -46,7 +51,7 @@ private:
     bool endPressed = false;
     struct World{
         sf::CircleShape shape;
-        Game game;
+        Levels level;
         sf::Texture levelBackground; 
         sf::Sprite levelSprite;
     };

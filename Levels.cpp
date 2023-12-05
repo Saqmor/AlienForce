@@ -2,7 +2,7 @@
 #include "bossFight.h"
 #include "GameState.h"
 
-void Game::setValues(){
+void Levels::setValues(){
     window.create(sf::VideoMode(800, 600), "My window");
 
     float playerScaleX = 2.f;
@@ -19,7 +19,7 @@ void Game::setValues(){
     enemy.setOrigin(centerM);
 }
 
-void Game::run(sf::Sprite backgroundLevel,Character& hero,std::string equipment){
+void Levels::run(sf::Sprite backgroundLevel,Character& hero,std::string equipment){
     setValues();
     while (window.isOpen())
     {
@@ -30,7 +30,7 @@ void Game::run(sf::Sprite backgroundLevel,Character& hero,std::string equipment)
     }
 }
 
-void Game::processEvents(){
+void Levels::processEvents(){
     while (window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
@@ -39,7 +39,7 @@ void Game::processEvents(){
 
 }
 
-void Game::update(Character& hero, std::string equipment){
+void Levels::update(Character& hero, std::string equipment){
     sf::Vector2u textureSize = playerTexture.getSize();
     textureSize.x /= 4;
     textureSize.y /= 4;
@@ -128,7 +128,7 @@ void Game::update(Character& hero, std::string equipment){
         takeOutBomb(hero,equipment);
     }
 }
-void Game::updateEnemy(){
+void Levels::updateEnemy(){
     sf::Vector2u textureSize = enemyTexture.getSize();
     textureSize.x /= 4;
     textureSize.y /= 4;
@@ -170,7 +170,7 @@ void Game::updateEnemy(){
     positionEnemy = enemy.getPosition();
     enemy.setPosition(positionEnemy.x,400.f);
 }
-void Game::render(sf::Sprite backgroundLevel,Character& hero,std::string equipment){
+void Levels::render(sf::Sprite backgroundLevel,Character& hero,std::string equipment){
     window.clear();
     window.draw(backgroundLevel);
 
@@ -184,7 +184,7 @@ void Game::render(sf::Sprite backgroundLevel,Character& hero,std::string equipme
     window.draw(enemy);
     window.display();
 }
-void Game::takeOutBomb(Character &hero, std::string equipment){
+void Levels::takeOutBomb(Character &hero, std::string equipment){
     for (size_t i = 0; i<4; i++){
         if(hero.grenades[i].type == equipment && hero.grenades[i].full)
         hero.grenades[i].full = false;

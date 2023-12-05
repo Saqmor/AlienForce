@@ -3,7 +3,7 @@
 #include "bossFight.h"
 #include "Graph.h"
 
-class Game
+class Levels
 {
 public:
 
@@ -30,6 +30,6 @@ private:
     float currentUpFrames = 0.f;
     float currentLeftFramesEnemy = 0.f;
     float currentRightFramesEnemy = 0.f;
-    float velocityAnimation = 0.002f;
+    float velocityAnimation = 0.007f;
     int lineAnimation=0;
 };

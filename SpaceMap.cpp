@@ -38,41 +38,23 @@ void SpaceMap::runSpaceMap(Character& alien, Character& hero) {
         }
     }
 }
-
-void SpaceMap::setValues()
+void SpaceMap::setLayout()
 {
-    addEdgesFromFile();
-    readPlanetsData();
-    for(std::size_t i=0;i<order();i++)
-    {   
-        std::string address ="./Images/mundo";
+    for (std::size_t i = 0; i < order(); ++i) {
+         std::string address ="./Images/mundo";
         std::stringstream ss;
         ss<<i;
         address= address + ss.str() + ".jpg";
         worlds[i].levelBackground.loadFromFile(address);
         worlds[i].levelSprite.setTexture(worlds[i].levelBackground);
-        
         float scaleX = static_cast<float>(800) / worlds[i].levelBackground.getSize().x;
         float scaleY = static_cast<float>(600) / worlds[i].levelBackground.getSize().y;
         worlds[i].levelSprite.setScale(scaleX,scaleY);
-    }
-
-    rocketTexture.loadFromFile("./Images/ship.png");
-    rocket.setTexture(rocketTexture);
-    rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
-    planet = 0;
-    rocketPosition = rocket.getPosition();
-    rocket.setScale(0.5f,0.5f);
-
-    for (std::size_t i = 0; i < order(); ++i) {
         worlds[i].shape.setRadius(sizeWorlds[i]);
         worlds[i].shape.setFillColor(sf::Color::Transparent);
         worlds[i].shape.setOrigin(worlds[i].shape.getRadius(),worlds[i].shape.getRadius());
         worlds[i].shape.setPosition(coordsWorlds[i]);
     }
-    posMouse = {0,0};
-    mouseCoord = {0, 0};
-    
     buttomSave.setSize(sf::Vector2f(130,30));
     buttomSave.setFillColor(sf::Color::Red);
     buttomSave.setOrigin(buttomSave.getSize().x/2.f,buttomSave.getSize().y/2.f);
@@ -102,6 +84,20 @@ void SpaceMap::setValues()
 
     alienEndTexture.loadFromFile("./Images/GameOver_screen.png");
     alienEnd.setTexture(alienEndTexture);
+}
+void SpaceMap::setValues()
+{
+    addEdgesFromFile();
+    readPlanetsData();
+    setLayout();
+    rocketTexture.loadFromFile("./Images/ship.png");
+    rocket.setTexture(rocketTexture);
+    rocket.setOrigin(rocketTexture.getSize().x/2,rocketTexture.getSize().y/2);
+    planet = 0;
+    rocketPosition = rocket.getPosition();
+    rocket.setScale(0.5f,0.5f);
+    posMouse = {0,0};
+    mouseCoord = {0, 0};
 }
 
 void SpaceMap::readPlanetsData(){
@@ -179,7 +175,7 @@ void SpaceMap::loopSpaceMap(Character& alien, Character& hero) {
                     if (i == order() - 1)
                         Fight.modeFight(alien, hero);
                     else
-                    worlds[i].game.run(worlds[i].levelSprite,hero,equipment[i]);
+                    worlds[i].level.run(worlds[i].levelSprite,hero,equipment[i]);
                 }
             }
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -234,7 +230,7 @@ void SpaceMap::moveShip()
             velocity.y=-std::abs(std::sin(angle));
 
         angle = setAngle(velocity);
-        velocity = velocity *3.f;
+        velocity = velocity *2.5f;
         rocket.setRotation(angle);
         print = true;
         
@@ -287,5 +283,49 @@ void SpaceMap::renderEnd(Character &alien, Character &hero)
     if(alienWins)
         window.draw(alienEnd);
     window.display();
+}
+void SpaceMap::nameBombs(Character &alien, Character &hero)
+{
+    std::vector<std::string> typeBombs={"IceBomb","FireBomb","PoisonBomb","Flashbang"};
+    for (int i = 0; i < 4; ++i) 
+    {
+        hero.grenades[i].type = typeBombs[i];
+        hero.grenades[i].full = false;
+        alien.grenades[i].type = typeBombs[i];
+        alien.grenades[i].full = false;
+    }
+}
+void SpaceMap::initializeBombs(Character &alien, Character &hero)
+{   
+    hero.name = "hero";
+    alien.name = "alien";
+    alien.hp = 700;
+    alien.speed = 25;
+    hero.hp = 250;
+    hero.speed = 12;
+    hero.grenades = new Grenade[4];
+    alien.grenades = new Grenade[4];
+}
+void SpaceMap::desinitializeBombs(Character &alien, Character &hero)
+{
+    delete[] hero.grenades;
+    delete[] alien.grenades;
+}
+void SpaceMap::setLayoutBombs(Character &alien, Character &hero)
+{
+    std::vector<sf::Vector2f> scales= {{0.15f,0.15f},{0.2f,0.2f},{0.1f,0.1f},{0.5f,0.5f}};
+    std::vector<sf::Vector2f> positions = {{400,500},{400,525},{400,500},{600,230}};
+    for(size_t i=0;i<4;i++)
+    {   
+        std::string address = "./Images/" + hero.grenades[i].type + ".png";
+        hero.grenades[i].bombTexture.loadFromFile(address);
+        hero.grenades[i].bombSprite.setScale(scales[i]);
+        hero.grenades[i].bombSprite.setPosition(positions[i]);
+        hero.grenades[i].bombSprite.setTexture(hero.grenades[i].bombTexture);
+        sf::Vector2f centerM(hero.grenades[i].bombTexture.getSize().x/2.f,hero.grenades[i].bombTexture.getSize().y/2.f);
+        hero.grenades[i].bombSprite.setOrigin(centerM);
+        hero.grenades[i].bombSprite.setPosition(400,500);
+    }
+
 }
 

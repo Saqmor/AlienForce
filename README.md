@@ -1,8 +1,12 @@
-This code is about a game of astronaut and aliens
+This code is about a game of alien invasion and your objective is passing through the planets avoiding enemies and coleting important items that can be used in boss battle which is the planet located on the upper left corner.
 
-O programa roda em sistema operacional Linux e compilado no editor de código-fonte, VScode, pelo Makefile com o comando "make" e em seguida com o comando de 
-"./prog"
+To build the code:
+Linux: First initialize the terminal in the folder that contains the .cpp files. Then in the terminal type the command:"make".
+After that to run the code, type on the terminal the commmand: "./prog".
 
-É possível compilar e rodar em sistema operacional Windows com o CMakeLists.txt na IDE do Clion
+Windows: Open the project using IDE Clion on this folder
+After that press on build on IDE Clion interface because CMakeLists.txt contains the commands.
+Next you can run the program.
 
-In this version there is actually a bug on the images of grenades and it will be fixed on the next git
+ 
+
